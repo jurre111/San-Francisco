@@ -41,15 +41,25 @@ struct ContentView: View {
         }
         .navigationTitle("San Francisco")
         .onAppear {
-            guard let url = Bundle.main.url(forResource: "symbols", withExtension: "plist") else {
-                return
+            let result = load()
+            if !result.ok {
+                Alertinator.shared.alert(title: "Error", body: result.message)
             }
-            let data = try Data(contentsOf: url)
-            symbols = try PropertyListDecoder().decode([String: Symbol].self, from: data)
-
-            categories = loadCategories(symbols)
         }
     }
+}
+
+func load() -> (ok: Bool, message: String) {
+    guard let url = Bundle.main.url(forResource: "symbols", withExtension: "plist") else {
+        return (ok: false, message: "symbols.plist is missing??")
+    }
+    do {
+        let data = try Data(contentsOf: url)
+        symbols = try PropertyListDecoder().decode([String: Symbol].self, from: data)
+    } catch {
+        return (ok: false, message: "Failed to load symbols.plist: \(error)")
+    }
+    categories = loadCategories(symbols)
 }
 
 func loadCategories(_ symbols: [String: Symbol]) -> [String: Category] {
