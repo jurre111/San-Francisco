@@ -57,6 +57,7 @@ struct ContentView: View {
             return (ok: false, message: "Failed to load symbols.plist: \(error)")
         }
         categories = loadCategories(symbols)
+        return (ok: true, message: "")
     }
 }
 
