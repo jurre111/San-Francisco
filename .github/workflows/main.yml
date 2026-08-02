@@ -23,10 +23,7 @@ jobs:
 
       - name: get SF Symbols
         run: |
-          find "$(xcrun --sdk iphoneos --show-sdk-path)" \
-            -path "*SFSymbols.framework*" \
-            -name "CoreGlyphs.bundle"
-
+          ls "$(xcrun --sdk iphoneos --show-sdk-path)/System/Library/PrivateFrameworks/"
       - name: setup xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
