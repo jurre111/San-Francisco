@@ -10,7 +10,7 @@ echo "Build Started!"
 echo
 
 xcodebuild \
-  -project $APP_NAME.xcodeproj \
+  -project "$APP_NAME.xcodeproj" \
   -scheme "$APP_NAME" \
   -configuration Debug \
   -sdk iphoneos \
