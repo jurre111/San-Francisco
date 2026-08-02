@@ -19,7 +19,7 @@ xcodebuild \
   CODE_SIGNING_REQUIRED=NO \
   CODE_SIGN_IDENTITY="" \
   archive \
-  -archivePath "$PWD/build/$APP_NAME.xcarchive" 2>&1 | xcpretty
+  -archivePath "$PWD/build/$APP_NAME.xcarchive" 2>&1 # | xcpretty
 
 APP_PATH="$PWD/build/$APP_NAME.xcarchive/Products/Applications/$APP_NAME.app"
 if [ ! -d "$APP_PATH" ]; then
