@@ -34,13 +34,13 @@ jobs:
       - name: build app
         run: |
           chmod +x ipabuild.sh
-          ./ipabuild.sh $scheme
+          ./ipabuild.sh "$scheme"
 
       - name: upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: App-ipa
-          path: App.ipa
+          name: ${{ env.scheme }}-ipa
+          path: ${{ env.scheme }}.ipa
 
   release:
     name: Release Nightly IPA 
