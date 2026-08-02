@@ -23,7 +23,7 @@ jobs:
 
       - name: get SF Symbols
         run: |
-          xcrun simctl list runtimes -j
+          ls ~/Library/Developer/CoreSimulator/Profiles
 
       - name: setup xcode
         uses: maxim-lobanov/setup-xcode@v1
