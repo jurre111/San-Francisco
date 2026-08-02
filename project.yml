@@ -1,0 +1,27 @@
+name: San Francisco
+options:
+  bundleIdPrefix: com.name
+  deploymentTarget:
+    iOS: "16.0"
+  xcodeVersion: "16.0"
+
+targets:
+  San Francisco:
+    type: application
+    platform: iOS
+    deploymentTarget: "16.0"
+    
+    sources:
+      - path: San Francisco
+        type: syncedFolder
+    
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.name.SanFrancisco
+        INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        GENERATE_INFOPLIST_FILE: YES
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        SWIFT_VERSION: "5.0"
+        TARGETED_DEVICE_FAMILY: "1,2"

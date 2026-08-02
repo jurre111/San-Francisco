@@ -1,7 +1,7 @@
 name: Build & Release IPA
 
 on:
-  push:
+  # push:
   workflow_dispatch:
 
 permissions:
