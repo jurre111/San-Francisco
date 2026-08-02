@@ -23,14 +23,12 @@ struct ContentView: View {
                         NavigationLink(catInfo.displayName) {
                             List {
                                 ForEach(catInfo.symbols, id: \.self) { symbol in
-                                    if let symbolInfo = symbols[symbol] {
-                                        HStack(spacing: 10) {
-                                            Image(systemName: symbol)
-                                                .resizable()
-                                                .scaledToFit()
-                                                .frame(width: 30, height: 30)
-                                            Text(symbol)
-                                        }
+                                    HStack(spacing: 10) {
+                                        Image(systemName: symbol)
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(width: 30, height: 30)
+                                        Text(symbol)
                                     }
                                 }
                             }
@@ -47,19 +45,19 @@ struct ContentView: View {
             }
         }
     }
-}
 
-func load() -> (ok: Bool, message: String) {
-    guard let url = Bundle.main.url(forResource: "symbols", withExtension: "plist") else {
-        return (ok: false, message: "symbols.plist is missing??")
+    func load() -> (ok: Bool, message: String) {
+        guard let url = Bundle.main.url(forResource: "symbols", withExtension: "plist") else {
+            return (ok: false, message: "symbols.plist is missing??")
+        }
+        do {
+            let data = try Data(contentsOf: url)
+            symbols = try PropertyListDecoder().decode([String: Symbol].self, from: data)
+        } catch {
+            return (ok: false, message: "Failed to load symbols.plist: \(error)")
+        }
+        categories = loadCategories(symbols)
     }
-    do {
-        let data = try Data(contentsOf: url)
-        symbols = try PropertyListDecoder().decode([String: Symbol].self, from: data)
-    } catch {
-        return (ok: false, message: "Failed to load symbols.plist: \(error)")
-    }
-    categories = loadCategories(symbols)
 }
 
 func loadCategories(_ symbols: [String: Symbol]) -> [String: Category] {
