@@ -38,7 +38,7 @@ if ! command -v ldid >/dev/null 2>&1; then
   exit 1
 fi
 ldid -S "$PWD/Payload/$APP_NAME.app/$APP_NAME"
-/usr/bin/zip -qry $APP_NAME.ipa Payload
+/usr/bin/zip -qry "$APP_NAME.ipa" Payload
 
 echo
 echo "build successful!"
