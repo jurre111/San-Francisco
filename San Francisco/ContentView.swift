@@ -25,9 +25,6 @@ struct ContentView: View {
                                 ForEach(catInfo.symbols, id: \.self) { symbol in
                                     HStack(spacing: 10) {
                                         Image(systemName: symbol)
-                                            .resizable()
-                                            .scaledToFit()
-                                            .frame(width: 30, height: 30)
                                         Text(symbol)
                                     }
                                 }
@@ -36,8 +33,8 @@ struct ContentView: View {
                     }
                 }
             }
+            .navigationTitle("San Francisco")
         }
-        .navigationTitle("San Francisco")
         .onAppear {
             let result = load()
             if !result.ok {
