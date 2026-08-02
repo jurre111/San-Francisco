@@ -31,10 +31,9 @@ jobs:
       - name: install xcpretty
         run: gem install xcpretty
 
-      - name: get SF Symbols from SDK
+      - name: get SF Symbols
         run: |
-          cp -r $(find ~/Library/Developer/CoreSimulator -name "CoreGlyphs.bundle") .
-          python3 main.py
+          find ~/Library/Developer/CoreSimulator -name "CoreGlyphs.bundle"
 
       - name: build app
         run: |
