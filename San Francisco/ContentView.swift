@@ -25,10 +25,12 @@ struct ContentView: View {
                                 ForEach(catInfo.symbols, id: \.self) { symbol in
                                     HStack(spacing: 10) {
                                         Image(systemName: symbol)
+                                            .frame(width: 20, alignment: .center)
                                         Text(symbol)
                                     }
                                 }
                             }
+                            .navigationTitle(catInfo.displayName)
                         }
                     }
                 }
