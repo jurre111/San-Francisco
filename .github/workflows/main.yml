@@ -23,9 +23,9 @@ jobs:
 
       - name: get SF Symbols
         run: |
-          copy -R $(sudo find /Library/Developer/CoreSimulator /Applications -name "CoreGlyphs.bundle" 2>/dev/null | head -n 1) .
-          
-          python3 main.py
+          find "$(xcrun --sdk iphoneos --show-sdk-path)" \
+            -path "*SFSymbols.framework*" \
+            -name "CoreGlyphs.bundle"
 
       - name: setup xcode
         uses: maxim-lobanov/setup-xcode@v1
