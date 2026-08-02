@@ -67,4 +67,4 @@ jobs:
           gh release create nightly \
             --title "Nightly" \
             --prerelease
-          gh release upload nightly App.ipa --clobber
+          gh release upload nightly ${{ env.scheme }}.ipa --clobber
