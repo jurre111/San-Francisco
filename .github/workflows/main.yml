@@ -34,7 +34,7 @@ jobs:
       - name: get SF Symbols
         run: |
           xcrun simctl list runtimes
-          find ~/Library/Developer/CoreSimulator -name "CoreGlyphs.bundle"
+          find ~/Library/Developer/CoreSimulator/Profiles/Runtimes -name "CoreGlyphs.bundle" 2>/dev/null
 
       - name: build app
         run: |
