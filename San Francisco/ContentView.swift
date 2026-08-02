@@ -22,7 +22,7 @@ struct ContentView: View {
                     if let catInfo = categories[category] {
                         NavigationLink(catInfo.displayName) {
                             List {
-                                ForEach(catInfo.symbols.sorted(), id: \.self) { symbol in
+                                ForEach(catInfo.symbols, id: \.self) { symbol in
                                     HStack(spacing: 12) {
                                         Image(systemName: symbol)
                                             .frame(width: 20, alignment: .center)
@@ -69,6 +69,9 @@ func loadCategories(_ symbols: [String: Symbol]) -> [String: Category] {
             }
             categories[category]!.symbols.append(symbol)
         }
+    }
+    for (category, info) in categories {
+        categories[category]!.symbols.sort()
     }
     return categories
 }
