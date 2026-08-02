@@ -7,17 +7,17 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		49D88A349FD70A9153DD2C03 /* App.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = App.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		49D88A349FD70A9153DD2C03 /* San Francisco.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = San Francisco.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		72A1F8D260D2B0F94CE920B5 /* App */ = {
+		72A1F8D260D2B0F94CE920B5 /* San Francisco */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			explicitFileTypes = {
 			};
 			explicitFolders = (
 			);
-			path = App;
+			path = San Francisco;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -26,7 +26,7 @@
 		4102E3E068508DD683953C7D = {
 			isa = PBXGroup;
 			children = (
-				72A1F8D260D2B0F94CE920B5 /* App */,
+				72A1F8D260D2B0F94CE920B5 /* San Francisco */,
 				E9C3DB3EC6D7655028A9C0D3 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -34,7 +34,7 @@
 		E9C3DB3EC6D7655028A9C0D3 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				49D88A349FD70A9153DD2C03 /* App.app */,
+				49D88A349FD70A9153DD2C03 /* San Francisco.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -42,9 +42,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		93E9E330FC2CE7458D9C925F /* App */ = {
+		93E9E330FC2CE7458D9C925F /* San Francisco */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = FFC1863BD4026D2C17CBE82B /* Build configuration list for PBXNativeTarget "App" */;
+			buildConfigurationList = FFC1863BD4026D2C17CBE82B /* Build configuration list for PBXNativeTarget "San Francisco" */;
 			buildPhases = (
 				B77F0AF073564580D75A2CF1 /* Sources */,
 				37BFF6A8CB5CC7FA21AD3FA3 /* Resources */,
@@ -54,13 +54,13 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				72A1F8D260D2B0F94CE920B5 /* App */,
+				72A1F8D260D2B0F94CE920B5 /* San Francisco */,
 			);
-			name = App;
+			name = San Francisco;
 			packageProductDependencies = (
 			);
-			productName = App;
-			productReference = 49D88A349FD70A9153DD2C03 /* App.app */;
+			productName = San Francisco;
+			productReference = 49D88A349FD70A9153DD2C03 /* San Francisco.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -74,7 +74,7 @@
 				TargetAttributes = {
 				};
 			};
-			buildConfigurationList = B3FD05C59F197F398A0B04AB /* Build configuration list for PBXProject "App" */;
+			buildConfigurationList = B3FD05C59F197F398A0B04AB /* Build configuration list for PBXProject "San Francisco" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -88,7 +88,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				93E9E330FC2CE7458D9C925F /* App */,
+				93E9E330FC2CE7458D9C925F /* San Francisco */,
 			);
 		};
 /* End PBXProject section */
@@ -128,7 +128,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.name.App;
+				PRODUCT_BUNDLE_IDENTIFIER = com.name.SanFrancisco;
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -205,7 +205,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.name.App;
+				PRODUCT_BUNDLE_IDENTIFIER = com.name.SanFrancisco;
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -278,7 +278,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		B3FD05C59F197F398A0B04AB /* Build configuration list for PBXProject "App" */ = {
+		B3FD05C59F197F398A0B04AB /* Build configuration list for PBXProject "San Francisco" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F61063B78755D98B1B9C3697 /* Debug */,
@@ -287,7 +287,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		FFC1863BD4026D2C17CBE82B /* Build configuration list for PBXNativeTarget "App" */ = {
+		FFC1863BD4026D2C17CBE82B /* Build configuration list for PBXNativeTarget "San Francisco" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4A0C935808978B5A7673E412 /* Debug */,

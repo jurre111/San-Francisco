@@ -11,7 +11,7 @@ echo
 
 xcodebuild \
   -project $APP_NAME.xcodeproj \
-  -scheme $APP_NAME \
+  -scheme "$APP_NAME" \
   -configuration Debug \
   -sdk iphoneos \
   -arch arm64e \
