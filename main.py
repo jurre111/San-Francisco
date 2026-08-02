@@ -1,8 +1,6 @@
 import plistlib
 import json
 import subprocess
-import os
-import sys
 
 
 def get_latest_ios_runtime_root():
@@ -33,13 +31,12 @@ def get_latest_ios_runtime_root():
 
     return ios_runtimes[0]["runtimeRoot"]
 
-print(get_latest_ios_runtime_root())
-exit(1)
+path = f"{get_latest_ios_runtime_root()}/System/Library/PrivateFrameworks/SFSymbols.framework"
 
-with open("CoreGlyphs.bundle/symbol_categories.plist", "rb") as f:
+with open(f"{path}/CoreGlyphs.bundle/symbol_categories.plist", "rb") as f:
     symbol_categories = plistlib.load(f)
 
-with open("CoreGlyphs.bundle/name_availability.plist", "rb") as f:
+with open(f"{path}/CoreGlyphs.bundle/name_availability.plist", "rb") as f:
     name_availability = plistlib.load(f)
 
 symbols = {}
