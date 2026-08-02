@@ -57,7 +57,7 @@ jobs:
       - name: download ipa
         uses: actions/download-artifact@v4
         with:
-          name: App-ipa
+          name: ${{ env.scheme }}-ipa
 
       - name: update nightly release
         env:
