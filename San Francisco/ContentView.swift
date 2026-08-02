@@ -23,7 +23,7 @@ struct ContentView: View {
                         NavigationLink(catInfo.displayName) {
                             List {
                                 ForEach(catInfo.symbols, id: \.self) { symbol in
-                                    HStack(spacing: 10) {
+                                    HStack(spacing: 12) {
                                         Image(systemName: symbol)
                                             .frame(width: 20, alignment: .center)
                                         Text(symbol)
