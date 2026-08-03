@@ -73,17 +73,17 @@ struct ContentView: View {
     }
 
     func load() -> (ok: Bool, message: String) {
-        var result = loadSymbols()
-        if !result.ok {
-            return result
+        let symbolResult = loadSymbols()
+        if !symbolResult.ok {
+            return (symbolResult.ok, symbolResult.message)
         }
-        symbols = result.dict
+        symbols = symbolResult.dict
 
-        result = loadYearToRelease()
-        if !result.ok {
-            return result
+        let yearToReleaseResult = loadYearToRelease()
+        if !yearToReleaseResult.ok {
+            return (yearToReleaseResult.ok, yearToReleaseResult.message)
         }
-        let yearToRelease = result.dict
+        let yearToRelease = yearToReleaseResult.dict
         let systemVersion = doubleSystemVersion()
         for symbol in symbols.keys {
             if systemVersion < yearToRelease[symbols[symbol]!.availability] {
