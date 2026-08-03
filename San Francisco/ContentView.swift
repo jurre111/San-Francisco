@@ -55,7 +55,7 @@ struct ContentView: View {
             .navigationTitle("San Francisco")
             .toolbar {
                 Button {
-                    showSettings.toggle
+                    showSettings.toggle()
                 } label: {
                     Image(systemName: "gear")
                 }
@@ -73,7 +73,7 @@ struct ContentView: View {
     }
 
     func load() -> (ok: Bool, message: String) {
-        result = loadSymbols()
+        var result = loadSymbols()
         if !result.ok {
             return result
         }
@@ -86,7 +86,7 @@ struct ContentView: View {
         let yearToRelease = result.dict
         let systemVersion = doubleSystemVersion()
         for symbol in symbols.keys {
-            if yearToRelease[symbols[symbol]!.availability] > systemVersion {
+            if systemVersion < yearToRelease[symbols[symbol]!.availability] {
                 symbols[symbol] = nil
             }
         }
@@ -118,7 +118,7 @@ func loadYearToRelease() -> (ok: Bool, dict: [String:[String:String]], message: 
         let dict = try PropertyListSerialization.propertyList(from: data, options: [], format: nil)
         var yearToRelease: [String:String] = [:]
         for (key, value) in dict {
-            yearToRelease[key] = value["iOS"]! as! Double
+            yearToRelease[key] = Double(value["iOS"]!) ?? 0.0
         }
         return (ok: true, dict: yearToRelease, message: "")
     } catch {
