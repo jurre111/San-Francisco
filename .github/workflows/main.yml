@@ -23,9 +23,7 @@ jobs:
 
       - name: get SF Symbols
         run: |
-          ls /System/Volumes/Data/Library/Developer/CoreSimulator/Volumes/iOS_23F77
-          xcrun simctl list runtimes
-          cat /Library/Developer/CoreSimulator/Volumes/iOS_23F77/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.5.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/SFSymbols.framework/CoreGlyphs.bundle/categories.plist
+          python3 main.py
           exit 1
       - name: setup xcode
         uses: maxim-lobanov/setup-xcode@v1
