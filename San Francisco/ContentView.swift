@@ -40,7 +40,7 @@ struct ContentView: View {
                                 ForEach(filteredSymbols(catInfo.symbols), id: \.self) { symbol in
                                     HStack(spacing: 12) {
                                         Image(systemName: symbol)
-                                            .symbolRenderingMode(symbols[symbol]!.categories.contains("multicolor") ? .multicolor : .hierarchical)
+                                            // .symbolRenderingMode(symbols[symbol]!.categories.contains("multicolor") ? .multicolor : .hierarchical)
                                             .frame(width: 20, alignment: .center)
                                         Text(symbol)
                                     }
