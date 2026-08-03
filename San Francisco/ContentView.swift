@@ -6,7 +6,7 @@ struct Symbol: Codable {
     var availability: String
 }
 
-struct Category: Codable {
+struct Category: Codable, Hashable {
     var key: String
     var icon: String
     var displayName: String
@@ -31,7 +31,7 @@ struct ContentView: View {
                             }
                         }
                     }
-                    .searchable(text: $searchText, prompt: "Search for Symbols")
+                    .searchable(text: $searchText, prompt: "Search Symbols")
                 }
                 ForEach(categories, id: \.self) { category in
                     NavigationLink {
@@ -44,8 +44,8 @@ struct ContentView: View {
                                 }
                             }
                         }
-                        .navigationTitle(catInfo.displayName)
-                        .searchable(text: $searchText, prompt: "Search for Symbols")
+                        .navigationTitle(category.displayName)
+                        .searchable(text: $searchText, prompt: "Search Symbols")
                     } label: {
                         HStack(spacing: 12) {
                             Image(systemName: category.icon)
@@ -141,21 +141,16 @@ func loadYearToRelease() -> (ok: Bool, dict: [String:Double], message: String, )
     }
 }
 
-func loadCategories(_ symbols: [String: Symbol]) -> (ok: Bool, array: [Category], message: String) {
+func loadCategories() -> (ok: Bool, array: [Category], message: String) {
     guard let url = Bundle.main.url(forResource: "categories", withExtension: "plist") else {
         return (ok: false, array: [], message: "categories.plist is missing??")
     }
     do {
         let data = try Data(contentsOf: url)
         var categories = try PropertyListDecoder().decode([Category].self, from: data)
-        for (symbol, info) in symbols {
-            for category in info.categories {
-                categories[category]!.symbols.append(symbol)
-            }
-        }
-        return (ok: true, dict: categories, message: "")
+        return (ok: true, array: categories, message: "")
     } catch {
-        return (ok: false, dict: [], message: "Failed to load categories.plist: \(error)")
+        return (ok: false, array: [], message: "Failed to load categories.plist: \(error)")
     }
 }
 

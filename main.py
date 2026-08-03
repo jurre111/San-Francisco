@@ -43,28 +43,6 @@ with open(f"{path}/CoreGlyphs.bundle/name_availability.plist", "rb") as f:
 with open(f"{path}/CoreGlyphs.bundle/categories.plist", "rb") as f:
     categoriesInfo = plistlib.load(f)
 
-
-# get category info
-categories = []
-for category in categoriesInfo:
-    dict = {
-        "key": category["key"],
-        "displayName": "",
-        "icon": category["icon"],
-        "symbols": []
-    }
-    categories.append(dict)
-with open("categories.plist", "wb") as file:
-    plistlib.dump(categories, file)
-
-
-
-
-# dump year to release version dictionary
-with open("year_to_release.plist", "wb") as f:
-    plistlib.dump(name_availability["year_to_release"], f)
-
-
 # get symbols
 symbols = {}
 
@@ -77,3 +55,29 @@ for symbol, value in name_availability["symbols"].items():
     symbols[symbol] = dict
 with open("symbols.plist", "wb") as f:
     plistlib.dump(symbols, f)
+
+
+
+# get category info
+categories = []
+for category in categoriesInfo:
+    key = category["key"]
+    dict = {
+        "key": key,
+        "displayName": "",
+        "icon": category["icon"],
+        "symbols": []
+    }
+    for symbol, info in symbols:
+        if key in info.categories:
+            dict["symbols"].append(symbol)
+    categories.append(dict)
+with open("categories.plist", "wb") as file:
+    plistlib.dump(categories, file)
+
+
+
+
+# dump year to release version dictionary
+with open("year_to_release.plist", "wb") as f:
+    plistlib.dump(name_availability["year_to_release"], f)
