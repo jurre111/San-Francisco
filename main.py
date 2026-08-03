@@ -2,7 +2,6 @@ import plistlib
 import json
 import subprocess
 
-
 def get_latest_ios_runtime_root():
     result = subprocess.run(
         ["xcrun", "simctl", "list", "runtimes", "-j"],
@@ -31,6 +30,8 @@ def get_latest_ios_runtime_root():
 
     return ios_runtimes[0]["runtimeRoot"]
 
+
+# load the necessary dicts
 path = f"{get_latest_ios_runtime_root()}/System/Library/PrivateFrameworks/SFSymbols.framework"
 
 with open(f"{path}/CoreGlyphs.bundle/symbol_categories.plist", "rb") as f:
@@ -39,10 +40,32 @@ with open(f"{path}/CoreGlyphs.bundle/symbol_categories.plist", "rb") as f:
 with open(f"{path}/CoreGlyphs.bundle/name_availability.plist", "rb") as f:
     name_availability = plistlib.load(f)
 
+with open(f"{path}/CoreGlyphs.bundle/categories.plist", "rb") as f:
+    categoriesInfo = plistlib.load(f)
 
+
+# get category info
+categories = []
+for category in categoriesInfo:
+    dict = {
+        "key": category["key"],
+        "displayName": "",
+        "icon": category["icon"],
+        "symbols": []
+    }
+    categories.append(dict)
+with open("categories.plist", "wb") as file:
+    plistlib.dump(categories, file)
+
+
+
+
+# dump year to release version dictionary
 with open("year_to_release.plist", "wb") as f:
     plistlib.dump(name_availability["year_to_release"], f)
 
+
+# get symbols
 symbols = {}
 
 for symbol, value in name_availability["symbols"].items():

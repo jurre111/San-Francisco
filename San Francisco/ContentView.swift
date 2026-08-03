@@ -7,14 +7,15 @@ struct Symbol: Codable {
 }
 
 struct Category: Codable {
+    var key: String
+    var icon: String
     var displayName: String
-    var displayIcon: String
     var symbols: [String]
 }
 
 struct ContentView: View {
     @State private var symbols: [String: Symbol] = [:]
-    @State private var categories: [String: Category] = [:]
+    @State private var categories: [Category] = []
     @State private var showSettings: Bool = false
     @State private var searchText: String = ""
     var body: some View {
@@ -25,7 +26,6 @@ struct ContentView: View {
                         ForEach(filteredSymbols(symbols.keys.sorted()), id: \.self) { symbol in
                             HStack(spacing: 12) {
                                 Image(systemName: symbol)
-                                    .symbolRenderingMode(symbols[symbol]!.categories.contains("multicolor") ? .multicolor : .hierarchical)
                                     .frame(width: 20, alignment: .center)
                                 Text(symbol)
                             }
@@ -33,21 +33,24 @@ struct ContentView: View {
                     }
                     .searchable(text: $searchText, prompt: "Search for Symbols")
                 }
-                ForEach(categories.keys.sorted(), id: \.self) { category in
-                    if let catInfo = categories[category] {
-                        NavigationLink(catInfo.displayName) {
-                            List {
-                                ForEach(filteredSymbols(catInfo.symbols), id: \.self) { symbol in
-                                    HStack(spacing: 12) {
-                                        Image(systemName: symbol)
-                                            .symbolRenderingMode(symbols[symbol]!.categories.contains("multicolor") ? .multicolor : nil)
-                                            .frame(width: 20, alignment: .center)
-                                        Text(symbol)
-                                    }
+                ForEach(categories, id: \.self) { category in
+                    NavigationLink {
+                        List {
+                            ForEach(filteredSymbols(category.symbols), id: \.self) { symbol in
+                                HStack(spacing: 12) {
+                                    Image(systemName: symbol)
+                                        .frame(width: 20, alignment: .center)
+                                    Text(symbol)
                                 }
                             }
-                            .navigationTitle(catInfo.displayName)
-                            .searchable(text: $searchText, prompt: "Search for Symbols")
+                        }
+                        .navigationTitle(catInfo.displayName)
+                        .searchable(text: $searchText, prompt: "Search for Symbols")
+                    } label: {
+                        HStack(spacing: 12) {
+                            Image(systemName: category.icon)
+                                .frame(width: 20, alignment: .center)
+                            Text(category.key)
                         }
                     }
                 }
@@ -74,22 +77,22 @@ struct ContentView: View {
 
     func filteredSymbols(_ symbolList: [String]) -> [String] {
         if searchText.isEmpty {
-            return symbolList
+            return symbolList.sorted()
         } else {
-            return symbolList.filter { $0.localizedCaseInsensitiveContains(searchText) }
+            return symbolList.sorted().filter { $0.localizedCaseInsensitiveContains(searchText) }
         }
     }
 
     func load() -> (ok: Bool, message: String) {
         let symbolResult = loadSymbols()
         if !symbolResult.ok {
-            return (symbolResult.ok, symbolResult.message)
+            return (false, symbolResult.message)
         }
         symbols = symbolResult.dict
 
         let yearToReleaseResult = loadYearToRelease()
         if !yearToReleaseResult.ok {
-            return (yearToReleaseResult.ok, yearToReleaseResult.message)
+            return (false, yearToReleaseResult.message)
         }
         let yearToRelease = yearToReleaseResult.dict
         let systemVersion = doubleSystemVersion()
@@ -99,7 +102,11 @@ struct ContentView: View {
             }
         }
 
-        categories = loadCategories(symbols)
+        let categoriesResult = loadCategories(symbols)
+        if !categoriesResult.ok {
+            return (false, categoriesResult.message)
+        }
+        categories = categoriesResult.array
         return (ok: true, message: "")
     }
 }
@@ -134,20 +141,22 @@ func loadYearToRelease() -> (ok: Bool, dict: [String:Double], message: String, )
     }
 }
 
-func loadCategories(_ symbols: [String: Symbol]) -> [String: Category] {
-    var categories: [String: Category] = [:]
-    for (symbol, info) in symbols {
-        for category in info.categories {
-            if categories[category] == nil {
-                categories[category] = Category(displayName: category, displayIcon: "", symbols: [])
+func loadCategories(_ symbols: [String: Symbol]) -> (ok: Bool, array: [Category], message: String) {
+    guard let url = Bundle.main.url(forResource: "categories", withExtension: "plist") else {
+        return (ok: false, array: [], message: "categories.plist is missing??")
+    }
+    do {
+        let data = try Data(contentsOf: url)
+        var categories = try PropertyListDecoder().decode([Category].self, from: data)
+        for (symbol, info) in symbols {
+            for category in info.categories {
+                categories[category]!.symbols.append(symbol)
             }
-            categories[category]!.symbols.append(symbol)
         }
+        return (ok: true, dict: categories, message: "")
+    } catch {
+        return (ok: false, dict: [], message: "Failed to load categories.plist: \(error)")
     }
-    for (category, info) in categories {
-        categories[category]!.symbols.sort()
-    }
-    return categories
 }
 
 #Preview {

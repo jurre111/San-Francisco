@@ -41,6 +41,7 @@ plutil -insert NSLocationWhenInUseUsageDescription -string "This app needs your 
 plutil -insert CommitHash -string $APP_COMMIT_HASH "$PWD/Payload/$APP_NAME.app/Info.plist"
 cp symbols.plist "$PWD/Payload/$APP_NAME.app/symbols.plist"
 cp year_to_release.plist "$PWD/Payload/$APP_NAME.app/year_to_release.plist"
+cp categories.plist "$PWD/Payload/$APP_NAME.app/categories.plist"
 
 if ! command -v ldid >/dev/null 2>&1; then
   echo "ERROR: ldid not installed. Install with: brew install ldid" >&2
