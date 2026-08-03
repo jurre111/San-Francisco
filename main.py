@@ -6,12 +6,10 @@ from pathlib import Path
 
 # should find the right path to the bundle where the SF Symbols live
 volumes = Path("/Library/Developer/CoreSimulator/Volumes")
-runtime_roots = sorted(
-    volumes.glob("iOS_*/Library/Developer/CoreSimulator/Profiles/Runtimes/*.simruntime/Contents/Resources/RuntimeRoot")
-)
-print(runtime_roots)
-path = runtime_roots[-1]
 
+for p in volumes.iterdir():
+    print(p)
+exit(1)
 with open(f"{path}/CoreGlyphs.bundle/symbol_categories.plist", "rb") as f:
     symbol_categories = plistlib.load(f)
 
