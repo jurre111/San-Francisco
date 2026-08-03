@@ -22,7 +22,7 @@ struct ContentView: View {
             List {
                 NavigationLink("All") {
                     List {
-                        ForEach(symbols.keys.sorted(), id: \.self) { symbol in
+                        ForEach(filteredSymbols(symbols.keys.sorted()), id: \.self) { symbol in
                             HStack(spacing: 12) {
                                 Image(systemName: symbol)
                                     .symbolRenderingMode(symbols[symbol]!.categories.contains("multicolor") ? .multicolor : .hierarchical)
@@ -37,7 +37,7 @@ struct ContentView: View {
                     if let catInfo = categories[category] {
                         NavigationLink(catInfo.displayName) {
                             List {
-                                ForEach(catInfo.symbols, id: \.self) { symbol in
+                                ForEach(filteredSymbols(catInfo.symbols), id: \.self) { symbol in
                                     HStack(spacing: 12) {
                                         Image(systemName: symbol)
                                             .symbolRenderingMode(symbols[symbol]!.categories.contains("multicolor") ? .multicolor : .hierarchical)
@@ -69,6 +69,14 @@ struct ContentView: View {
             if !result.ok {
                 Alertinator.shared.alert(title: "Error", body: result.message)
             }
+        }
+    }
+
+    func filteredSymbols(_ symbolList: [String]) -> [String] {
+        if searchText.isEmpty {
+            return symbolList
+        } else {
+            return symbolList.filter { $0.localizedCaseInsensitiveContains(searchText) }
         }
     }
 
