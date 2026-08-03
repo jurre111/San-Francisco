@@ -7,8 +7,9 @@ from pathlib import Path
 # should find the right path to the bundle where the SF Symbols live
 volumes = Path("/Library/Developer/CoreSimulator/Volumes")
 
-for p in volumes.iterdir():
-    print(p)
+matches = list(volumes.rglob("CoreGlyphs.bundle"))
+
+print(matches)
 exit(1)
 with open(f"{path}/CoreGlyphs.bundle/symbol_categories.plist", "rb") as f:
     symbol_categories = plistlib.load(f)
