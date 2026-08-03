@@ -35,14 +35,7 @@ def get_latest_ios_runtime_root():
 
 # load the necessary dicts
 path = f"{get_latest_ios_runtime_root()}/System/Library/PrivateFrameworks/SFSymbols.framework"
-print(path)
-
-with open(f"{path}/CoreGlyphs.bundle/symbol_categories.plist", "rb") as f:
-    symbol_categories = plistlib.load(f)
-    print(symbol_categories)
-
-print(os.listdir(path))
-
+print(f"{path}/CoreGlyphs.bundle/symbol_categories.plist")
 exit(0)
 
 import os
