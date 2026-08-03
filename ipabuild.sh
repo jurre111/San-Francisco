@@ -2,6 +2,9 @@
 set -euo pipefail
 
 APP_NAME=$1
+APP_MARKETING_VERSION=$2
+APP_BUILD_VERSION=$3
+APP_COMMIT_HASH=$4
 
 rm -rf build/
 mkdir -p build
@@ -15,6 +18,9 @@ xcodebuild \
   -configuration Debug \
   -sdk iphoneos \
   -arch arm64e \
+  MARKETING_VERSION="$APP_MARKETING_VERSION" \
+  CURRENT_PROJECT_VERSION="$APP_BUILD_VERSION" \
+  COMMIT_HASH="$APP_COMMIT_HASH" \
   CODE_SIGNING_ALLOWED=NO \
   CODE_SIGNING_REQUIRED=NO \
   CODE_SIGN_IDENTITY="" \

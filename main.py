@@ -48,6 +48,5 @@ for symbol, value in name_availability["symbols"].items():
         categories = ["other"]
     dict = {"categories": categories, "availability": value}
     symbols[symbol] = dict
-print(symbols)
 with open("symbols.plist", "wb") as f:
     plistlib.dump(symbols, f)
