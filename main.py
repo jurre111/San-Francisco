@@ -2,6 +2,7 @@ import plistlib
 import json
 import subprocess
 from pathlib import Path
+import os
 
 def get_latest_ios_runtime_root():
     result = subprocess.run(
