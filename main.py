@@ -9,6 +9,7 @@ volumes = Path("/Library/Developer/CoreSimulator/Volumes")
 runtime_roots = sorted(
     volumes.glob("iOS_*/Library/Developer/CoreSimulator/Profiles/Runtimes/*.simruntime/Contents/Resources/RuntimeRoot")
 )
+print(runtime_roots)
 path = runtime_roots[-1]
 
 with open(f"{path}/CoreGlyphs.bundle/symbol_categories.plist", "rb") as f:
