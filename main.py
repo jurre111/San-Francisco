@@ -39,6 +39,10 @@ with open(f"{path}/CoreGlyphs.bundle/symbol_categories.plist", "rb") as f:
 with open(f"{path}/CoreGlyphs.bundle/name_availability.plist", "rb") as f:
     name_availability = plistlib.load(f)
 
+
+with open("year_to_release.plist", "wb") as f:
+    plistlib.dump(name_availability["year_to_release"], f)
+
 symbols = {}
 
 for symbol, value in name_availability["symbols"].items():
