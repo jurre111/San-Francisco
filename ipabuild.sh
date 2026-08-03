@@ -38,6 +38,7 @@ cp -R "$APP_PATH" "$PWD/Payload/"
 
 plutil -insert NSLocationWhenInUseUsageDescription -string "This app needs your location to display your position on the map." "$PWD/Payload/$APP_NAME.app/Info.plist"
 cp symbols.plist "$PWD/Payload/$APP_NAME.app/symbols.plist"
+cp year_to_release.plist "$PWD/Payload/$APP_NAME.app/year_to_release.plist"
 
 if ! command -v ldid >/dev/null 2>&1; then
   echo "ERROR: ldid not installed. Install with: brew install ldid" >&2
