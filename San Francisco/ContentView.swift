@@ -86,7 +86,7 @@ struct ContentView: View {
         let yearToRelease = yearToReleaseResult.dict
         let systemVersion = doubleSystemVersion()
         for symbol in symbols.keys {
-            if systemVersion < yearToRelease[symbols[symbol]!.availability] {
+            if systemVersion < yearToRelease[symbols[symbol]!.availability]! {
                 symbols[symbol] = nil
             }
         }
@@ -109,20 +109,20 @@ func loadSymbols() -> (ok: Bool, dict: [String: Symbol], message: String) {
     }
 }
 
-func loadYearToRelease() -> (ok: Bool, dict: [String:[String:String]], message: String, ) {
+func loadYearToRelease() -> (ok: Bool, dict: [String:String], message: String, ) {
     guard let url = Bundle.main.url(forResource: "year_to_release", withExtension: "plist") else {
-        return (ok: false, dict: [:], message: "symbols.plist is missing??")
+        return (ok: false, dict: [:], message: "year_to_release.plist is missing??")
     }
     do {
         let data = try Data(contentsOf: url)
-        let dict = try PropertyListSerialization.propertyList(from: data, options: [], format: nil)
+        let yearsDict = try PropertyListSerialization.propertyList(from: data, options: [], format: nil)
         var yearToRelease: [String:String] = [:]
-        for (key, value) in dict {
+        for (key, value) in yearsDict as! [String: [String: String]] {
             yearToRelease[key] = Double(value["iOS"]!) ?? 0.0
         }
         return (ok: true, dict: yearToRelease, message: "")
     } catch {
-        return (ok: false, dict: [:], message: "Failed to load symbols.plist: \(error)")
+        return (ok: false, dict: [:], message: "Failed to load year_to_release.plist: \(error)")
     }
 }
 
