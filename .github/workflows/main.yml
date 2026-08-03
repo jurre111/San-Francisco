@@ -37,7 +37,6 @@ jobs:
       - name: build app
         run: |
           chmod +x ipabuild.sh
-          echo $(git rev-parse --short HEAD)
           ./ipabuild.sh "$scheme" "1.0" $(git rev-list --count HEAD) $(git rev-parse --short HEAD)
 
       - name: upload artifact

@@ -6,6 +6,8 @@ APP_MARKETING_VERSION=$2
 APP_BUILD_VERSION=$3
 APP_COMMIT_HASH=$4
 
+echo $APP_COMMIT_HASH
+
 rm -rf build/
 mkdir -p build
 
@@ -20,7 +22,6 @@ xcodebuild \
   -arch arm64e \
   MARKETING_VERSION="$APP_MARKETING_VERSION" \
   CURRENT_PROJECT_VERSION="$APP_BUILD_VERSION" \
-  COMMIT_HASH="$APP_COMMIT_HASH" \
   CODE_SIGNING_ALLOWED=NO \
   CODE_SIGNING_REQUIRED=NO \
   CODE_SIGN_IDENTITY="" \
@@ -37,6 +38,7 @@ mkdir -p "$PWD/Payload"
 cp -R "$APP_PATH" "$PWD/Payload/"
 
 plutil -insert NSLocationWhenInUseUsageDescription -string "This app needs your location to display your position on the map." "$PWD/Payload/$APP_NAME.app/Info.plist"
+plutil -insert CommitHash -string $APP_COMMIT_HASH "$PWD/Payload/$APP_NAME.app/Info.plist"
 cp symbols.plist "$PWD/Payload/$APP_NAME.app/symbols.plist"
 cp year_to_release.plist "$PWD/Payload/$APP_NAME.app/year_to_release.plist"
 
