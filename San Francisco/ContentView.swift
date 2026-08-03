@@ -109,14 +109,14 @@ func loadSymbols() -> (ok: Bool, dict: [String: Symbol], message: String) {
     }
 }
 
-func loadYearToRelease() -> (ok: Bool, dict: [String:String], message: String, ) {
+func loadYearToRelease() -> (ok: Bool, dict: [String:Double], message: String, ) {
     guard let url = Bundle.main.url(forResource: "year_to_release", withExtension: "plist") else {
         return (ok: false, dict: [:], message: "year_to_release.plist is missing??")
     }
     do {
         let data = try Data(contentsOf: url)
         let yearsDict = try PropertyListSerialization.propertyList(from: data, options: [], format: nil)
-        var yearToRelease: [String:String] = [:]
+        var yearToRelease: [String:Double] = [:]
         for (key, value) in yearsDict as! [String: [String: String]] {
             yearToRelease[key] = Double(value["iOS"]!) ?? 0.0
         }
