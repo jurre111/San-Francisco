@@ -3,9 +3,15 @@ import json
 import subprocess
 from pathlib import Path
 
-
+exit(1)
 # should find the right path to the bundle where the SF Symbols live
+/Library/Developer/CoreSimulator/Volumes/iOS_23F77/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.5.simruntime/Contents/Resources/RuntimeRoot
 volumes = Path("/Library/Developer/CoreSimulator/Volumes")
+iosVolumes = [p for p in volumes.iterdir() if "iOS" in p.name]
+runtimes = []
+for volume in iosVolumes:
+    path = volume / "Library/Developer/CoreSimulator/Profiles/Runtimes/"
+    iosruntime = [p for p in volumes.iterdir() if "iOS" in p.name]
 
 matches = list(volumes.rglob("CoreGlyphs.bundle"))
 
