@@ -16,7 +16,7 @@ struct SettingsView: View {
                     HStack {
                         Text("Commit Hash")
                         Spacer()
-                        Text(appVersion)
+                        Text(commitHash)
                             .foregroundColor(.secondary)
                     }
                 }

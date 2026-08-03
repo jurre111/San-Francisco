@@ -25,7 +25,7 @@ struct ContentView: View {
                         ForEach(symbols.keys.sorted(), id: \.self) { symbol in
                             HStack(spacing: 12) {
                                 Image(systemName: symbol)
-                                    .symbolRenderingMode(.multicolor)
+                                    .symbolRenderingMode(symbols[symbol]!.categories.contains("multicolor") ? .multicolor : .hierarchical)
                                     .frame(width: 20, alignment: .center)
                                 Text(symbol)
                             }
@@ -40,7 +40,7 @@ struct ContentView: View {
                                 ForEach(catInfo.symbols, id: \.self) { symbol in
                                     HStack(spacing: 12) {
                                         Image(systemName: symbol)
-                                            .symbolRenderingMode(.multicolor)
+                                            .symbolRenderingMode(symbols[symbol]!.categories.contains("multicolor") ? .multicolor : .hierarchical)
                                             .frame(width: 20, alignment: .center)
                                         Text(symbol)
                                     }
