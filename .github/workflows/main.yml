@@ -24,7 +24,7 @@ jobs:
       - name: get SF Symbols
         run: |
           ls /System/Volumes/Data/Library/Developer/CoreSimulator/Volumes/iOS_23F77
-          xcrun simctl runtime match list
+          xcrun simctl list runtimes
           cat /Library/Developer/CoreSimulator/Volumes/iOS_23F77/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.5.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/SFSymbols.framework/CoreGlyphs.bundle/categories.plist
           exit 1
       - name: setup xcode
