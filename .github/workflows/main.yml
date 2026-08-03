@@ -23,7 +23,6 @@ jobs:
 
       - name: get SF Symbols
         run: |
-          ls /Library/Developer/CoreSimulator/Volumes/iOS_23F77/Library/Developer/CoreSimulator/Profiles/Runtimes/
           python3 main.py
       - name: setup xcode
         uses: maxim-lobanov/setup-xcode@v1
