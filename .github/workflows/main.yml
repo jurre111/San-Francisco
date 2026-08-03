@@ -24,6 +24,7 @@ jobs:
       - name: get SF Symbols
         run: |
           ls /System/Volumes/Data/Library/Developer/CoreSimulator/Volumes/iOS_23F77
+          xcrun simctl runtime match list
           exit 1
       - name: setup xcode
         uses: maxim-lobanov/setup-xcode@v1
