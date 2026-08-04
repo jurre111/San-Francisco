@@ -4,11 +4,11 @@ import subprocess
 from pathlib import Path
 import os
 
-path = "/Library/Developer/CoreSimulator/Volumes/iOS_23F77/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.5.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/SFSymbols.framework"
-with open(f"{path}/CoreGlyphs.bundle/symbol_categories.plist", "rb") as f:
-    symbol_categories = plistlib.load(f)
+path = "/Library/Developer/CoreSimulator/Images/images.plist"
+with open(path, "rb") as f:
+    plist = plistlib.load(f)
 
-print(symbol_categories)
+print(plist)
 
 
 exit(1)

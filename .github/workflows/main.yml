@@ -23,9 +23,7 @@ jobs:
 
       - name: get SF Symbols
         run: |
-          cat /Library/Developer/CoreSimulator/Images/images.plist
           ls /Library/Developer/CoreSimulator/Images/mnt
-          exit 1
           python3 main.py
           exit 1
       - name: setup xcode
