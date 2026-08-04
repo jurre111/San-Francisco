@@ -26,8 +26,6 @@ print("retrieved latest runtime:\n")
 for key, value in runtime.items():
     print(f"{key}: {value}")
 
-
-os.makedirs("mnt", exist_ok=True)
 try:
     result = subprocess.run(
         ["hdiutil", "attach", runtime["path"], "-noverify", "-plist"],
@@ -45,7 +43,7 @@ try:
     print(plist)
 
     print("\n\n\n-------------------------------------------\n\n\nContent:\n\n")
-    os.listdir(mount_point)
+    print(os.listdir(mount_point), sep="\n")
 except subprocess.CalledProcessError as e:
     print(f"Failed to mount Runtime (Exit Code {e.returncode}):")
     print(e.stderr)
