@@ -23,9 +23,9 @@ for image in images:
         })
 
 runtime = max(ios_runtimes, key=lambda r: r["version"], default=None)
-# print("retrieved latest runtime:\n")
-# for key, value in runtime.items():
-#     print(f"{key}: {value}")
+print("retrieved latest runtime:\n")
+for key, value in runtime.items():
+    print(f"{key}: {value}")
 
 try:
     result = subprocess.run(
@@ -40,7 +40,7 @@ try:
     for entity in plist.get("system-entities", []):
         if "mount-point" in entity:
             mount_point = entity["mount-point"]
-    # print(f"Runtime mounted at {mount_point}!\n\n\n--------------\n\n\n")
+    print(f"Runtime mounted at {mount_point}!\n\n\n--------------\n\n\n")
 except subprocess.CalledProcessError as e:
     print(f"Failed to mount Runtime (Exit Code {e.returncode}):")
     print(e.stderr)
@@ -49,13 +49,14 @@ except subprocess.CalledProcessError as e:
 
 path = f"{mount_point}/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS {runtime['versionString']}.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/SFSymbols.framework"
 
-print(f"{path}/CoreGlyphs.bundle")
-exit(0)
 with open(f"{path}/CoreGlyphs.bundle/symbol_categories.plist", "rb") as f:
     symbol_categories = plistlib.load(f)
 
 with open(f"{path}/CoreGlyphs.bundle/name_availability.plist", "rb") as f:
     name_availability = plistlib.load(f)
+
+with open(f"{path}/CoreGlyphs.bundle/name_aliases.strings", "rb") as f:
+    name_aliases = plistlib.load(f)
 
 with open(f"{path}/CoreGlyphs.bundle/categories.plist", "rb") as f:
     categoriesInfo = plistlib.load(f)
@@ -100,3 +101,12 @@ with open("categories.plist", "wb") as file:
 # dump year to release version dictionary
 with open("year_to_release.plist", "wb") as f:
     plistlib.dump(name_availability["year_to_release"], f)
+
+
+# dump name aliases
+with open("name_aliases.plist", "wb") as f:
+    dict = {}
+    for key, value in name_aliases.items():
+        dict[value] = key
+
+    plistlib.dump(dict, f)

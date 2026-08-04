@@ -95,6 +95,13 @@ struct ContentView: View {
             return (false, categoriesResult.message)
         }
         categories = categoriesResult.array
+
+        for category in categories {
+            // this means it got removed because the iOS version is too low
+            if symbols[category.icon] == nil {
+
+            }
+        }
         return (ok: true, message: "")
     }
 }
@@ -141,6 +148,30 @@ func loadCategories() -> (ok: Bool, array: [Category], message: String) {
         return (ok: false, array: [], message: "Failed to load categories.plist: \(error)")
     }
 }
+
+func checkCategoriesIconAvailability(categories: [Category], symbols: [String: Symbol])  -> (ok: Bool, array: [Category], message: String) {
+    guard let url = Bundle.main.url(forResource: "name_aliases", withExtension: "plist") else {
+        return (ok: false, array: [], message: "name_aliases.plist is missing??")
+    }
+    do { 
+        let data = try Data(contentsOf: url)
+        let aliases = try PropertyListDecoder().decode([String: String].self, from: data)
+        for index in categories.indices {
+            var category = categories[index]
+            // this means it got removed because the iOS version is too low
+            if symbols[category.icon] == nil {
+                let alias = aliases[category.icon] ?? "questionmark.square"
+                category.icon = symbols[alias] != nil ? alias : "questionmark.square"
+            }
+
+            categories[index] = category
+        }
+        return (ok: true, array: categories, message: "")
+    } catch {
+        return (ok: false, array: [], message: "Failed to load name_aliases.plist: \(error)")
+    }
+}
+
 
 #Preview {
     ContentView()
