@@ -30,18 +30,19 @@ struct ContentView: View {
                                     List{
                                         // ai
                                         Section {
-                                                VStack {
-                                                    Image(systemName: symbol)
-                                                        .font(.system(size: 80))
-                                                        .foregroundColor(.blue)
-                                                }
-                                                .frame(maxWidth: .infinity)
-                                                .aspectRatio(1.0, contentMode: .fit)
-                                                .background(Color(UIColor.secondarySystemGroupedBackground))
-                                                .cornerRadius(12)
+                                            VStack {
+                                                Image(systemName: symbol)
+                                                    .font(.system(size: 80))
+                                                    .foregroundColor(.blue)
                                             }
+                                            .frame(maxWidth: .infinity)
+                                            .aspectRatio(1.0, contentMode: .fit)
                                             .listRowInsets(EdgeInsets())
-                                            .listRowBackground(Color.clear)
+                                            .listRowBackground(
+                                                RoundedRectangle(cornerRadius: 12)
+                                                    .fill(Color(UIColor.secondarySystemGroupedBackground))
+                                            )
+                                        }
 
                                         Section("Customize") {
                                             HStack {
@@ -61,12 +62,13 @@ struct ContentView: View {
                                             HStack {
                                                 Text("Available since")
                                                 Spacer()
-                                                Text("iOS \(symbols[symbol]!.availability)")
+                                                Text("iOS \(symbolData.availability, specifier: "%.1f")")
                                                     .foregroundColor(.secondary)
                                             }
                                         }
                                     }
                                     .navigationTitle("Symbol")
+                                    .navigationBarTitleDisplayMode(.inline)
                                 } label: {
                                     HStack(spacing: 12) {
                                         Image(systemName: symbol)
