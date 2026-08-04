@@ -28,7 +28,6 @@ struct ContentView: View {
                             ForEach(filteredSymbols(category.symbols), id: \.self) { symbol in
                                 NavigationLink {
                                     List{
-                                        // ai
                                         ZStack(alignment: .center) {
                                             RoundedRectangle(cornerRadius: 20, style: .continuous)
                                                 .fill(.thinMaterial)
@@ -38,20 +37,6 @@ struct ContentView: View {
                                             Image(systemName: symbol)
                                                 .font(.system(size: 140))
                                                 .foregroundColor(.blue)
-                                        }
-                                        Section {
-                                            VStack {
-                                                Image(systemName: symbol)
-                                                    .font(.system(size: 80))
-                                                    .foregroundColor(.blue)
-                                            }
-                                            .frame(maxWidth: .infinity)
-                                            .aspectRatio(1.0, contentMode: .fit)
-                                            .listRowInsets(EdgeInsets())
-                                            .listRowBackground(
-                                                RoundedRectangle(cornerRadius: 12)
-                                                    .fill(Color(UIColor.secondarySystemGroupedBackground))
-                                            )
                                         }
 
                                         Section("Customize") {
