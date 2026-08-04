@@ -35,7 +35,7 @@ struct ContentView: View {
                                                 .aspectRatio(1.0, contentMode: .fit)
 
                                             Image(systemName: symbol)
-                                                .font(.system(size: 140))
+                                                .font(.system(size: 220))
                                                 .foregroundColor(.blue)
                                         }
 
@@ -79,7 +79,7 @@ struct ContentView: View {
                         HStack(spacing: 12) {
                             Image(systemName: category.icon)
                                 .frame(width: 20, alignment: .center)
-                            Text(category.key)
+                            Text(category.displayName)
                         }
                     }
                 }
