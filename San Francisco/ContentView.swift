@@ -29,15 +29,16 @@ struct ContentView: View {
                                 NavigationLink {
                                     List{
                                         ZStack(alignment: .center) {
-                                            RoundedRectangle(cornerRadius: 20, style: .continuous)
-                                            .fill(Color.clear)
-                                                .frame(maxWidth: .infinity)
-                                                .aspectRatio(1.0, contentMode: .fit)
-
                                             Image(systemName: symbol)
                                                 .font(.system(size: 220))
                                                 .foregroundColor(.blue)
                                         }
+                                        .frame(maxWidth: .infinity)
+                                        .aspectRatio(1.0, contentMode: .fit)
+                                        .listRowBackground(
+                                            RoundedRectangle(cornerRadius: 20, style: .continuous)
+                                                .fill(Color(UIColor.secondarySystemGroupedBackground))
+                                        )
 
                                         Section("Customize") {
                                             HStack {
