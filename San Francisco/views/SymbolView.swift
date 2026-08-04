@@ -10,7 +10,7 @@ import SwiftUI
 struct SymbolView: View {
     @Environment(\.dismiss) var dismiss
     @ObservedObject var mgr: sfmgr = sfmgr.shared
-    var symbol: String
+    @State private var symbol: String
 
     var body: some View {
         List {
