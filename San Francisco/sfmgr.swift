@@ -7,6 +7,7 @@
 
 import Foundation
 
+@MainActor
 final class sfmgr: ObservableObject {
     @Published var symbols: [String: Symbol] = [:]
     @Published var categories: [Category] = []
