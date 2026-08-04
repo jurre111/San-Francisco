@@ -8,11 +8,11 @@ from pprint import pprint
 path = "/Library/Developer/CoreSimulator/Images/images.plist"
 with open(path, "rb") as f:
     plist = plistlib.load(f)
+    with open("images.plist", "wb") as file:
+        plistlib.dump(plist, file)
 
-pprint(plist)
 
-
-exit(1)
+exit(0)
 
 def get_latest_ios_runtime_root():
     result = subprocess.run(
