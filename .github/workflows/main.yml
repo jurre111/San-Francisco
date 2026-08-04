@@ -23,7 +23,7 @@ jobs:
 
       - name: get SF Symbols
         run: |
-          ls "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 17.simdevicetype"
+          ls "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 17.simdevicetype/Contents"
           exit 1
       - name: setup xcode
         uses: maxim-lobanov/setup-xcode@v1
