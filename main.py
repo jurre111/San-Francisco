@@ -100,7 +100,11 @@ with open("categories.plist", "wb") as file:
 
 # dump year to release version dictionary
 with open("year_to_release.plist", "wb") as f:
-    plistlib.dump(name_availability["year_to_release"], f)
+    year_to_release = name_availability["year_to_release"]
+    for year in year_to_release.keys():
+        for platform in year_to_release[year].keys():
+            year_to_release[year][platform] = float(year_to_release[year][platform])
+    plistlib.dump(year_to_release, f)
 
 
 # dump name aliases

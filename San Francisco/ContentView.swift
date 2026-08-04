@@ -119,16 +119,16 @@ func loadSymbols() -> (ok: Bool, dict: [String: Symbol], message: String) {
     }
 }
 
-func loadYearToRelease() -> (ok: Bool, dict: [String:Double], message: String, ) {
+func loadYearToRelease() -> (ok: Bool, dict: [String: Double], message: String, ) {
     guard let url = Bundle.main.url(forResource: "year_to_release", withExtension: "plist") else {
         return (ok: false, dict: [:], message: "year_to_release.plist is missing??")
     }
     do {
         let data = try Data(contentsOf: url)
-        let yearsDict = try PropertyListSerialization.propertyList(from: data, options: [], format: nil)
+        let yearsDict = try PropertyListDecoder().decode([String: [String: Double]].self, from: data)
         var yearToRelease: [String:Double] = [:]
-        for (key, value) in yearsDict as! [String: [String: String]] {
-            yearToRelease[key] = Double(value["iOS"]!) ?? 0.0
+        for (key, value) in yearsDict {
+            yearToRelease[key] = value["iOS"] ?? 0.0
         }
         return (ok: true, dict: yearToRelease, message: "")
     } catch {
@@ -160,12 +160,13 @@ func checkCategoriesIconAvailability(categories: [Category], symbols: [String: S
         var categoriesCopy = categories
         for index in categoriesCopy.indices {
             var category = categoriesCopy[index]
+            category.symbols = category.symbols.filter { symbols[$0] != nil }
             // this means it got removed because the iOS version is too low
             if symbols[category.icon] == nil {
                 let alias = aliases[category.icon] ?? "questionmark.square"
                 category.icon = symbols[alias] != nil ? alias : "questionmark.square"
-                categoriesCopy[index] = category
             }
+            categoriesCopy[index] = category
         }
         return (ok: true, array: categoriesCopy, message: "")
     } catch {
