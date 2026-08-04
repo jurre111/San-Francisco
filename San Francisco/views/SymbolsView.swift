@@ -9,16 +9,14 @@ import SwiftUI
 
 struct SymbolsView: View {
     @State private var searchText: String = ""
-    @State private var showSheet: Bool = false
-    @State private var selectedSymbol: String = ""
+    @State private var symbolSheet: String? = nil
     var category: sfmgr.Category
 
     var body: some View {
         List {
             ForEach(filteredSymbols(category.symbols), id: \.self) { symbol in
                 Button {
-                    selectedSymbol = symbol
-                    showSheet = true
+                    symbolSheet = symbol
                 } label: {
                     HStack {
                         Image(systemName: symbol)
@@ -38,8 +36,7 @@ struct SymbolsView: View {
                         Label("Copy", systemImage: "doc.on.doc")
                     }
                     Button {
-                        selectedSymbol = symbol
-                        showSheet = true
+                        symbolSheet = symbol
                     } label: {
                         Label("Information", systemImage: "info.circle")
                     }
@@ -48,8 +45,8 @@ struct SymbolsView: View {
         }
         .navigationTitle(category.displayName)
         .searchable(text: $searchText, prompt: "Search Symbols")
-        .sheet(isPresented: $showSheet) {
-            SymbolView(symbol: selectedSymbol)
+        .sheet(item: $symbolSheet) { symbol in
+            SymbolView(symbol: symbol)
         }
     }
 
@@ -60,4 +57,8 @@ struct SymbolsView: View {
             return symbolList.sorted().filter { $0.localizedCaseInsensitiveContains(searchText) }
         }
     }
+}
+
+extension String: Identifiable {
+    public var id: String { self }
 }
