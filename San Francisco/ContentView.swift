@@ -62,7 +62,7 @@ struct ContentView: View {
                                             HStack {
                                                 Text("Available since")
                                                 Spacer()
-                                                Text("iOS \(symbolData.availability, specifier: "%.1f")")
+                                                Text("iOS \(symbols[symbol]!.availability, specifier: "%.1f")")
                                                     .foregroundColor(.secondary)
                                             }
                                         }
