@@ -23,7 +23,8 @@ jobs:
 
       - name: get SF Symbols
         run: |
-          ls /Library/Developer/CoreSimulator/Images
+          cat /Library/Developer/CoreSimulator/Images/images.plist
+          ls /Library/Developer/CoreSimulator/Images/mnt
           exit 1
           python3 main.py
           exit 1
