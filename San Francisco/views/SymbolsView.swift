@@ -29,6 +29,7 @@ struct SymbolsView: View {
                             .imageScale(.small)
                     }
                 }
+                .buttonStyle(.plain)
                 .contextMenu {
                     Button {
                         UIPasteboard.general.string = symbol

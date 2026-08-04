@@ -22,8 +22,6 @@ struct SymbolView: View {
                         .frame(maxWidth: .infinity, alignment: .center)
                         .aspectRatio(1.0, contentMode: .fit)
                 }
-                .frame(maxWidth: .infinity)
-                .aspectRatio(1.0, contentMode: .fit)
                 .listRowBackground(
                     RoundedRectangle(cornerRadius: 20, style: .continuous)
                         .fill(Color(UIColor.secondarySystemGroupedBackground))
@@ -59,6 +57,8 @@ struct SymbolView: View {
                         dismiss()
                     } label: {
                         Image(systemName: "xmark.circle.fill")
+                            .font(.system(size: 25))
+                            .symbolRenderingMode(.palette)
                             .foregroundStyle(.secondary, Color(UIColor.secondarySystemGroupedBackground))
                     }
                 }
