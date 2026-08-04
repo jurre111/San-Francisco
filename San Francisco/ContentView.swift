@@ -21,18 +21,6 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             List {
-                NavigationLink("All") {
-                    List {
-                        ForEach(filteredSymbols(symbols.keys.sorted()), id: \.self) { symbol in
-                            HStack(spacing: 12) {
-                                Image(systemName: symbol)
-                                    .frame(width: 20, alignment: .center)
-                                Text(symbol)
-                            }
-                        }
-                    }
-                    .searchable(text: $searchText, prompt: "Search Symbols")
-                }
                 ForEach(categories, id: \.self) { category in
                     NavigationLink {
                         List {
@@ -147,7 +135,7 @@ func loadCategories() -> (ok: Bool, array: [Category], message: String) {
     }
     do {
         let data = try Data(contentsOf: url)
-        var categories = try PropertyListDecoder().decode([Category].self, from: data)
+        let categories = try PropertyListDecoder().decode([Category].self, from: data)
         return (ok: true, array: categories, message: "")
     } catch {
         return (ok: false, array: [], message: "Failed to load categories.plist: \(error)")
