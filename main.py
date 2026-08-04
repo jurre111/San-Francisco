@@ -22,11 +22,28 @@ for image in images:
         })
 
 runtime = max(ios_runtimes, key=lambda r: r["version"], default=None)
-print(runtime)
+print("retrieved latest runtime:\n")
+for key, value in runtime.items():
+    print(f"{key}: {value}")
 
 
+os.makedirs("mnt", exist_ok=True)
+try:
+    result = subprocess.run(
+        ["hdiutil", "attach", runtime["path"], "-mountpoint", "mnt"],
+        check=True,
+        capture_output=True,
+        text=True
+    )
+    print("Runtime mounted!")
+    print(result.stdout)
+except subprocess.CalledProcessError as e:
+    print(f"Failed to mount Runtime (Exit Code {e.returncode}):")
+    print(e.stderr)
+    raise
 
-
+print("\n\n\n-------------------------------------------\n\n\nContent:\n\n")
+os.listdir("mnt")
 exit(1)
 
 def get_latest_ios_runtime_root():
