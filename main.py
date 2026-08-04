@@ -11,7 +11,7 @@ with open(path, "rb") as f:
 
 ios_runtimes = []
 for image in images:
-    path = image["path"]["relative"].replacing("file://", "")
+    path = image["path"]["relative"].replace("file://", "")
     if "iOS" in path:
         ios_runtimes.append(Path(path))
 
