@@ -86,7 +86,7 @@ for category in categoriesInfo:
         "symbols": []
     }
     for symbol, info in symbols.items():
-        if key in info.categories:
+        if key in info["categories"]:
             dict["symbols"].append(symbol)
     categories.append(dict)
 with open("categories.plist", "wb") as file:
