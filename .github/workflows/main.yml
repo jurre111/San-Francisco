@@ -23,7 +23,6 @@ jobs:
 
       - name: get SF Symbols
         run: |
-          hdiutil attach $(python3 mount.py)
           python3 main.py
       - name: setup xcode
         uses: maxim-lobanov/setup-xcode@v1
