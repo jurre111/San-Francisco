@@ -18,6 +18,7 @@ for image in images:
         ios_runtimes.append({
             "path": path,
             "version": version,
+            "versionString": bundle_id.split("iOS-")[-1].replace("-", "."),
             "build": build
         })
 
@@ -39,81 +40,14 @@ try:
     for entity in plist.get("system-entities", []):
         if "mount-point" in entity:
             mount_point = entity["mount-point"]
-    print("Runtime mounted!")
-    print(plist)
-
-    print("\n\n\n-------------------------------------------\n\n\nContent:\n\n")
-    print(os.listdir(mount_point), sep="\n")
+    print(f"Runtime mounted at {mount_point}!\n\n\n--------------\n\n\n")
 except subprocess.CalledProcessError as e:
     print(f"Failed to mount Runtime (Exit Code {e.returncode}):")
     print(e.stderr)
     raise
 
-exit(1)
 
-def get_latest_ios_runtime_root():
-    result = subprocess.run(
-        ["xcrun", "simctl", "list", "runtimes", "-j"],
-        capture_output=True,
-        text=True,
-        check=True
-    )
-
-    data = json.loads(result.stdout)
-
-    ios_runtimes = [
-        runtime
-        for runtime in data["runtimes"]
-        if runtime.get("platform") == "iOS"
-        and runtime.get("isAvailable", False)
-    ]
-
-    if not ios_runtimes:
-        raise RuntimeError("No available iOS runtimes found")
-
-    # Sort by version number
-    ios_runtimes.sort(
-        key=lambda r: tuple(map(int, r["version"].split("."))),
-        reverse=True
-    )
-
-    return ios_runtimes[0]["runtimeRoot"]
-
-
-# load the necessary dicts
-path = f"{get_latest_ios_runtime_root()}/System/Library/PrivateFrameworks/SFSymbols.framework"
-print(f"{path}/CoreGlyphs.bundle/symbol_categories.plist")
-exit(0)
-
-import os
-import plistlib
-from pathlib import Path
-
-
-# should find the right path to the bundle where the SF Symbols live
-# /Library/Developer/CoreSimulator/Volumes/iOS_23F77/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.5.simruntime/Contents/Resources/RuntimeRoot
-volumes = Path("/Library/Developer/CoreSimulator/Volumes")
-
-
-
-
-
-
-iosVolumes = [p for p in volumes.iterdir() if "iOS" in p.name]
-print(iosVolumes)
-runtimes = []
-for volume in iosVolumes:
-    path = volume / "Library/Developer/CoreSimulator/Profiles/Runtimes/"
-    iosruntime = [p for p in path.iterdir() if "iOS" in p.name]
-    runtimes.extend(iosruntime)
-print(runtimes)
-for runtime in runtimes:
-    os.listdir(runtime)
-exit(1)
-
-
-
-
+path = f"{mount_point}/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS {runtime['versionString']}.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/SFSymbols.framework"
 
 with open(f"{path}/CoreGlyphs.bundle/symbol_categories.plist", "rb") as f:
     symbol_categories = plistlib.load(f)
@@ -123,6 +57,8 @@ with open(f"{path}/CoreGlyphs.bundle/name_availability.plist", "rb") as f:
 
 with open(f"{path}/CoreGlyphs.bundle/categories.plist", "rb") as f:
     categoriesInfo = plistlib.load(f)
+    print(f"{path}/CoreGlyphs.bundle/categories.plist:\n")
+    print(categoriesInfo)
 
 # get symbols
 symbols = {}
