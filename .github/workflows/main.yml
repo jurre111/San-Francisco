@@ -23,7 +23,7 @@ jobs:
 
       - name: get SF Symbols
         run: |
-          find /Library/Developer/CoreSimulator -name "*.simruntime" 2>/dev/null
+          ls /Library/Developer/CoreSimulator/Profiles
           exit 1
       - name: setup xcode
         uses: maxim-lobanov/setup-xcode@v1
