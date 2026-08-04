@@ -63,6 +63,12 @@ with open(f"{path}/CoreGlyphs.bundle/categories.plist", "rb") as f:
     print(f"{path}/CoreGlyphs.bundle/categories.plist:\n")
     print(categoriesInfo)
 
+
+year_to_release = name_availability["year_to_release"]
+for year in year_to_release.keys():
+    year_to_release[year] = float(year_to_release[year]["iOS"])
+
+
 # get symbols
 symbols = {}
 
@@ -71,12 +77,47 @@ for symbol, value in name_availability["symbols"].items():
         categories = symbol_categories[symbol]
     else:
         categories = ["other"]
-    dict = {"categories": categories, "availability": value}
+    dict = {"categories": categories, "availability": year_to_release.get(value, 0.0)}
     symbols[symbol] = dict
 with open("symbols.plist", "wb") as f:
     plistlib.dump(symbols, f)
 
 
+# a dict of all the categories and their display name (yes this is manual and may be subject to change)
+category_display_names = {
+    "all": "All",
+    "whatsnew": "What's New",
+    "draw": "Draw",
+    "variable": "Variable",
+    "multicolor": "Multicolor",
+    "communication": "Communication",
+    "weather": "Weather",
+    "maps": "Maps",
+    "objectsandtools": "Objects & Tools",
+    "devices": "Devices",
+    "cameraandphotos": "Camera & Photos",
+    "gaming": "Gaming",
+    "connectivity": "Connectivity",
+    "transportation": "Transportation",
+    "automotive": "Automotive",
+    "accessibility": "Accessibility",
+    "privacyandsecurity": "Privacy & Security",
+    "human": "Human",
+    "home": "Home",
+    "fitness": "Fitness",
+    "nature": "Nature",
+    "editing": "Editing",
+    "textformatting": "Text Formatting",
+    "media": "Media",
+    "keyboard": "Keyboard",
+    "commerce": "Commerce",
+    "time": "Time",
+    "health": "Health",
+    "shapes": "Shapes",
+    "arrows": "Arrows",
+    "indices": "Indices",
+    "math": "Math",
+}
 
 # get category info
 categories = []
@@ -84,7 +125,7 @@ for category in categoriesInfo:
     key = category["key"]
     dict = {
         "key": key,
-        "displayName": "",
+        "displayName": category_display_names.get(key, key),
         "icon": category["icon"],
         "symbols": []
     }
@@ -96,15 +137,6 @@ with open("categories.plist", "wb") as file:
     plistlib.dump(categories, file)
 
 
-
-
-# dump year to release version dictionary
-with open("year_to_release.plist", "wb") as f:
-    year_to_release = name_availability["year_to_release"]
-    for year in year_to_release.keys():
-        for platform in year_to_release[year].keys():
-            year_to_release[year][platform] = float(year_to_release[year][platform])
-    plistlib.dump(year_to_release, f)
 
 
 # dump name aliases

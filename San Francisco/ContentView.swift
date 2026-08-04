@@ -3,7 +3,7 @@ import Foundation
 
 struct Symbol: Codable {
     var categories: [String]
-    var availability: String
+    var availability: Double
 }
 
 struct Category: Codable, Hashable {
@@ -26,10 +26,53 @@ struct ContentView: View {
                     NavigationLink {
                         List {
                             ForEach(filteredSymbols(category.symbols), id: \.self) { symbol in
-                                HStack(spacing: 12) {
-                                    Image(systemName: symbol)
-                                        .frame(width: 20, alignment: .center)
-                                    Text(symbol)
+                                NavigationLink {
+                                    List{
+                                        // ai
+                                        Section {
+                                                VStack {
+                                                    Image(systemName: symbol)
+                                                        .font(.system(size: 80))
+                                                        .foregroundColor(.blue)
+                                                }
+                                                .frame(maxWidth: .infinity)
+                                                .aspectRatio(1.0, contentMode: .fit)
+                                                .background(Color(UIColor.secondarySystemGroupedBackground))
+                                                .cornerRadius(12)
+                                            }
+                                            .listRowInsets(EdgeInsets())
+                                            .listRowBackground(Color.clear)
+
+                                        Section("Customize") {
+                                            HStack {
+                                                Text("Color")
+                                                Spacer()
+                                                Text("Blue")
+                                                    .foregroundColor(.secondary)
+                                            }
+                                        }
+                                        Section("Info") {
+                                            HStack {
+                                                Text("Name")
+                                                Spacer()
+                                                Text(symbol)
+                                                    .foregroundColor(.secondary)
+                                            }
+                                            HStack {
+                                                Text("Available since")
+                                                Spacer()
+                                                Text("iOS \(symbols[symbol]!.availability)")
+                                                    .foregroundColor(.secondary)
+                                            }
+                                        }
+                                    }
+                                    .navigationTitle("Symbol")
+                                } label: {
+                                    HStack(spacing: 12) {
+                                        Image(systemName: symbol)
+                                            .frame(width: 20, alignment: .center)
+                                        Text(symbol)
+                                    }
                                 }
                             }
                         }
@@ -79,17 +122,11 @@ struct ContentView: View {
         }
         symbols = symbolResult.dict
 
-        let yearToReleaseResult = loadYearToRelease()
-        if !yearToReleaseResult.ok {
-            return (false, yearToReleaseResult.message)
-        }
-        let release = yearToReleaseResult.dict
         let systemVersion = doubleSystemVersion()
-        for symbol in symbols.keys {
-            if systemVersion < release[symbols[symbol]!.availability]! {
-                symbols[symbol] = nil
-            }
+        symbols = symbols.filter { _, info in
+            return systemVersion >= info.availability
         }
+
 
         let categoriesResult = loadCategories()
         if !categoriesResult.ok {
@@ -116,23 +153,6 @@ func loadSymbols() -> (ok: Bool, dict: [String: Symbol], message: String) {
         return (ok: true, dict: symbols, message: "")
     } catch {
         return (ok: false, dict: [:], message: "Failed to load symbols.plist: \(error)")
-    }
-}
-
-func loadYearToRelease() -> (ok: Bool, dict: [String: Double], message: String, ) {
-    guard let url = Bundle.main.url(forResource: "year_to_release", withExtension: "plist") else {
-        return (ok: false, dict: [:], message: "year_to_release.plist is missing??")
-    }
-    do {
-        let data = try Data(contentsOf: url)
-        let yearsDict = try PropertyListDecoder().decode([String: [String: Double]].self, from: data)
-        var yearToRelease: [String:Double] = [:]
-        for (key, value) in yearsDict {
-            yearToRelease[key] = value["iOS"] ?? 0.0
-        }
-        return (ok: true, dict: yearToRelease, message: "")
-    } catch {
-        return (ok: false, dict: [:], message: "Failed to load year_to_release.plist: \(error)")
     }
 }
 
