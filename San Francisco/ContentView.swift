@@ -13,6 +13,7 @@ struct Category: Codable, Hashable {
     var symbols: [String]
 }
 
+
 struct ContentView: View {
     @State private var symbols: [String: Symbol] = [:]
     @State private var categories: [Category] = []
@@ -82,12 +83,10 @@ struct ContentView: View {
         if !yearToReleaseResult.ok {
             return (false, yearToReleaseResult.message)
         }
-        let yearToRelease = yearToReleaseResult.dict
+        let release = yearToReleaseResult.dict
         let systemVersion = doubleSystemVersion()
-        for symbol in symbols.keys {
-            if systemVersion < yearToRelease[symbols[symbol]!.availability]! {
-                symbols[symbol] = nil
-            }
+        symbols = symbols.filter { _, info in 
+            return systemVersion >= release[info.availability]!
         }
 
         let categoriesResult = loadCategories()
@@ -96,12 +95,11 @@ struct ContentView: View {
         }
         categories = categoriesResult.array
 
-        for category in categories {
-            // this means it got removed because the iOS version is too low
-            if symbols[category.icon] == nil {
-
-            }
+        let checkResult = checkCategoriesIconAvailability(categories: categories, symbols: symbols)
+        if !checkResult.ok {
+            return (false, checkResult.message)
         }
+        categories = checkResult.array
         return (ok: true, message: "")
     }
 }
@@ -156,17 +154,18 @@ func checkCategoriesIconAvailability(categories: [Category], symbols: [String: S
     do { 
         let data = try Data(contentsOf: url)
         let aliases = try PropertyListDecoder().decode([String: String].self, from: data)
-        for index in categories.indices {
-            var category = categories[index]
+        
+        var categoriesCopy = categories
+        for index in categoriesCopy.indices {
+            var category = categoriesCopy[index]
             // this means it got removed because the iOS version is too low
             if symbols[category.icon] == nil {
                 let alias = aliases[category.icon] ?? "questionmark.square"
                 category.icon = symbols[alias] != nil ? alias : "questionmark.square"
+                categoriesCopy[index] = category
             }
-
-            categories[index] = category
         }
-        return (ok: true, array: categories, message: "")
+        return (ok: true, array: categoriesCopy, message: "")
     } catch {
         return (ok: false, array: [], message: "Failed to load name_aliases.plist: \(error)")
     }
