@@ -30,6 +30,7 @@ struct ContentView: View {
                                     List{
                                         ZStack(alignment: .center) {
                                             RoundedRectangle(cornerRadius: 20, style: .continuous)
+                                            .fill(Color.clear)
                                                 .frame(maxWidth: .infinity)
                                                 .aspectRatio(1.0, contentMode: .fit)
 
