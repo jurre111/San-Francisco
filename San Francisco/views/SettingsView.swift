@@ -1,3 +1,10 @@
+//
+//  SettingsView.swift
+//  San Francisco
+//
+//  Created by jurre111 on 03.08.26.
+//
+
 import SwiftUI
 
 struct SettingsView: View {
