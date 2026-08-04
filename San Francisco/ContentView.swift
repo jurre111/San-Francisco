@@ -85,8 +85,10 @@ struct ContentView: View {
         }
         let release = yearToReleaseResult.dict
         let systemVersion = doubleSystemVersion()
-        symbols = symbols.filter { _, info in 
-            return systemVersion >= release[info.availability]!
+        for symbol in symbols.keys {
+            if systemVersion < release[symbols[symbol]!.availability]! {
+                symbols[symbol] = nil
+            }
         }
 
         let categoriesResult = loadCategories()
