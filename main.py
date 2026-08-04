@@ -7,12 +7,20 @@ from pprint import pprint
 
 path = "/Library/Developer/CoreSimulator/Images/images.plist"
 with open(path, "rb") as f:
-    plist = plistlib.load(f)
-    with open("images.plist", "wb") as file:
-        plistlib.dump(plist, file)
+    images = plistlib.load(f)["images"]
+
+ios_runtimes = []
+for image in images:
+    path = image["path"]["relative"].replacing("file://", "")
+    if "iOS" in path:
+        ios_runtimes.append(Path(path))
+
+print(ios_runtimes)
 
 
-exit(0)
+
+
+exit(1)
 
 def get_latest_ios_runtime_root():
     result = subprocess.run(
