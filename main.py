@@ -4,6 +4,15 @@ import subprocess
 from pathlib import Path
 import os
 
+path = "/Library/Developer/CoreSimulator/Volumes/iOS_23F77/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.5.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/SFSymbols.framework"
+with open(f"{path}/CoreGlyphs.bundle/symbol_categories.plist", "rb") as f:
+    symbol_categories = plistlib.load(f)
+
+print(symbol_categories)
+
+
+exit(1)
+
 def get_latest_ios_runtime_root():
     result = subprocess.run(
         ["xcrun", "simctl", "list", "runtimes", "-j"],
@@ -46,6 +55,12 @@ from pathlib import Path
 # should find the right path to the bundle where the SF Symbols live
 # /Library/Developer/CoreSimulator/Volumes/iOS_23F77/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.5.simruntime/Contents/Resources/RuntimeRoot
 volumes = Path("/Library/Developer/CoreSimulator/Volumes")
+
+
+
+
+
+
 iosVolumes = [p for p in volumes.iterdir() if "iOS" in p.name]
 print(iosVolumes)
 runtimes = []
