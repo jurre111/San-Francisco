@@ -102,7 +102,7 @@ struct ContentView: View {
             }
         }
 
-        let categoriesResult = loadCategories(symbols)
+        let categoriesResult = loadCategories()
         if !categoriesResult.ok {
             return (false, categoriesResult.message)
         }
