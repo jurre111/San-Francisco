@@ -3,12 +3,13 @@ import json
 import subprocess
 from pathlib import Path
 import os
+from pprint import pprint
 
 path = "/Library/Developer/CoreSimulator/Images/images.plist"
 with open(path, "rb") as f:
     plist = plistlib.load(f)
 
-print(json.dumps(plist, indent=4))
+pprint(plist)
 
 
 exit(1)
