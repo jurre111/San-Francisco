@@ -29,6 +29,16 @@ struct ContentView: View {
                                 NavigationLink {
                                     List{
                                         // ai
+                                        ZStack(alignment: .center) {
+                                            RoundedRectangle(cornerRadius: 20, style: .continuous)
+                                                .fill(.thinMaterial)
+                                                .frame(maxWidth: .infinity)
+                                                .aspectRatio(1.0, contentMode: .fit)
+
+                                            Image(systemName: symbol)
+                                                .font(.system(size: 140))
+                                                .foregroundColor(.blue)
+                                        }
                                         Section {
                                             VStack {
                                                 Image(systemName: symbol)
