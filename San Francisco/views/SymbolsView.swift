@@ -17,7 +17,7 @@ struct SymbolsView: View {
         List {
             ForEach(filteredSymbols(category.symbols), id: \.self) { symbol in
                 NavigationLink {
-                    SymbolCustomizeView(symbol: symbol)
+                    SymbolCustomizeView(symbol: symbol, info: mgr.symbols[symbol])
                 } label: {
                     HStack {
                         Image(systemName: symbol)

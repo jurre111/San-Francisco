@@ -9,8 +9,8 @@ import SwiftUI
 
 struct SymbolInfoView: View {
     @ObservedObject var mgr: sfmgr = sfmgr.shared
-    @State private var symbol: String
-    @State private var info: sfmgr.Symbol?
+    var symbol: String
+    var info: sfmgr.Symbol?
 
     var body: some View {
         if let symbolInfo = info {
