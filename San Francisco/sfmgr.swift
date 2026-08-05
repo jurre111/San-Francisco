@@ -13,7 +13,7 @@ final class sfmgr: ObservableObject {
     @Published var symbols: [String: Symbol] = [:]
     @Published var categories: [Category] = []
 
-    @AppStorage("favorites") var favorites: String = ""
+    @AppStorage("favorites") var favorites: String = ";"
 
     static let shared = sfmgr()
 
@@ -55,6 +55,17 @@ final class sfmgr: ObservableObject {
         }
         categories = checkResult.array
         return (ok: true, message: "")
+    }
+
+
+    func toggleFavorite(symbol: String) {
+        if !favorites.contains(";\(symbol);") {
+            favorites += symbol + ";"
+            symbols[symbol]?.favorite = true
+        } else {
+            favorites = favorites.replacingOccurrences(of: ";\(symbol);", with: ";")
+            symbols[symbol]?.favorite = false
+        } 
     }
 
     private func loadSymbols() -> (ok: Bool, dict: [String: Symbol], message: String) {

@@ -25,8 +25,10 @@ struct SymbolsView: View {
     var body: some View {
         Group {
             if loaded {
-                List(shownSymbols, id: \.self) { symbol in 
-                    SymbolListView(symbol: symbol, mgr: mgr, infoSheet: $infoSheet)
+                List(shownSymbols, id: \.self) { symbol in
+                    if let symbolInfo = mgr.symbols[symbol] {
+                        SymbolListView(symbol: symbol, info: symbolInfo, infoSheet: $infoSheet)
+                    }
                 }
             } else {
                 ProgressView()
@@ -40,7 +42,7 @@ struct SymbolsView: View {
             }
         }
         .onSubmit(of: .search) {
-            shownSymbols = allSymbols.filter { $0.localizedCaseInsensitiveContains(searchText) }
+            await search()
         }
         .sheet(item: $infoSheet) { symbol in
             SymbolInfoView(symbol: symbol.name, info: symbol.info)
@@ -55,5 +57,16 @@ struct SymbolsView: View {
         let sortedSymbols = category.symbols.sorted()
         allSymbols = sortedSymbols
         shownSymbols = sortedSymbols
+    }
+
+    func search() async {
+        let query = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+        DispatchQueue.global(qos: .userInitiated).async {
+            let filtered = allSymbols.filter { $0.localizedCaseInsensitiveContains(query) }
+
+            DispatchQueue.main.async {
+                shownSymbols = filtered
+            }
+        }
     }
 }
