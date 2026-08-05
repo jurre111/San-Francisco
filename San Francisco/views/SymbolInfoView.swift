@@ -10,6 +10,7 @@ import SwiftUI
 struct SymbolInfoView: View {
     @ObservedObject var mgr: sfmgr = sfmgr.shared
     var symbol: String
+    let symbolInfo = mgr.symbols[symbol]!
 
     var body: some View {
         NavigationStack {
@@ -36,8 +37,19 @@ struct SymbolInfoView: View {
                     HStack {
                         Text("Available since")
                         Spacer()
-                        Text("iOS \(String(mgr.symbols[symbol]!.availability))")
+                        Text("iOS \(String(symbolInfo.availability))")
                             .foregroundColor(.secondary)
+                    }
+                }
+            }
+            Section("Categories") {
+                ForEach(mgr.categories, id: \.self) { category in
+                    if category.key != "name" && symbolInfo.categories.contains(category.key) {
+                        HStack {
+                            Image(systemName: category.icon)
+                                .frame(width: 20, alignment: .center)
+                            Text(category.displayName)
+                        }
                     }
                 }
             }

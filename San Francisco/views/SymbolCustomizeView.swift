@@ -8,8 +8,11 @@
 import SwiftUI
 
 struct SymbolCustomizeView: View {
+    @ObservedObject var mgr: sfmgr = sfmgr.shared
     @State private var symbolSheet: String? = nil
+    @State private var renderingMode: SymbolRenderingMode? = nil
     var symbol: String
+    let symbolInfo = mgr.symbols[symbol]!
 
     var body: some View {
         NavigationStack {
@@ -19,6 +22,7 @@ struct SymbolCustomizeView: View {
                         .frame(maxWidth: .infinity, alignment: .center)
                         .aspectRatio(1.0, contentMode: .fit)
                     Image(systemName: symbol)
+                        .symbolRenderingMode(renderingMode)
                         .font(.system(size: 220))
                         .foregroundColor(.blue)
                 }
@@ -27,12 +31,24 @@ struct SymbolCustomizeView: View {
                         .fill(Color(UIColor.secondarySystemGroupedBackground))
                 )
                 Section {
-                    NavigationLink {}
-                    HStack {
-                        Text("Color")
-                        Spacer()
-                        Text("Blue")
-                            .foregroundColor(.secondary)
+                    Picker("Style", selection: $renderingMode) {
+                        Text("Automatic").tag(nil as SymbolRenderingMode?)
+                        if symbolInfo.categories.contains("multicolor") {
+                            Text("Multicolor").tag(.multicolor)
+                        }
+                        Text("Hierarchical").tag(.hierarchical)
+                        Text("Palette").tag(.palette)
+
+                    }
+                    NavigationLink("Color") {
+                        List {
+                            HStack {
+                                Text("Color")
+                                Spacer()
+                                Text("Blue")
+                                    .foregroundColor(.secondary)
+                            }
+                        }
                     }
                 }
             }
@@ -44,6 +60,8 @@ struct SymbolCustomizeView: View {
             .toolbar {
                 Button {
                     symbolSheet = symbol
+                } label: {
+                    Image(systemName: "info.circle")
                 }
             }
         }
