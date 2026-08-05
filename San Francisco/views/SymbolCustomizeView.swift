@@ -62,9 +62,11 @@ struct SymbolCustomizeView: View {
                     if !info.favorite {
                         mgr.favorites += symbol + ";"
                         mgr.symbols[symbol]!.favorite = true
+                        info.favorite = true
                     } else {
                         mgr.favorites = mgr.favorites.replacingOccurrences(of: symbol + ";", with: "")
                         mgr.symbols[symbol]?.favorite = false
+                        info.favorite = false
                     }  
                 } label: {
                     Image(systemName: info.favorite ? "star.fill" : "star")
