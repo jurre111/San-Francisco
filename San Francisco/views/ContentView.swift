@@ -27,7 +27,15 @@ struct ContentView: View {
                 NavigationLink {
                     List {
                         ForEach(0...8000, id: \.self) { item in
-                            Text("Item \(item)")
+                            NavigationLink {
+                                List {}
+                            } label: {
+                                HStack {
+                                    Image(systemName: "ladybug")
+                                        .frame(width: 20, alignment: .center)
+                                    Text("item \(item)")
+                                }
+                            }
                         }
                     }
                 } label: {
