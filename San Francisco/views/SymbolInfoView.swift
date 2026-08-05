@@ -10,7 +10,7 @@ import SwiftUI
 struct SymbolInfoView: View {
     @ObservedObject var mgr: sfmgr = sfmgr.shared
     var symbol: String
-    let symbolInfo = mgr.symbols[symbol]!
+    var symbolInfo: sfmgr.Symbol
 
     var body: some View {
         NavigationStack {
@@ -55,6 +55,9 @@ struct SymbolInfoView: View {
             }
             .navigationTitle("Information")
             .navigationBarTitleDisplayMode(.inline)
+        }
+        .onAppear {
+            symbolInfo = mgr.symbols[symbol]!
         }
     }
 }
