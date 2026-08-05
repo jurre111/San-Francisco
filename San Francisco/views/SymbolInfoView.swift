@@ -12,6 +12,10 @@ struct SymbolInfoView: View {
     var symbol: String
     var symbolInfo: sfmgr.Symbol
 
+    init() {
+        _symbolInfo = State(initialValue: mgr.symbols[symbol]!)
+    }
+
     var body: some View {
         NavigationStack {
             List{
@@ -56,9 +60,6 @@ struct SymbolInfoView: View {
             }
             .navigationTitle("Information")
             .navigationBarTitleDisplayMode(.inline)
-        }
-        .onAppear {
-            symbolInfo = mgr.symbols[symbol]!
         }
     }
 }
