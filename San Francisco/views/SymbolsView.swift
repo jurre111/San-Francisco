@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct SymbolsView: View {
+    @ObservedObject var mgr: sfmgr = sfmgr.shared
     @State private var searchText: String = ""
     @State private var symbolSheet: String? = nil
     var category: sfmgr.Category
@@ -41,7 +42,7 @@ struct SymbolsView: View {
         .navigationTitle(category.displayName)
         .searchable(text: $searchText, prompt: "Search Symbols")
         .sheet(item: $symbolSheet) { symbol in
-            SymbolInfoView(symbol: symbol)
+            SymbolInfoView(symbol: symbol, info: mgr.symbols[symbol])
         }
     }
 
