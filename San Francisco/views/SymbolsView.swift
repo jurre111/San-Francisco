@@ -15,21 +15,15 @@ struct SymbolsView: View {
     var body: some View {
         List {
             ForEach(filteredSymbols(category.symbols), id: \.self) { symbol in
-                Button {
-                    symbolSheet = symbol
+                NavigationLink {
+                    SymbolCustomizeView(symbol: symbol)
                 } label: {
                     HStack {
                         Image(systemName: symbol)
                             .frame(width: 20, alignment: .center)
                         Text(symbol)
-                        Spacer()
-                        Image(systemName: "chevron.right")
-                            .fontWeight(.semibold)
-                            .foregroundStyle(.tertiary)
-                            .imageScale(.small)
                     }
                 }
-                .buttonStyle(.plain)
                 .contextMenu {
                     Button {
                         UIPasteboard.general.string = symbol
@@ -39,7 +33,7 @@ struct SymbolsView: View {
                     Button {
                         symbolSheet = symbol
                     } label: {
-                        Label("Information", systemImage: "info.circle")
+                        Label("Info", systemImage: "info.circle")
                     }
                 }
             }
@@ -47,7 +41,7 @@ struct SymbolsView: View {
         .navigationTitle(category.displayName)
         .searchable(text: $searchText, prompt: "Search Symbols")
         .sheet(item: $symbolSheet) { symbol in
-            SymbolView(symbol: symbol)
+            SymbolInfoView(symbol: symbol)
         }
     }
 

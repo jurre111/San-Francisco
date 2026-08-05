@@ -1,14 +1,13 @@
 //
-//  SymbolView.swift
+//  SymbolInfoView.swift
 //  San Francisco
 //
-//  Created by jurre111 on 04.08.26.
+//  Created by jurre111 on 05.08.26.
 //
 
 import SwiftUI
 
-struct SymbolView: View {
-    @Environment(\.dismiss) var dismiss
+struct SymbolInfoView: View {
     @ObservedObject var mgr: sfmgr = sfmgr.shared
     var symbol: String
 
@@ -19,6 +18,7 @@ struct SymbolView: View {
                     Image(systemName: symbol)
                         .font(.system(size: 220))
                         .foregroundColor(.blue)
+                    
                         .frame(maxWidth: .infinity, alignment: .center)
                         .aspectRatio(1.0, contentMode: .fit)
                 }
@@ -26,14 +26,6 @@ struct SymbolView: View {
                     RoundedRectangle(cornerRadius: 20, style: .continuous)
                         .fill(Color(UIColor.secondarySystemGroupedBackground))
                 )
-                Section("Customize") {
-                    HStack {
-                        Text("Color")
-                        Spacer()
-                        Text("Blue")
-                            .foregroundColor(.secondary)
-                    }
-                }
                 Section("Info") {
                     HStack {
                         Text("Name")
@@ -49,20 +41,8 @@ struct SymbolView: View {
                     }
                 }
             }
-            .navigationTitle("Symbol")
+            .navigationTitle("Information")
             .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                        dismiss()
-                    } label: {
-                        Image(systemName: "xmark.circle.fill")
-                            .font(.system(size: 25))
-                            .symbolRenderingMode(.palette)
-                            .foregroundStyle(.secondary, Color(UIColor.secondarySystemGroupedBackground))
-                    }
-                }
-            }
         }
     }
 }
