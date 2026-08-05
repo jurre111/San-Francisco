@@ -77,7 +77,7 @@ for symbol, value in name_availability["symbols"].items():
         categories = symbol_categories[symbol]
     else:
         categories = ["other"]
-    dict = {"categories": categories, "availability": year_to_release.get(value, 0.0)}
+    dict = {"categories": categories, "availability": year_to_release.get(value, 0.0), "favorite": False}
     symbols[symbol] = dict
 with open("symbols.plist", "wb") as f:
     plistlib.dump(symbols, f)

@@ -12,11 +12,14 @@ final class sfmgr: ObservableObject {
     @Published var symbols: [String: Symbol] = [:]
     @Published var categories: [Category] = []
 
+    @AppStorage("favorites") var favorites: String = ""
+
     static let shared = sfmgr()
 
     struct Symbol: Codable {
         var categories: [String]
         var availability: Double
+        var favorite: Bool
     }
 
     struct Category: Codable, Hashable {
@@ -60,6 +63,9 @@ final class sfmgr: ObservableObject {
         do {
             let data = try Data(contentsOf: url)
             let symbols = try PropertyListDecoder().decode([String: Symbol].self, from: data)
+            for symbol in favorites.components(separatedBy: ";").dropLast() {
+                symbols[symbol]?.favorite = true
+            }
             return (ok: true, dict: symbols, message: "")
         } catch {
             return (ok: false, dict: [:], message: "Failed to load symbols.plist: \(error)")

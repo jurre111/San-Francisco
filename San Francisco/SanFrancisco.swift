@@ -11,7 +11,14 @@ import SwiftUI
 struct SanFrancisco: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            TabView {
+                Tab("Home", systemImage: "house.fill") {
+                    ContentView()
+                }
+                Tab("Favorites", systemImage: "star.fill") {
+                    FavoritesView()
+                }
+            }
         }
     }
 }

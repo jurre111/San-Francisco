@@ -10,31 +10,39 @@ import SwiftUI
 struct SymbolsView: View {
     @ObservedObject var mgr: sfmgr = sfmgr.shared
     @State private var searchText: String = ""
-    @State private var symbolSheet: String? = nil
+    @State private var symbolSheet: (name: String, info: sfmgr.SymbolInfo)? = nil
     var category: sfmgr.Category
 
     var body: some View {
         List {
             ForEach(filteredSymbols(category.symbols), id: \.self) { symbol in
-                NavigationLink {
-                    SymbolCustomizeView(symbol: symbol, info: mgr.symbols[symbol])
-                } label: {
-                    HStack {
-                        Image(systemName: symbol)
-                            .frame(width: 20, alignment: .center)
-                        Text(symbol)
-                    }
-                }
-                .contextMenu {
-                    Button {
-                        UIPasteboard.general.string = symbol
+                if let symbolInfo = mgr.symbols[symbol] {
+                    NavigationLink {
+                        SymbolCustomizeView(symbol: symbol, info: symbolInfo)
                     } label: {
-                        Label("Copy", systemImage: "doc.on.doc")
+                        HStack {
+                            Image(systemName: symbol)
+                                .frame(width: 20, alignment: .center)
+                            Text(symbol)
+                        }
                     }
-                    Button {
-                        symbolSheet = symbol
-                    } label: {
-                        Label("Info", systemImage: "info.circle")
+                    .contextMenu {
+                        Button {
+                            UIPasteboard.general.string = symbol
+                        } label: {
+                            Label("Copy", systemImage: "doc.on.doc")
+                        }
+                        Button {
+                            symbolSheet = (name: symbol, info: symbolInfo)
+                        } label: {
+                            Label("Info", systemImage: "info.circle")
+                        }
+                        Button {
+                            mgr.favorites += symbol + ";"
+                            mgr.symbols[symbol]!.favorite = true
+                        } label: {
+                            Label(symbolInfo.favorite ? "Remove from Favorites" : "Add to Favorites", systemImage: symbolInfo.favorite ? "star.slash" : "star")
+                        }
                     }
                 }
             }
@@ -42,7 +50,7 @@ struct SymbolsView: View {
         .navigationTitle(category.displayName)
         .searchable(text: $searchText, prompt: "Search Symbols")
         .sheet(item: $symbolSheet) { symbol in
-            SymbolInfoView(symbol: symbol, info: mgr.symbols[symbol])
+            SymbolInfoView(symbol: symbol.name, info: symbol.info)
         }
     }
 
