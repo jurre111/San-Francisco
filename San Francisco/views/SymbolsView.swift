@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct SymbolSheet: Identifiable {
+struct InfoSheet: Identifiable {
     var id: String { name }
     let name: String
     let info: sfmgr.Symbol
@@ -16,49 +16,17 @@ struct SymbolSheet: Identifiable {
 struct SymbolsView: View {
     @ObservedObject var mgr: sfmgr = sfmgr.shared
     @State private var searchText: String = ""
-    @State private var symbolSheet: SymbolSheet? = nil
-    @State var category: sfmgr.Category
+    @State private var infoSheet: InfoSheet? = nil
+    let category: sfmgr.Category
+    @State private var allSymbols: [String] = []
     @State private var shownSymbols: [String] = []
     @State private var loaded: Bool = false
 
     var body: some View {
-        List {
+        Group {
             if loaded {
-                ForEach(shownSymbols, id: \.self) { symbol in
-                    if let symbolInfo = mgr.symbols[symbol] {
-                        NavigationLink {
-                            SymbolCustomizeView(symbol: symbol, info: symbolInfo)
-                        } label: {
-                            HStack {
-                                Image(systemName: symbol)
-                                    .frame(width: 20, alignment: .center)
-                                Text(symbol)
-                            }
-                        }
-                        .contextMenu {
-                            Button {
-                                UIPasteboard.general.string = symbol
-                            } label: {
-                                Label("Copy", systemImage: "doc.on.doc")
-                            }
-                            Button {
-                                symbolSheet = SymbolSheet(name: symbol, info: symbolInfo)
-                            } label: {
-                                Label("Info", systemImage: "info.circle")
-                            }
-                            Button {
-                                if !symbolInfo.favorite {
-                                    mgr.favorites += symbol + ";"
-                                    mgr.symbols[symbol]?.favorite = true
-                                } else {
-                                    mgr.favorites = mgr.favorites.replacingOccurrences(of: symbol + ";", with: "")
-                                    mgr.symbols[symbol]?.favorite = false
-                                } 
-                            } label: {
-                                Label(symbolInfo.favorite ? "Remove from Favorites" : "Add to Favorites", systemImage: symbolInfo.favorite ? "star.slash" : "star")
-                            }
-                        }
-                    }
+                List(shownSymbols, id: \.self) { symbol in 
+                    SymbolListView(symbol: symbol, mgr: mgr, infoSheet: $infoSheet)
                 }
             } else {
                 ProgressView()
@@ -68,13 +36,13 @@ struct SymbolsView: View {
         .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search Symbols")
         .onChange(of: searchText) { newValue in
             if newValue.isEmpty {
-                shownSymbols = category.symbols
+                shownSymbols = allSymbols
             }
         }
         .onSubmit(of: .search) {
-            shownSymbols = category.symbols.filter { $0.localizedCaseInsensitiveContains(searchText) }
+            shownSymbols = allSymbols.filter { $0.localizedCaseInsensitiveContains(searchText) }
         }
-        .sheet(item: $symbolSheet) { symbol in
+        .sheet(item: $infoSheet) { symbol in
             SymbolInfoView(symbol: symbol.name, info: symbol.info)
         }
         .task {
@@ -84,7 +52,8 @@ struct SymbolsView: View {
     }
 
     func load() async {
-        category.symbols.sort()
-        shownSymbols = category.symbols
+        let sortedSymbols = category.symbols.sorted()
+        allSymbols = sortedSymbols
+        shownSymbols = sortedSymbols
     }
 }
