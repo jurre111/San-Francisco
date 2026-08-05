@@ -45,8 +45,13 @@ struct SymbolsView: View {
                             Label("Info", systemImage: "info.circle")
                         }
                         Button {
-                            mgr.favorites += symbol + ";"
-                            mgr.symbols[symbol]!.favorite = true
+                            if !symbolInfo.favorite {
+                                mgr.favorites += symbol + ";"
+                                mgr.symbols[symbol]!.favorite = true
+                            } else {
+                                mgr.favorites = mgr.favorites.replacingOccurrences(of: symbol + ";", with: "")
+                                mgr.symbols[symbol]?.favorite = false
+                            } 
                         } label: {
                             Label(symbolInfo.favorite ? "Remove from Favorites" : "Add to Favorites", systemImage: symbolInfo.favorite ? "star.slash" : "star")
                         }

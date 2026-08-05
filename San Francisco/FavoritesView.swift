@@ -47,7 +47,7 @@ struct FavoritesView: View {
                                     mgr.favorites = mgr.favorites.replacingOccurrences(of: symbol + ";", with: "")
                                     mgr.symbols[symbol]?.favorite = false
                                 } label: {
-                                    Label("Remove", systemImage: "star.slash")
+                                    Text("Remove")
                                 }
                             }
                         }
