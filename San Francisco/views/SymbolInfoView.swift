@@ -37,14 +37,14 @@ struct SymbolInfoView: View {
                     HStack {
                         Text("Available since")
                         Spacer()
-                        Text("iOS \(String(symbolInfo.availability))")
+                        Text("iOS \(String(info.availability))")
                             .foregroundColor(.secondary)
                     }
                 }
             
                 Section("Categories") {
                     ForEach(mgr.categories, id: \.self) { category in
-                        if category.key != "name" && symbolInfo.categories.contains(category.key) {
+                        if category.key != "name" && info.categories.contains(category.key) {
                             HStack {
                                 Image(systemName: category.icon)
                                     .frame(width: 20, alignment: .center)

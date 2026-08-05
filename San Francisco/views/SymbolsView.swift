@@ -7,11 +7,17 @@
 
 import SwiftUI
 
+struct SymbolSheet: Identifiable {
+    var id: String { name }
+    let name: String
+    let info: sfmgr.Symbol
+}
+
 struct SymbolsView: View {
     @ObservedObject var mgr: sfmgr = sfmgr.shared
     @State private var query: String = ""
     @State private var searchText: String = ""
-    @State private var symbolSheet: (name: String, info: sfmgr.Symbol)? = nil
+    @State private var symbolSheet: SymbolSheet? = nil
     var category: sfmgr.Category
 
     var body: some View {
@@ -34,7 +40,7 @@ struct SymbolsView: View {
                             Label("Copy", systemImage: "doc.on.doc")
                         }
                         Button {
-                            symbolSheet = (name: symbol, info: symbolInfo)
+                            symbolSheet = SymbolSheet(name: symbol, info: symbolInfo)
                         } label: {
                             Label("Info", systemImage: "info.circle")
                         }

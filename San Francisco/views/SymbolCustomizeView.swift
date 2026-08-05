@@ -33,7 +33,7 @@ struct SymbolCustomizeView: View {
                 Section {
                     Picker("Style", selection: $renderingMode) {
                         Text("Default").tag("default")
-                        if symbolInfo.categories.contains("multicolor") {
+                        if info.categories.contains("multicolor") {
                             Text("Multicolor").tag("multicolor")
                         }
                         Text("Hierarchical").tag("hierarchical")
@@ -62,7 +62,7 @@ struct SymbolCustomizeView: View {
                     mgr.favorites += symbol + ";"
                     mgr.symbols[symbol]!.favorite = true
                 } label: {
-                    Label(systemImage: info.favorite ? "star.fill" : "star")
+                    Image(systemImage: info.favorite ? "star.fill" : "star")
                 }
                 Button {
                     symbolSheet = symbol
