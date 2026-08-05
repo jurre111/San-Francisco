@@ -11,14 +11,14 @@ struct FavoritesView: View {
     @ObservedObject var mgr: sfmgr = sfmgr.shared
     @State private var query: String = ""
     @State private var searchText: String = ""
-    @State private var symbolSheet: (name: String, info: sfmgr.Symbol)? = nil
+    @State private var symbolSheet: SymbolSheet? = nil
 
     var body: some View {
         if mgr.favorites == "" {
             Text("No favorites yet")
         } else {
             List {
-                ForEach(filteredSymbols(favorites.components(separatedBy: ";").dropLast()), id: \.self) { symbol in
+                ForEach(filteredSymbols(mgr.favorites.components(separatedBy: ";").dropLast()), id: \.self) { symbol in
                     if let symbolInfo = mgr.symbols[symbol] {
                         NavigationLink {
                             SymbolCustomizeView(symbol: symbol, info: symbolInfo)
@@ -36,7 +36,7 @@ struct FavoritesView: View {
                                 Label("Copy", systemImage: "doc.on.doc")
                             }
                             Button {
-                                symbolSheet = (name: symbol, info: symbolInfo)
+                                symbolSheet = SymbolSheet(name: symbol, info: symbolInfo)
                             } label: {
                                 Label("Info", systemImage: "info.circle")
                             }
@@ -52,7 +52,7 @@ struct FavoritesView: View {
                     }
                 }
             }
-            .navigationTitle(category.displayName)
+            .navigationTitle("Favorites")
             .searchable(text: $searchText, prompt: "Search Favorites")
             .onSubmit(of: .search) {
                 query = searchText

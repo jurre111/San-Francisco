@@ -62,7 +62,7 @@ struct SymbolCustomizeView: View {
                     mgr.favorites += symbol + ";"
                     mgr.symbols[symbol]!.favorite = true
                 } label: {
-                    Image(systemImage: info.favorite ? "star.fill" : "star")
+                    Image(systemName: info.favorite ? "star.fill" : "star")
                 }
                 Button {
                     symbolSheet = symbol
