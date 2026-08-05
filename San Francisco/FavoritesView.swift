@@ -55,7 +55,7 @@ struct FavoritesView: View {
                 }
             }
             .navigationTitle("Favorites")
-            .searchable(text: $searchText, prompt: "Search Favorites")
+            .searchable(text: $searchText, prompt: "Search Favorites", placement: .navigationBarDrawer(displayMode: .always))
             .onSubmit(of: .search) {
                 query = searchText
             }

@@ -55,7 +55,7 @@ struct SymbolsView: View {
             }
         }
         .navigationTitle(category.displayName)
-        .searchable(text: $searchText, prompt: "Search Symbols")
+        .searchable(text: $searchText, prompt: "Search Symbols", placement: .navigationBarDrawer(displayMode: .always))
         .onSubmit(of: .search) {
             query = searchText
         }
