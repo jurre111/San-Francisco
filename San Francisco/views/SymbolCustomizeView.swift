@@ -26,12 +26,12 @@ struct SymbolCustomizeView: View {
                             .font(.system(size: 220))
                             .foregroundColor(.blue)
                     }
-                    .listRowBackground(
-                        GeometryReader { geometry in
-                            RoundedRectangle(cornerRadius: geometry.size.width * 0.2237, style: .continuous)
-                                .fill(Color(UIColor.secondarySystemGroupedBackground))
-                        }
-                    )
+                    // .listRowBackground(
+                    //     GeometryReader { geometry in
+                    //         RoundedRectangle(cornerRadius: geometry.size.width * 0.2237, style: .continuous)
+                    //             .fill(Color(UIColor.secondarySystemGroupedBackground))
+                    //     }
+                    // )
                     Section {
                         Picker("Style", selection: $renderingMode) {
                             Text("Default").tag("default")
