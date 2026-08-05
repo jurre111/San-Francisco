@@ -42,7 +42,9 @@ struct SymbolsView: View {
             }
         }
         .onSubmit(of: .search) {
-            await filterSymbols()
+            Task {
+                await search()
+            }
         }
         .sheet(item: $infoSheet) { symbol in
             SymbolInfoView(symbol: symbol.name, info: symbol.info)
@@ -59,7 +61,7 @@ struct SymbolsView: View {
         shownSymbols = sortedSymbols
     }
 
-    func filterSymbols() async {
+    func search() async {
         let query = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
         DispatchQueue.global(qos: .userInitiated).async {
             let filtered = allSymbols.filter { $0.localizedCaseInsensitiveContains(query) }
