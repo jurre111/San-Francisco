@@ -11,7 +11,7 @@ struct FavoritesView: View {
     @ObservedObject var mgr: sfmgr = sfmgr.shared
     @State private var query: String = ""
     @State private var searchText: String = ""
-    @State private var symbolSheet: (name: String, info: sfmgr.SymbolInfo)? = nil
+    @State private var symbolSheet: (name: String, info: sfmgr.Symbol)? = nil
 
     var body: some View {
         if mgr.favorites == "" {
@@ -70,8 +70,4 @@ struct FavoritesView: View {
             return symbolList.sorted().filter { $0.localizedCaseInsensitiveContains(query) }
         }
     }
-}
-
-extension String: Identifiable {
-    public var id: String { self }
 }

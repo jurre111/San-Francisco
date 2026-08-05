@@ -24,3 +24,7 @@ struct SanFrancisco: App {
         }
     }
 }
+
+extension String: Identifiable {
+    public var id: String { self }
+}
