@@ -21,7 +21,6 @@ struct SymbolInfoView: View {
                             .frame(maxWidth: .infinity, alignment: .center)
                             .aspectRatio(1.0, contentMode: .fit)
                         Image(systemName: symbol)
-                            .symbolRenderingMode(renderingMode)
                             .font(.system(size: 220))
                             .foregroundColor(.blue)
                     }
