@@ -14,39 +14,41 @@ struct FavoritesView: View {
     @State private var symbolSheet: SymbolSheet? = nil
 
     var body: some View {
-        if mgr.favorites == "" {
-            Text("No favorites yet")
-        } else {
+        NavigationStack {
             List {
-                ForEach(filteredSymbols(mgr.favorites.components(separatedBy: ";").dropLast()), id: \.self) { symbol in
-                    if let symbolInfo = mgr.symbols[symbol] {
-                        NavigationLink {
-                            SymbolCustomizeView(symbol: symbol, info: symbolInfo)
-                        } label: {
-                            HStack {
-                                Image(systemName: symbol)
-                                    .frame(width: 20, alignment: .center)
-                                Text(symbol)
-                            }
-                        }
-                        .contextMenu {
-                            Button {
-                                UIPasteboard.general.string = symbol
+                if mgr.favorites.isEmpty {
+                    Text("No favorites yet")
+                } else {
+                    ForEach(filteredSymbols(mgr.favorites.components(separatedBy: ";").dropLast()), id: \.self) { symbol in
+                        if let symbolInfo = mgr.symbols[symbol] {
+                            NavigationLink {
+                                SymbolCustomizeView(symbol: symbol, info: symbolInfo)
                             } label: {
-                                Label("Copy", systemImage: "doc.on.doc")
+                                HStack {
+                                    Image(systemName: symbol)
+                                        .frame(width: 20, alignment: .center)
+                                    Text(symbol)
+                                }
                             }
-                            Button {
-                                symbolSheet = SymbolSheet(name: symbol, info: symbolInfo)
-                            } label: {
-                                Label("Info", systemImage: "info.circle")
+                            .contextMenu {
+                                Button {
+                                    UIPasteboard.general.string = symbol
+                                } label: {
+                                    Label("Copy", systemImage: "doc.on.doc")
+                                }
+                                Button {
+                                    symbolSheet = SymbolSheet(name: symbol, info: symbolInfo)
+                                } label: {
+                                    Label("Info", systemImage: "info.circle")
+                                }
                             }
-                        }
-                        .swipeActions(edge: .trailing) {
-                            Button(role: .destructive) {
-                                mgr.favorites = mgr.favorites.replacingOccurrences(of: symbol + ";", with: "")
-                                mgr.symbols[symbol]?.favorite = false
-                            } label: {
-                                Label("Remove", systemImage: "star.slash")
+                            .swipeActions(edge: .trailing) {
+                                Button(role: .destructive) {
+                                    mgr.favorites = mgr.favorites.replacingOccurrences(of: symbol + ";", with: "")
+                                    mgr.symbols[symbol]?.favorite = false
+                                } label: {
+                                    Label("Remove", systemImage: "star.slash")
+                                }
                             }
                         }
                     }
@@ -64,7 +66,7 @@ struct FavoritesView: View {
     }
 
     private func filteredSymbols(_ symbolList: [String]) -> [String] {
-        if query.isEmpty {
+        if query.isEmpty | (!query.isEmpty && searchText.isEmpty) {
             return symbolList.sorted()
         } else {
             return symbolList.sorted().filter { $0.localizedCaseInsensitiveContains(query) }
