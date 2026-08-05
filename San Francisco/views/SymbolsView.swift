@@ -15,65 +15,76 @@ struct SymbolSheet: Identifiable {
 
 struct SymbolsView: View {
     @ObservedObject var mgr: sfmgr = sfmgr.shared
-    @State private var query: String = ""
     @State private var searchText: String = ""
     @State private var symbolSheet: SymbolSheet? = nil
-    var category: sfmgr.Category
+    @State var category: sfmgr.Category
+    @State private var shownSymbols: [String] = []
+    @State private var loaded: Bool = false
 
     var body: some View {
         List {
-            ForEach(filteredSymbols(category.symbols), id: \.self) { symbol in
-                if let symbolInfo = mgr.symbols[symbol] {
-                    NavigationLink {
-                        SymbolCustomizeView(symbol: symbol, info: symbolInfo)
-                    } label: {
-                        HStack {
-                            Image(systemName: symbol)
-                                .frame(width: 20, alignment: .center)
-                            Text(symbol)
-                        }
-                    }
-                    .contextMenu {
-                        Button {
-                            UIPasteboard.general.string = symbol
+            if loaded {
+                ForEach(shownSymbols, id: \.self) { symbol in
+                    if let symbolInfo = mgr.symbols[symbol] {
+                        NavigationLink {
+                            SymbolCustomizeView(symbol: symbol, info: symbolInfo)
                         } label: {
-                            Label("Copy", systemImage: "doc.on.doc")
+                            HStack {
+                                Image(systemName: symbol)
+                                    .frame(width: 20, alignment: .center)
+                                Text(symbol)
+                            }
                         }
-                        Button {
-                            symbolSheet = SymbolSheet(name: symbol, info: symbolInfo)
-                        } label: {
-                            Label("Info", systemImage: "info.circle")
-                        }
-                        Button {
-                            if !symbolInfo.favorite {
-                                mgr.favorites += symbol + ";"
-                                mgr.symbols[symbol]?.favorite = true
-                            } else {
-                                mgr.favorites = mgr.favorites.replacingOccurrences(of: symbol + ";", with: "")
-                                mgr.symbols[symbol]?.favorite = false
-                            } 
-                        } label: {
-                            Label(symbolInfo.favorite ? "Remove from Favorites" : "Add to Favorites", systemImage: symbolInfo.favorite ? "star.slash" : "star")
+                        .contextMenu {
+                            Button {
+                                UIPasteboard.general.string = symbol
+                            } label: {
+                                Label("Copy", systemImage: "doc.on.doc")
+                            }
+                            Button {
+                                symbolSheet = SymbolSheet(name: symbol, info: symbolInfo)
+                            } label: {
+                                Label("Info", systemImage: "info.circle")
+                            }
+                            Button {
+                                if !symbolInfo.favorite {
+                                    mgr.favorites += symbol + ";"
+                                    mgr.symbols[symbol]?.favorite = true
+                                } else {
+                                    mgr.favorites = mgr.favorites.replacingOccurrences(of: symbol + ";", with: "")
+                                    mgr.symbols[symbol]?.favorite = false
+                                } 
+                            } label: {
+                                Label(symbolInfo.favorite ? "Remove from Favorites" : "Add to Favorites", systemImage: symbolInfo.favorite ? "star.slash" : "star")
+                            }
                         }
                     }
                 }
+            } else {
+                ProgressView()
             }
         }
         .navigationTitle(category.displayName)
         .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search Symbols")
+        .onChange(of: searchText) { newValue in
+            if newValue.isEmpty {
+                shownSymbols = category.symbols
+            }
+        }
         .onSubmit(of: .search) {
-            query = searchText
+            shownSymbols = category.symbols.filter { $0.localizedCaseInsensitiveContains(searchText) }
         }
         .sheet(item: $symbolSheet) { symbol in
             SymbolInfoView(symbol: symbol.name, info: symbol.info)
         }
+        .task {
+            await load()
+            loaded = true
+        }
     }
 
-    private func filteredSymbols(_ symbolList: [String]) -> [String] {
-        if query.isEmpty || (!query.isEmpty && searchText.isEmpty)  {
-            return symbolList.sorted()
-        } else {
-            return symbolList.sorted().filter { $0.localizedCaseInsensitiveContains(query) }
-        }
+    func load() async {
+        category.symbols.sort()
+        shownSymbols = category.symbols
     }
 }
