@@ -25,9 +25,11 @@ struct SymbolsView: View {
     var body: some View {
         Group {
             if loaded {
-                List(shownSymbols, id: \.self) { symbol in
-                    if let symbolInfo = mgr.symbols[symbol] {
-                        SymbolListView(symbol: symbol, info: symbolInfo, infoSheet: $infoSheet)
+                List {
+                    ForEach(shownSymbols, id: \.self) { symbol in
+                        if let symbolInfo = mgr.symbols[symbol] {
+                            SymbolListView(symbol: symbol, info: symbolInfo, infoSheet: $infoSheet)
+                        }
                     }
                 }
             } else {
