@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SymbolCustomizeView: View {
     @State private var symbolSheet: String? = nil
-    @State private var renderingMode: String = "automatic"
+    @State private var renderingMode: String = "default"
     var symbol: String
     var info: sfmgr.Symbol?
 
@@ -27,12 +27,14 @@ struct SymbolCustomizeView: View {
                             .foregroundColor(.blue)
                     }
                     .listRowBackground(
-                        RoundedRectangle(cornerRadius: 30, style: .continuous)
-                            .fill(Color(UIColor.secondarySystemGroupedBackground))
+                        GeometryReader { geometry in
+                            RoundedRectangle(cornerRadius: geometry.size.width * 0.2237, style: .continuous)
+                                .fill(Color(UIColor.secondarySystemGroupedBackground))
+                        }
                     )
                     Section {
                         Picker("Style", selection: $renderingMode) {
-                            Text("Automatic").tag("automatic")
+                            Text("Default").tag("default")
                             if symbolInfo.categories.contains("multicolor") {
                                 Text("Multicolor").tag("multicolor")
                             }
@@ -70,7 +72,7 @@ struct SymbolCustomizeView: View {
 
     func getRenderingMode(from string: String) -> SymbolRenderingMode? {
         switch string {
-            case "automatic":
+            case "default":
                 return nil
             case "multicolor":
                 return .multicolor
