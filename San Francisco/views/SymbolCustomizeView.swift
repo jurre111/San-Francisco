@@ -59,17 +59,15 @@ struct SymbolCustomizeView: View {
             }
             .toolbar {
                 Button {
-                    if !info.favorite {
+                    if !mgr.symbols[symbol]?.favorite ?? false {
                         mgr.favorites += symbol + ";"
-                        mgr.symbols[symbol]!.favorite = true
-                        info.favorite = true
+                        mgr.symbols[symbol]?.favorite = true
                     } else {
                         mgr.favorites = mgr.favorites.replacingOccurrences(of: symbol + ";", with: "")
                         mgr.symbols[symbol]?.favorite = false
-                        info.favorite = false
                     }  
                 } label: {
-                    Image(systemName: info.favorite ? "star.fill" : "star")
+                    Image(systemName: mgr.symbols[symbol]?.favorite ?? false ? "star.fill" : "star")
                 }
                 Button {
                     symbolSheet = symbol

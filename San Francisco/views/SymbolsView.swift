@@ -47,7 +47,7 @@ struct SymbolsView: View {
                         Button {
                             if !symbolInfo.favorite {
                                 mgr.favorites += symbol + ";"
-                                mgr.symbols[symbol]!.favorite = true
+                                mgr.symbols[symbol]?.favorite = true
                             } else {
                                 mgr.favorites = mgr.favorites.replacingOccurrences(of: symbol + ";", with: "")
                                 mgr.symbols[symbol]?.favorite = false
