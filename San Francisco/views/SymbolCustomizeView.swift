@@ -28,7 +28,7 @@ struct SymbolCustomizeView: View {
                     }
                     .listRowBackground(
                         GeometryReader { geometry in
-                            RoundedRectangle(cornerRadius: 15, style: .continuous)
+                            RoundedRectangle(cornerRadius: 20, style: .continuous)
                                 .fill(Color(UIColor.secondarySystemGroupedBackground))
                         }
                     )
