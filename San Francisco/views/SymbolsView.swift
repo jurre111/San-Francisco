@@ -70,7 +70,7 @@ struct SymbolsView: View {
     }
 
     private func filteredSymbols(_ symbolList: [String]) -> [String] {
-        if query.isEmpty {
+        if query.isEmpty || (!query.isEmpty && searchText.isEmpty)  {
             return symbolList.sorted()
         } else {
             return symbolList.sorted().filter { $0.localizedCaseInsensitiveContains(query) }

@@ -59,7 +59,7 @@ struct SymbolCustomizeView: View {
             }
             .toolbar {
                 Button {
-                    if !mgr.symbols[symbol]?.favorite ?? false {
+                    if !(mgr.symbols[symbol]?.favorite ?? false) {
                         mgr.favorites += symbol + ";"
                         mgr.symbols[symbol]?.favorite = true
                     } else {
