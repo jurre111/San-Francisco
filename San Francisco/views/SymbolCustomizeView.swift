@@ -12,7 +12,7 @@ struct SymbolCustomizeView: View {
     @State private var symbolSheet: String? = nil
     @State private var renderingMode: SymbolRenderingMode? = nil
     var symbol: String
-    let symbolInfo = mgr.symbols[symbol]!
+    var symbolInfo: sfmgr.Symbol
 
     var body: some View {
         NavigationStack {
@@ -64,6 +64,9 @@ struct SymbolCustomizeView: View {
                     Image(systemName: "info.circle")
                 }
             }
+        }
+        .onAppear {
+            symbolInfo = mgr.symbols[symbol]!
         }
     }
 }
