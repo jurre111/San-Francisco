@@ -5,6 +5,7 @@
 //  Created by jurre111 on 04.08.26.
 //
 
+import SwiftUI
 import Foundation
 
 @MainActor
@@ -62,7 +63,7 @@ final class sfmgr: ObservableObject {
         }
         do {
             let data = try Data(contentsOf: url)
-            let symbols = try PropertyListDecoder().decode([String: Symbol].self, from: data)
+            var symbols = try PropertyListDecoder().decode([String: Symbol].self, from: data)
             for symbol in favorites.components(separatedBy: ";").dropLast() {
                 symbols[symbol]?.favorite = true
             }

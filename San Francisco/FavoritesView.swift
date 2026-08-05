@@ -9,9 +9,9 @@ import SwiftUI
 
 struct FavoritesView: View {
     @ObservedObject var mgr: sfmgr = sfmgr.shared
+    @State private var query: String = ""
     @State private var searchText: String = ""
     @State private var symbolSheet: (name: String, info: sfmgr.SymbolInfo)? = nil
-    var category: sfmgr.Category
 
     var body: some View {
         if mgr.favorites == "" {
@@ -54,6 +54,9 @@ struct FavoritesView: View {
             }
             .navigationTitle(category.displayName)
             .searchable(text: $searchText, prompt: "Search Favorites")
+            .onSubmit(of: .search) {
+                query = searchText
+            }
             .sheet(item: $symbolSheet) { symbol in
                 SymbolInfoView(symbol: symbol.name, info: symbol.info)
             }
@@ -61,10 +64,10 @@ struct FavoritesView: View {
     }
 
     private func filteredSymbols(_ symbolList: [String]) -> [String] {
-        if searchText.isEmpty {
+        if query.isEmpty {
             return symbolList.sorted()
         } else {
-            return symbolList.sorted().filter { $0.localizedCaseInsensitiveContains(searchText) }
+            return symbolList.sorted().filter { $0.localizedCaseInsensitiveContains(query) }
         }
     }
 }
