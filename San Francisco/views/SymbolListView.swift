@@ -30,7 +30,7 @@ struct SymbolListView: View {
                     Label("Copy", systemImage: "doc.on.doc")
                 }
                 Button {
-                    infoSheet = SymbolSheet(name: symbol, info: symbolBinding.wrappedValue)
+                    infoSheet = InfoSheet(name: symbol, info: symbolBinding.wrappedValue)
                 } label: {
                     Label("Info", systemImage: "info.circle")
                 }

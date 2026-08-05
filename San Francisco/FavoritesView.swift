@@ -11,7 +11,7 @@ struct FavoritesView: View {
     @ObservedObject var mgr: sfmgr = sfmgr.shared
     @State private var query: String = ""
     @State private var searchText: String = ""
-    @State private var symbolSheet: SymbolSheet? = nil
+    @State private var symbolSheet: InfoSheet? = nil
 
     var body: some View {
         NavigationStack {
@@ -37,7 +37,7 @@ struct FavoritesView: View {
                                     Label("Copy", systemImage: "doc.on.doc")
                                 }
                                 Button {
-                                    symbolSheet = SymbolSheet(name: symbol, info: symbolInfo)
+                                    symbolSheet = InfoSheet(name: symbol, info: symbolInfo)
                                 } label: {
                                     Label("Info", systemImage: "info.circle")
                                 }
