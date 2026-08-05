@@ -98,6 +98,7 @@ final class sfmgr: ObservableObject {
                 }
                 categoriesCopy[index] = category
             }
+            categoriesCopy = categoriesCopy.filter { $0.symbols.isNotEmpty }
             return (ok: true, array: categoriesCopy, message: "")
         } catch {
             return (ok: false, array: [], message: "Failed to load name_aliases.plist: \(error)")
