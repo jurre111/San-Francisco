@@ -23,24 +23,24 @@ struct SymbolListView: View {
                 Text(symbol)
             }
         }
-        .contextMenu {
-            Button {
-                UIPasteboard.general.string = symbol
-            } label: {
-                Label("Copy", systemImage: "doc.on.doc")
-            }
-            Button {
-                infoSheet = InfoSheet(name: symbol, info: info)
-            } label: {
-                Label("Info", systemImage: "info.circle")
-            }
-            Button {
-                sfmgr.shared.toggleFavorite(symbol: symbol)
-                isFavorite.toggle()
-            } label: {
-                Label(isFavorite ? "Remove from Favorites" : "Add to Favorites", systemImage: isFavorite ? "star.slash" : "star")
-            }
-        }
+        // .contextMenu {
+        //     Button {
+        //         UIPasteboard.general.string = symbol
+        //     } label: {
+        //         Label("Copy", systemImage: "doc.on.doc")
+        //     }
+        //     Button {
+        //         infoSheet = InfoSheet(name: symbol, info: info)
+        //     } label: {
+        //         Label("Info", systemImage: "info.circle")
+        //     }
+        //     Button {
+        //         sfmgr.shared.toggleFavorite(symbol: symbol)
+        //         isFavorite.toggle()
+        //     } label: {
+        //         Label(isFavorite ? "Remove from Favorites" : "Add to Favorites", systemImage: isFavorite ? "star.slash" : "star")
+        //     }
+        // }
         .onAppear {
             isFavorite = info.favorite
         }
