@@ -12,12 +12,14 @@ struct SanFrancisco: App {
     var body: some Scene {
         WindowGroup {
             TabView {
-                Tab("Home", systemImage: "house.fill") {
-                    ContentView()
-                }
-                Tab("Favorites", systemImage: "star.fill") {
-                    FavoritesView()
-                }
+                ContentView()
+                    .tabItem {
+                        Label("Home", systemImage: "house.fill")
+                    }
+                FavoritesView()
+                    .tabItem {
+                        Label("Favorites", systemImage: "star.fill")
+                    }
             }
         }
     }
