@@ -42,14 +42,15 @@ struct SymbolInfoView: View {
                                 .foregroundColor(.secondary)
                         }
                     }
-                }
-                Section("Categories") {
-                    ForEach(mgr.categories, id: \.self) { category in
-                        if category.key != "name" && symbolInfo.categories.contains(category.key) {
-                            HStack {
-                                Image(systemName: category.icon)
-                                    .frame(width: 20, alignment: .center)
-                                Text(category.displayName)
+                
+                    Section("Categories") {
+                        ForEach(mgr.categories, id: \.self) { category in
+                            if category.key != "name" && symbolInfo.categories.contains(category.key) {
+                                HStack {
+                                    Image(systemName: category.icon)
+                                        .frame(width: 20, alignment: .center)
+                                    Text(category.displayName)
+                                }
                             }
                         }
                     }

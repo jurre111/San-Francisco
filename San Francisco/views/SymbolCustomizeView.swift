@@ -55,7 +55,7 @@ struct SymbolCustomizeView: View {
                 .navigationTitle("Customize")
                 .navigationBarTitleDisplayMode(.inline)
                 .sheet(item: $symbolSheet) { selectedSymbol in
-                    SymbolInfoView(symbol: selectedSymbol)
+                    SymbolInfoView(symbol: selectedSymbol, info: symbolInfo)
                 }
                 .toolbar {
                     Button {
