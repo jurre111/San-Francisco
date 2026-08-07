@@ -18,7 +18,7 @@ final class sfmgr: ObservableObject {
 
     static let shared = sfmgr()
 
-    struct Symbol: Codable {
+    struct Symbol: Codable, Hashable, Identifiable {
         var name: String
         var categories: [String]
         var availability: Double

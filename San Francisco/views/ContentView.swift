@@ -15,7 +15,7 @@ struct ContentView: View {
             List {
                 ForEach(mgr.categories, id: \.self) { category in
                     NavigationLink {
-                        SymbolsView(category: category.name)
+                        SymbolsView(category: category)
                     } label: {
                         HStack {
                             Image(systemName: category.icon)

@@ -14,7 +14,7 @@ struct SymbolsView: View {
     @State private var shownSymbols: [sfmgr.Symbol] = []
     @State private var loaded: Bool = false
 
-    let category: String
+    let category: sfmgr.Category
 
     var body: some View {
         Group {
@@ -50,7 +50,7 @@ struct SymbolsView: View {
     }
 
     func load() async {
-        let relevantSymbols = sfmgr.shared.symbols.filter { $0.categories.contains(category) }
+        let relevantSymbols = sfmgr.shared.symbols.filter { $0.categories.contains(category.name) }
         allSymbols = relevantSymbols
         shownSymbols = relevantSymbols
     }

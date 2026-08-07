@@ -59,13 +59,13 @@ struct SymbolCustomizeView: View {
             }
             .toolbar {
                 Button {
-                    sfmgr.shared.toggleFavorite(symbol: symbol)
+                    sfmgr.shared.toggleFavorite(symbol: symbol.name)
                     isFavorite.toggle()
                 } label: {
                     Image(systemName: isFavorite ? "star.fill" : "star")
                 }
                 Button {
-                    symbolSheet = symbol
+                    infoSheet = symbol
                 } label: {
                     Image(systemName: "info.circle")
                 }

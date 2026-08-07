@@ -8,10 +8,9 @@
 import SwiftUI
 
 struct SymbolListView: View {
-    @Binding var infoSheet: sfmgr.Symbol?
     @State private var isFavorite: Bool = false
-
     let symbol: sfmgr.Symbol
+    @Binding var infoSheet: sfmgr.Symbol?
 
     var body: some View {
         NavigationLink {
@@ -35,7 +34,7 @@ struct SymbolListView: View {
                 Label("Info", systemImage: "info.circle")
             }
             Button {
-                sfmgr.shared.toggleFavorite(symbol: symbol)
+                sfmgr.shared.toggleFavorite(symbol: symbol.name)
                 isFavorite.toggle()
             } label: {
                 Label(isFavorite ? "Remove from Favorites" : "Add to Favorites", systemImage: isFavorite ? "star.slash" : "star")

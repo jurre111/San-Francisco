@@ -41,7 +41,7 @@ struct FavoritesView: View {
                                 Label("Info", systemImage: "info.circle")
                             }
                             Button {
-                                sfmgr.shared.toggleFavorite(symbol: symbol)
+                                sfmgr.shared.toggleFavorite(symbol: symbol.name)
                                 allSymbols.removeAll { $0.name == symbol.name }
                                 shownSymbols.removeAll { $0.name == symbol.name }
                             } label: {
