@@ -13,7 +13,7 @@ struct FavoritesView: View {
     @State private var infoSheet: sfmgr.Symbol? = nil
     @State private var allSymbols: [sfmgr.Symbol] = []
     @State private var shownSymbols: [sfmgr.Symbol] = []
-    @State private var loaded: Bool = false
+    @State private var loaded: Bool = true
 
     var body: some View {
         NavigationStack {
