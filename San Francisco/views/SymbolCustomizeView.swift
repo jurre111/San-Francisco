@@ -44,7 +44,7 @@ struct SymbolCustomizeView: View {
                     HStack(spacing: 12) {
                         Text("Color")
                         Spacer()
-                        ColorPicker("Color", selection: $option.color)
+                        ColorPicker("Color", selection: $color)
                             .labelsHidden()
                             .frame(width: 40)
                     }
