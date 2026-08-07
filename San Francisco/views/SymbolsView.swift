@@ -31,11 +31,10 @@ struct SymbolsView: View {
         .onChange(of: searchText) { newValue in
             if newValue.isEmpty {
                 shownSymbols = allSymbols
-            }
-        }
-        .onSubmit(of: .search) {
-            Task {
-                await search()
+            } else {
+                Task {
+                    await search()
+                }
             }
         }
         .sheet(item: $infoSheet) { symbol in
