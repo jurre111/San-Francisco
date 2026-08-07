@@ -16,68 +16,69 @@ struct FavoritesView: View {
     @State private var loaded: Bool = false
 
     var body: some View {
-        List {
-            if loaded {
-                ForEach(shownSymbols, id: \.self) { symbol in
-                    NavigationLink {
-                        SymbolCustomizeView(symbol: symbol)
-                    } label: {
-                        HStack {
-                            Image(systemName: symbol.name)
-                                .frame(width: 20, alignment: .center)
-                            Text(symbol.name)
+        NavigationStack {
+            List {
+                if loaded {
+                    ForEach(shownSymbols, id: \.self) { symbol in
+                        NavigationLink {
+                            SymbolCustomizeView(symbol: symbol)
+                        } label: {
+                            HStack {
+                                Image(systemName: symbol.name)
+                                    .frame(width: 20, alignment: .center)
+                                Text(symbol.name)
+                            }
+                        }
+                        .contextMenu {
+                            Button {
+                                UIPasteboard.general.string = symbol.name
+                            } label: {
+                                Label("Copy", systemImage: "doc.on.doc")
+                            }
+                            Button {
+                                infoSheet = symbol
+                            } label: {
+                                Label("Info", systemImage: "info.circle")
+                            }
+                            Button {
+                                sfmgr.shared.toggleFavorite(symbol: symbol.name)
+                                allSymbols.removeAll { $0.name == symbol.name }
+                                shownSymbols.removeAll { $0.name == symbol.name }
+                            } label: {
+                                Label("Remove from Favorites", systemImage: "star.slash")
+                            }
                         }
                     }
-                    .contextMenu {
-                        Button {
-                            UIPasteboard.general.string = symbol.name
-                        } label: {
-                            Label("Copy", systemImage: "doc.on.doc")
-                        }
-                        Button {
-                            infoSheet = symbol
-                        } label: {
-                            Label("Info", systemImage: "info.circle")
-                        }
-                        Button {
-                            sfmgr.shared.toggleFavorite(symbol: symbol.name)
-                            allSymbols.removeAll { $0.name == symbol.name }
-                            shownSymbols.removeAll { $0.name == symbol.name }
-                        } label: {
-                            Label("Remove from Favorites", systemImage: "star.slash")
-                        }
-                    }
+                } else {
+                    ProgressView()
                 }
-            } else {
-                ProgressView()
             }
-        }
-        .refreshable {
-            await load()
-        }
-        .navigationTitle("Favorites")
-        .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search Symbols")
-        .onChange(of: searchText) { newValue in
-            if newValue.isEmpty {
-                shownSymbols = allSymbols
+            .navigationTitle("Favorites")
+            .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search Symbols")
+            .onChange(of: searchText) { newValue in
+                if newValue.isEmpty {
+                    shownSymbols = allSymbols
+                }
             }
-        }
-        .onSubmit(of: .search) {
-            Task {
-                await search()
+            .onSubmit(of: .search) {
+                Task {
+                    await search()
+                }
             }
-        }
-        .sheet(item: $infoSheet) { symbol in
-            SymbolInfoView(symbol: symbol)
-        }
-        .task {
-            await load()
-            loaded = true
+            .sheet(item: $infoSheet) { symbol in
+                SymbolInfoView(symbol: symbol)
+            }
+            .onAppear {
+                load()
+            }
+            .refreshable {
+                await load()
+            }
         }
     }
 
-    func load() async {
-        let relevantSymbols = sfmgr.shared.symbols.filter { mgr.favorites.contains($0.name) }
+    func load() {
+        let relevantSymbols = mgr.symbols.filter { mgr.favorites.contains($0.name) }
         allSymbols = relevantSymbols
         shownSymbols = relevantSymbols
     }
