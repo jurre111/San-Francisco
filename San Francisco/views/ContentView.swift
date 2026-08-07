@@ -58,12 +58,6 @@ struct ContentView: View {
                 SettingsView()
             }
         }
-        .onAppear {
-            let result = mgr.load()
-            if !result.ok {
-                Alertinator.shared.alert(title: "Error", body: result.message)
-            }
-        }
     }
 }
 

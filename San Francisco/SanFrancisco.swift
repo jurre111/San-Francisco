@@ -10,19 +10,39 @@ import SwiftUI
 @main
 struct SanFrancisco: App {
     @StateObject var mgr: sfmgr = sfmgr.shared
+    @State private var loaded: Bool = false
     var body: some Scene {
         WindowGroup {
-            TabView {
-                ContentView()
-                    .tabItem {
-                        Label("Home", systemImage: "house.fill")
+            Group {
+                if loaded {
+                    TabView {
+                        ContentView()
+                            .tabItem {
+                                Label("Home", systemImage: "house.fill")
+                            }
+                        FavoritesView()
+                            .tabItem {
+                                Label("Favorites", systemImage: "star.fill")
+                            }
                     }
-                FavoritesView()
-                    .tabItem {
-                        Label("Favorites", systemImage: "star.fill")
+                } else {
+                    NavigationStack {
+                        List {
+                            ProgressView()
+                        }
+                        .navigationTitle("San Francisco")
                     }
+                }
             }
             .environmentObject(mgr)
+            .onAppear {
+                let result = mgr.load()
+                if !result.ok {
+                    Alertinator.shared.alert(title: "Error", body: result.message)
+                } else {
+                    loaded = true
+                }
+            }
         }
     }
 }
