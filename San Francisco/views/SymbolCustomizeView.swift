@@ -11,6 +11,7 @@ struct SymbolCustomizeView: View {
     @ObservedObject var mgr: sfmgr = sfmgr.shared
     @State private var infoSheet: sfmgr.Symbol? = nil
     @State private var renderingMode: String = "default"
+    @State private var color: Color = .blue
     @State private var isFavorite: Bool = false
     let symbol: sfmgr.Symbol
 
@@ -24,7 +25,7 @@ struct SymbolCustomizeView: View {
                     Image(systemName: symbol.name)
                         .symbolRenderingMode(getRenderingMode(from: renderingMode))
                         .font(.system(size: 220))
-                        .foregroundColor(.blue)
+                        .foregroundColor(color)
                 }
                 .listRowBackground(
                     RoundedRectangle(cornerRadius: 28, style: .continuous)
@@ -40,15 +41,12 @@ struct SymbolCustomizeView: View {
                         Text("Palette").tag("palette")
                         Text("Monochrome").tag("monochrome")
                     }
-                    NavigationLink("Color") {
-                        List {
-                            HStack {
-                                Text("Color")
-                                Spacer()
-                                Text("Blue")
-                                    .foregroundColor(.secondary)
-                            }
-                        }
+                    HStack(spacing: 12) {
+                        Text("Color")
+                        Spacer()
+                        ColorPicker("Color", selection: $option.color)
+                            .labelsHidden()
+                            .frame(width: 40)
                     }
                 }
             }
