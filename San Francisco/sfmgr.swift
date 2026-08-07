@@ -55,8 +55,9 @@ final class sfmgr: ObservableObject {
             return (false, aliasesResult.message)
         }
         for category in categories.indices {
-            guard UIImage(systemName: categories[category]!.icon) != nil else {
-                categories[category]!.icon = aliasesResult.aliases[icon] ?? "questionmark.square"
+            let icon = categories[category].icon
+            guard UIImage(systemName: icon) != nil else {
+                categories[category].icon = aliasesResult.aliases[icon] ?? "questionmark.square"
             }
         }
 
