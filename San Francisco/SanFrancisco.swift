@@ -30,6 +30,7 @@ struct SanFrancisco: App {
                         List {
                             HStack {
                                 Text("Loading Symbols...")
+                                    .foregroundColor(.secondary)
                                 Spacer()
                                 ProgressView()
                             }
