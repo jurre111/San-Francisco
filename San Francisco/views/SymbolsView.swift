@@ -12,7 +12,7 @@ struct SymbolsView: View {
     @State private var infoSheet: sfmgr.Symbol? = nil
     @State private var allSymbols: [sfmgr.Symbol] = []
     @State private var shownSymbols: [sfmgr.Symbol] = []
-    @State private var loaded: Bool = false
+    @State private var loaded: Bool = true
 
     let category: sfmgr.Category
 
@@ -41,13 +41,12 @@ struct SymbolsView: View {
         .sheet(item: $infoSheet) { symbol in
             SymbolInfoView(symbol: symbol)
         }
-        .task {
-            await load()
-            loaded = true
+        .onAppear {
+            load()
         }
     }
 
-    func load() async {
+    func load() {
         let relevantSymbols = sfmgr.shared.symbols.filter { $0.categories.contains(category.name) }
         allSymbols = relevantSymbols
         shownSymbols = relevantSymbols
