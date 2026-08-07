@@ -28,7 +28,11 @@ struct SanFrancisco: App {
                 } else {
                     NavigationStack {
                         List {
-                            ProgressView()
+                            HStack {
+                                Text("Loading Symbols...")
+                                Spacer()
+                                ProgressView()
+                            }
                         }
                         .navigationTitle("San Francisco")
                     }
