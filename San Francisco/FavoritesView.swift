@@ -16,46 +16,44 @@ struct FavoritesView: View {
     @State private var loaded: Bool = false
 
     var body: some View {
-        Group {
+        List {
             if loaded {
-                List {
-                    ForEach(shownSymbols, id: \.self) { symbol in
-                        NavigationLink {
-                            SymbolCustomizeView(symbol: symbol)
-                        } label: {
-                            HStack {
-                                Image(systemName: symbol.name)
-                                    .frame(width: 20, alignment: .center)
-                                Text(symbol.name)
-                            }
-                        }
-                        .contextMenu {
-                            Button {
-                                UIPasteboard.general.string = symbol.name
-                            } label: {
-                                Label("Copy", systemImage: "doc.on.doc")
-                            }
-                            Button {
-                                infoSheet = symbol
-                            } label: {
-                                Label("Info", systemImage: "info.circle")
-                            }
-                            Button {
-                                sfmgr.shared.toggleFavorite(symbol: symbol.name)
-                                allSymbols.removeAll { $0.name == symbol.name }
-                                shownSymbols.removeAll { $0.name == symbol.name }
-                            } label: {
-                                Label("Remove from Favorites", systemImage: "star.slash")
-                            }
+                ForEach(shownSymbols, id: \.self) { symbol in
+                    NavigationLink {
+                        SymbolCustomizeView(symbol: symbol)
+                    } label: {
+                        HStack {
+                            Image(systemName: symbol.name)
+                                .frame(width: 20, alignment: .center)
+                            Text(symbol.name)
                         }
                     }
-                }
-                .refreshable {
-                    await load()
+                    .contextMenu {
+                        Button {
+                            UIPasteboard.general.string = symbol.name
+                        } label: {
+                            Label("Copy", systemImage: "doc.on.doc")
+                        }
+                        Button {
+                            infoSheet = symbol
+                        } label: {
+                            Label("Info", systemImage: "info.circle")
+                        }
+                        Button {
+                            sfmgr.shared.toggleFavorite(symbol: symbol.name)
+                            allSymbols.removeAll { $0.name == symbol.name }
+                            shownSymbols.removeAll { $0.name == symbol.name }
+                        } label: {
+                            Label("Remove from Favorites", systemImage: "star.slash")
+                        }
+                    }
                 }
             } else {
                 ProgressView()
             }
+        }
+        .refreshable {
+            await load()
         }
         .navigationTitle("Favorites")
         .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search Symbols")
@@ -85,13 +83,10 @@ struct FavoritesView: View {
     }
 
     func search() async {
+        loaded = false
         let query = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
-        DispatchQueue.global(qos: .userInitiated).async {
-            let filtered = allSymbols.filter { $0.name.localizedCaseInsensitiveContains(query) }
-
-            DispatchQueue.main.async {
-                shownSymbols = filtered
-            }
-        }
+        let filtered = allSymbols.filter { $0.name.localizedCaseInsensitiveContains(query) }
+        shownSymbols = filtered
+        loaded = true
     }
 }

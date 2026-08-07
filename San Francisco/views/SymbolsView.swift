@@ -17,12 +17,10 @@ struct SymbolsView: View {
     let category: sfmgr.Category
 
     var body: some View {
-        Group {
+        List {
             if loaded {
-                List {
-                    ForEach(shownSymbols, id: \.self) { symbol in
-                        SymbolListView(symbol: symbol, infoSheet: $infoSheet)
-                    }
+                ForEach(shownSymbols, id: \.self) { symbol in
+                    SymbolListView(symbol: symbol, infoSheet: $infoSheet)
                 }
             } else {
                 ProgressView()
@@ -56,13 +54,10 @@ struct SymbolsView: View {
     }
 
     func search() async {
+        loaded = false
         let query = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
-        DispatchQueue.global(qos: .userInitiated).async {
-            let filtered = allSymbols.filter { $0.name.localizedCaseInsensitiveContains(query) }
-
-            DispatchQueue.main.async {
-                shownSymbols = filtered
-            }
-        }
+        let filtered = allSymbols.filter { $0.name.localizedCaseInsensitiveContains(query) }
+        shownSymbols = filtered
+        loaded = true
     }
 }

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SymbolListView: View {
-    @State private var isFavorite: Bool = false
+    // @State private var isFavorite: Bool = false
     let symbol: sfmgr.Symbol
     @Binding var infoSheet: sfmgr.Symbol?
 
@@ -22,7 +22,7 @@ struct SymbolListView: View {
                 Text(symbol.name)
             }
         }
-        .contextMenu {
+        .contextMenu {        }
             Button {
                 UIPasteboard.general.string = symbol.name
             } label: {
@@ -33,15 +33,15 @@ struct SymbolListView: View {
             } label: {
                 Label("Info", systemImage: "info.circle")
             }
-            Button {
-                sfmgr.shared.toggleFavorite(symbol: symbol.name)
-                isFavorite.toggle()
-            } label: {
-                Label(isFavorite ? "Remove from Favorites" : "Add to Favorites", systemImage: isFavorite ? "star.slash" : "star")
-            }
+            // Button {
+            //     sfmgr.shared.toggleFavorite(symbol: symbol.name)
+            //     isFavorite.toggle()
+            // } label: {
+            //     Label(isFavorite ? "Remove from Favorites" : "Add to Favorites", systemImage: isFavorite ? "star.slash" : "star")
+            // }
         }
-        .onAppear {
-            isFavorite = sfmgr.shared.favorites.contains(symbol.name)
-        }
+        // .onAppear {
+        //     isFavorite = sfmgr.shared.favorites.contains(symbol.name)
+        // }
     }
 }
