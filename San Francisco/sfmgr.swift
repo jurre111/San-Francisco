@@ -19,6 +19,7 @@ final class sfmgr: ObservableObject {
     static let shared = sfmgr()
 
     struct Symbol: Codable, Hashable, Identifiable {
+        var id: String { name }
         var name: String
         var categories: [String]
         var availability: Double
@@ -53,21 +54,13 @@ final class sfmgr: ObservableObject {
         guard aliasesResult.ok else {
             return (false, aliasesResult.message)
         }
-        for category in categories.keys {
-            guard let info = categories[category], let icon = info.icon else {
-                categories[category]?.icon = "questionmark.square"
-            }
-            guard UIImage(systemName: icon) != nil else {
-                categories[category]?.icon = aliasesResult.aliases[icon] ?? "questionmark.square"
+        for category in categories.indices {
+            guard UIImage(systemName: categories[category]!.icon) != nil else {
+                categories[category]!.icon = aliasesResult.aliases[icon] ?? "questionmark.square"
             }
         }
 
         favorites = favoritesString.split(separator: ";").map(String.init)
-        for (index, symbol) in symbols.enumerated() {
-            if favorites.contains(symbol.name) {
-                symbols[index]?.favorite = true
-            }
-        }
 
         return (ok: true, message: "")
     }
@@ -79,7 +72,7 @@ final class sfmgr: ObservableObject {
             favorites.append(symbol)
         } else {
             favoritesString = favoritesString.replacingOccurrences(of: ";\(symbol);", with: ";")
-            favorites.removeFirst { $0 == symbol }
+            favorites.removeAll { $0 == symbol }
         } 
     }
 
