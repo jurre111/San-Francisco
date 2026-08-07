@@ -63,7 +63,7 @@ final class sfmgr: ObservableObject {
         }
 
         favorites = favoritesString.split(separator: ";").map(String.init)
-        for index, symbol in enumerate(symbols) {
+        for (index, symbol) in symbols.enumerated() {
             if favorites.contains(symbol.name) {
                 symbols[index]?.favorite = true
             }
