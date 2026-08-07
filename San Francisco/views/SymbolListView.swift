@@ -22,7 +22,7 @@ struct SymbolListView: View {
                 Text(symbol.name)
             }
         }
-        .contextMenu {        }
+        .contextMenu {
             Button {
                 UIPasteboard.general.string = symbol.name
             } label: {
