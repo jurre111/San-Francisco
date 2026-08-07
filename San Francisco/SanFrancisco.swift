@@ -35,7 +35,7 @@ struct SanFrancisco: App {
                 }
             }
             .environmentObject(mgr)
-            .onAppear {
+            .task {
                 let result = mgr.load()
                 if !result.ok {
                     Alertinator.shared.alert(title: "Error", body: result.message)
