@@ -9,10 +9,10 @@ import SwiftUI
 
 struct SymbolCustomizeView: View {
     @ObservedObject var mgr: sfmgr = sfmgr.shared
-    @State private var symbolSheet: String? = nil
+    @State private var infoSheet: sfmgr.Symbol? = nil
     @State private var renderingMode: String = "default"
-    var symbol: String
-    var info: sfmgr.Symbol
+    @State private var isFavorite: Bool = false
+    let symbol: sfmgr.Symbol
 
     var body: some View {
         NavigationStack {
@@ -21,7 +21,7 @@ struct SymbolCustomizeView: View {
                     Color.clear
                         .frame(maxWidth: .infinity, alignment: .center)
                         .aspectRatio(1.0, contentMode: .fit)
-                    Image(systemName: symbol)
+                    Image(systemName: symbol.name)
                         .symbolRenderingMode(getRenderingMode(from: renderingMode))
                         .font(.system(size: 220))
                         .foregroundColor(.blue)
@@ -33,7 +33,7 @@ struct SymbolCustomizeView: View {
                 Section {
                     Picker("Style", selection: $renderingMode) {
                         Text("Default").tag("default")
-                        if info.categories.contains("multicolor") {
+                        if symbol.categories.contains("multicolor") {
                             Text("Multicolor").tag("multicolor")
                         }
                         Text("Hierarchical").tag("hierarchical")
@@ -54,26 +54,24 @@ struct SymbolCustomizeView: View {
             }
             .navigationTitle("Customize")
             .navigationBarTitleDisplayMode(.inline)
-            .sheet(item: $symbolSheet) { selectedSymbol in
-                SymbolInfoView(symbol: selectedSymbol, info: info)
+            .sheet(item: $infoSheet) { symbol in
+                SymbolInfoView(symbol: symbol)
             }
             .toolbar {
                 Button {
-                    if !(mgr.symbols[symbol]?.favorite ?? false) {
-                        mgr.favorites += symbol + ";"
-                        mgr.symbols[symbol]?.favorite = true
-                    } else {
-                        mgr.favorites = mgr.favorites.replacingOccurrences(of: symbol + ";", with: "")
-                        mgr.symbols[symbol]?.favorite = false
-                    }  
+                    sfmgr.shared.toggleFavorite(symbol: symbol)
+                    isFavorite.toggle()
                 } label: {
-                    Image(systemName: mgr.symbols[symbol]?.favorite ?? false ? "star.fill" : "star")
+                    Image(systemName: isFavorite ? "star.fill" : "star")
                 }
                 Button {
                     symbolSheet = symbol
                 } label: {
                     Image(systemName: "info.circle")
                 }
+            }
+            .onAppear {
+                isFavorite = sfmgr.shared.favorites.contains(symbol.name)
             }
         }
     }

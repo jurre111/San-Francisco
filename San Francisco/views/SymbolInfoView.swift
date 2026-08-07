@@ -8,9 +8,7 @@
 import SwiftUI
 
 struct SymbolInfoView: View {
-    @ObservedObject var mgr: sfmgr = sfmgr.shared
-    var symbol: String
-    var info: sfmgr.Symbol
+    let symbol: sfmgr.Symbol
 
     var body: some View {
         NavigationStack {
@@ -19,7 +17,7 @@ struct SymbolInfoView: View {
                     Color.clear
                         .frame(maxWidth: .infinity, alignment: .center)
                         .aspectRatio(1.0, contentMode: .fit)
-                    Image(systemName: symbol)
+                    Image(systemName: symbol.name)
                         .font(.system(size: 220))
                         .foregroundColor(.blue)
                 }
@@ -31,20 +29,20 @@ struct SymbolInfoView: View {
                     HStack {
                         Text("Name")
                         Spacer()
-                        Text(symbol)
+                        Text(symbol.name)
                             .foregroundColor(.secondary)
                     }
                     HStack {
                         Text("Available since")
                         Spacer()
-                        Text("iOS \(String(info.availability))")
+                        Text("iOS \(String(symbol.availability))")
                             .foregroundColor(.secondary)
                     }
                 }
             
                 Section("Categories") {
-                    ForEach(mgr.categories, id: \.self) { category in
-                        if category.key != "name" && info.categories.contains(category.key) {
+                    ForEach(sfmgr.shared.categories, id: \.self) { category in
+                        if category.name != "all" && symbol.categories.contains(category.name) {
                             HStack {
                                 Image(systemName: category.icon)
                                     .frame(width: 20, alignment: .center)

@@ -7,29 +7,21 @@
 
 import SwiftUI
 
-struct InfoSheet: Identifiable {
-    var id: String { name }
-    let name: String
-    let info: sfmgr.Symbol
-}
-
 struct SymbolsView: View {
-    @ObservedObject var mgr: sfmgr = sfmgr.shared
     @State private var searchText: String = ""
-    @State private var infoSheet: InfoSheet? = nil
-    let category: sfmgr.Category
-    @State private var allSymbols: [String] = []
-    @State private var shownSymbols: [String] = []
+    @State private var infoSheet: sfmgr.Symbol? = nil
+    @State private var allSymbols: [sfmgr.Symbol] = []
+    @State private var shownSymbols: [sfmgr.Symbol] = []
     @State private var loaded: Bool = false
+
+    let category: String
 
     var body: some View {
         Group {
             if loaded {
                 List {
                     ForEach(shownSymbols, id: \.self) { symbol in
-                        if let symbolInfo = mgr.symbols[symbol] {
-                            SymbolListView(symbol: symbol, info: symbolInfo, infoSheet: $infoSheet)
-                        }
+                        SymbolListView(symbol: symbol, infoSheet: $infoSheet)
                     }
                 }
             } else {
@@ -49,7 +41,7 @@ struct SymbolsView: View {
             }
         }
         .sheet(item: $infoSheet) { symbol in
-            SymbolInfoView(symbol: symbol.name, info: symbol.info)
+            SymbolInfoView(symbol: symbol)
         }
         .task {
             await load()
@@ -58,15 +50,15 @@ struct SymbolsView: View {
     }
 
     func load() async {
-        let sortedSymbols = category.symbols.sorted()
-        allSymbols = sortedSymbols
-        shownSymbols = sortedSymbols
+        let relevantSymbols = sfmgr.shared.symbols.filter { $0.categories.contains(category) }
+        allSymbols = relevantSymbols
+        shownSymbols = relevantSymbols
     }
 
     func search() async {
         let query = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
         DispatchQueue.global(qos: .userInitiated).async {
-            let filtered = allSymbols.filter { $0.localizedCaseInsensitiveContains(query) }
+            let filtered = allSymbols.filter { $0.name.localizedCaseInsensitiveContains(query) }
 
             DispatchQueue.main.async {
                 shownSymbols = filtered

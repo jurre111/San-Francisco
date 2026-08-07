@@ -8,14 +8,14 @@
 import SwiftUI
 
 struct ContentView: View {
-    @ObservedObject var mgr: sfmgr = sfmgr.shared
+    @EnvironmentObject var mgr: sfmgr
     @State private var showSettings: Bool = false
     var body: some View {
         NavigationStack {
             List {
                 ForEach(mgr.categories, id: \.self) { category in
                     NavigationLink {
-                        SymbolsView(category: category)
+                        SymbolsView(category: category.name)
                     } label: {
                         HStack {
                             Image(systemName: category.icon)

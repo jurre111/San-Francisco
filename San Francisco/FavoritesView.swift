@@ -8,68 +8,90 @@
 import SwiftUI
 
 struct FavoritesView: View {
-    @ObservedObject var mgr: sfmgr = sfmgr.shared
-    @State private var query: String = ""
+    @EnvironmentObject var mgr: sfmgr
     @State private var searchText: String = ""
-    @State private var symbolSheet: InfoSheet? = nil
+    @State private var infoSheet: sfmgr.Symbol? = nil
+    @State private var allSymbols: [sfmgr.Symbol] = []
+    @State private var shownSymbols: [sfmgr.Symbol] = []
+    @State private var loaded: Bool = false
 
     var body: some View {
-        NavigationStack {
-            List {
-                if mgr.favorites.isEmpty {
-                    Text("No favorites yet")
-                } else {
-                    ForEach(filteredSymbols(mgr.favorites.components(separatedBy: ";").dropLast()), id: \.self) { symbol in
-                        if let symbolInfo = mgr.symbols[symbol] {
-                            NavigationLink {
-                                SymbolCustomizeView(symbol: symbol, info: symbolInfo)
+        Group {
+            if loaded {
+                List {
+                    ForEach(shownSymbols, id: \.self) { symbol in
+                        NavigationLink {
+                            SymbolCustomizeView(symbol: symbol)
+                        } label: {
+                            HStack {
+                                Image(systemName: symbol.name)
+                                    .frame(width: 20, alignment: .center)
+                                Text(symbol.name)
+                            }
+                        }
+                        .contextMenu {
+                            Button {
+                                UIPasteboard.general.string = symbol.name
                             } label: {
-                                HStack {
-                                    Image(systemName: symbol)
-                                        .frame(width: 20, alignment: .center)
-                                    Text(symbol)
-                                }
+                                Label("Copy", systemImage: "doc.on.doc")
                             }
-                            .contextMenu {
-                                Button {
-                                    UIPasteboard.general.string = symbol
-                                } label: {
-                                    Label("Copy", systemImage: "doc.on.doc")
-                                }
-                                Button {
-                                    symbolSheet = InfoSheet(name: symbol, info: symbolInfo)
-                                } label: {
-                                    Label("Info", systemImage: "info.circle")
-                                }
+                            Button {
+                                infoSheet = symbol
+                            } label: {
+                                Label("Info", systemImage: "info.circle")
                             }
-                            .swipeActions(edge: .trailing) {
-                                Button(role: .destructive) {
-                                    mgr.favorites = mgr.favorites.replacingOccurrences(of: symbol + ";", with: "")
-                                    mgr.symbols[symbol]?.favorite = false
-                                } label: {
-                                    Text("Remove")
-                                }
+                            Button {
+                                sfmgr.shared.toggleFavorite(symbol: symbol)
+                                allSymbols.removeAll { $0.name == symbol.name }
+                                shownSymbols.removeAll { $0.name == symbol.name }
+                            } label: {
+                                Label("Remove from Favorites", systemImage: "star.slash")
                             }
                         }
                     }
                 }
+                .refreshable {
+                    await load()
+                }
+            } else {
+                ProgressView()
             }
-            .navigationTitle("Favorites")
-            .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search Favorites")
-            .onSubmit(of: .search) {
-                query = searchText
+        }
+        .navigationTitle("Favorites")
+        .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search Symbols")
+        .onChange(of: searchText) { newValue in
+            if newValue.isEmpty {
+                shownSymbols = allSymbols
             }
-            .sheet(item: $symbolSheet) { symbol in
-                SymbolInfoView(symbol: symbol.name, info: symbol.info)
+        }
+        .onSubmit(of: .search) {
+            Task {
+                await search()
             }
+        }
+        .sheet(item: $infoSheet) { symbol in
+            SymbolInfoView(symbol: symbol)
+        }
+        .task {
+            await load()
+            loaded = true
         }
     }
 
-    private func filteredSymbols(_ symbolList: [String]) -> [String] {
-        if query.isEmpty || (!query.isEmpty && searchText.isEmpty) {
-            return symbolList.sorted()
-        } else {
-            return symbolList.sorted().filter { $0.localizedCaseInsensitiveContains(query) }
+    func load() async {
+        let relevantSymbols = sfmgr.shared.symbols.filter { mgr.favorites.contains($0.name) }
+        allSymbols = relevantSymbols
+        shownSymbols = relevantSymbols
+    }
+
+    func search() async {
+        let query = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+        DispatchQueue.global(qos: .userInitiated).async {
+            let filtered = allSymbols.filter { $0.name.localizedCaseInsensitiveContains(query) }
+
+            DispatchQueue.main.async {
+                shownSymbols = filtered
+            }
         }
     }
 }

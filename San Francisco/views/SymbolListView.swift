@@ -8,41 +8,41 @@
 import SwiftUI
 
 struct SymbolListView: View {
-    var symbol: String
-    var info: sfmgr.Symbol
-    @Binding var infoSheet: InfoSheet?
+    @Binding var infoSheet: sfmgr.Symbol?
     @State private var isFavorite: Bool = false
+
+    let symbol: sfmgr.Symbol
 
     var body: some View {
         NavigationLink {
-            SymbolCustomizeView(symbol: symbol, info: info)
+            SymbolCustomizeView(symbol: symbol)
         } label: {
             HStack {
-                Image(systemName: symbol)
+                Image(systemName: symbol.name)
                     .frame(width: 20, alignment: .center)
-                Text(symbol)
+                Text(symbol.name)
             }
         }
-        // .contextMenu {
-        //     Button {
-        //         UIPasteboard.general.string = symbol
-        //     } label: {
-        //         Label("Copy", systemImage: "doc.on.doc")
-        //     }
-        //     Button {
-        //         infoSheet = InfoSheet(name: symbol, info: info)
-        //     } label: {
-        //         Label("Info", systemImage: "info.circle")
-        //     }
-        //     Button {
-        //         sfmgr.shared.toggleFavorite(symbol: symbol)
-        //         isFavorite.toggle()
-        //     } label: {
-        //         Label(isFavorite ? "Remove from Favorites" : "Add to Favorites", systemImage: isFavorite ? "star.slash" : "star")
-        //     }
-        // }
+        .contextMenu {
+            Button {
+                UIPasteboard.general.string = symbol.name
+            } label: {
+                Label("Copy", systemImage: "doc.on.doc")
+            }
+            Button {
+                infoSheet = symbol
+            } label: {
+                Label("Info", systemImage: "info.circle")
+            }
+            Button {
+                sfmgr.shared.toggleFavorite(symbol: symbol)
+                isFavorite.toggle()
+            } label: {
+                Label(isFavorite ? "Remove from Favorites" : "Add to Favorites", systemImage: isFavorite ? "star.slash" : "star")
+            }
+        }
         .onAppear {
-            isFavorite = info.favorite
+            isFavorite = sfmgr.shared.favorites.contains(symbol.name)
         }
     }
 }

@@ -9,6 +9,7 @@ import SwiftUI
 
 @main
 struct SanFrancisco: App {
+    @StateObject var mgr: sfmgr = sfmgr.shared
     var body: some Scene {
         WindowGroup {
             TabView {
@@ -21,6 +22,7 @@ struct SanFrancisco: App {
                         Label("Favorites", systemImage: "star.fill")
                     }
             }
+            .environmentObject(mgr)
         }
     }
 }

@@ -1,5 +1,5 @@
 import plistlib
-import json
+from operator import itemgetter
 import subprocess
 from pathlib import Path
 import os
@@ -70,15 +70,15 @@ for year in year_to_release.keys():
 
 
 # get symbols
-symbols = {}
+symbols = []
 
 for symbol, value in name_availability["symbols"].items():
+    categories = ["all"]
     if symbol in symbol_categories:
-        categories = symbol_categories[symbol]
-    else:
-        categories = ["other"]
-    dict = {"categories": categories, "availability": year_to_release.get(value, 0.0), "favorite": False}
-    symbols[symbol] = dict
+        categories += symbol_categories[symbol]
+    dict = {"name": symbol, "categories": categories, "availability": year_to_release.get(value, 0.0)}
+    symbols = sorted(symbols, key=itemgetter("name"))
+    symbols.append(dict)
 with open("symbols.plist", "wb") as f:
     plistlib.dump(symbols, f)
 
@@ -124,14 +124,10 @@ categories = []
 for category in categoriesInfo:
     key = category["key"]
     dict = {
-        "key": key,
+        "name": key,
         "displayName": category_display_names.get(key, key),
         "icon": category["icon"],
-        "symbols": []
     }
-    for symbol, info in symbols.items():
-        if key == "all" or key in info["categories"]:
-            dict["symbols"].append(symbol)
     categories.append(dict)
 with open("categories.plist", "wb") as file:
     plistlib.dump(categories, file)
