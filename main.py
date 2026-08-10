@@ -3,12 +3,10 @@ from operator import itemgetter
 import os
 from fontTools.ttLib import TTFont
 
-print(os.listdir("/System/Library/Fonts"))
-
 path = "/System/Library/PrivateFrameworks/SFSymbols.framework/Resources/CoreGlyphs.bundle/Contents/Resources"
 
-font = TTFont(f"/System/Library/Fonts/Core/SFUI.ttf")
-glyphs = font.getGlyphSet()
+font = TTFont(f"/System/Library/Fonts/SFNS.ttf")
+glyphs = font.getGlyphOrder()
 print(f"{len(glyphs)} glyps")
 exit(1)
 

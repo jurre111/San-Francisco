@@ -26,8 +26,6 @@ jobs:
 
       - name: get SF Symbols
         run: |
-          ls -l "/System/Library/Fonts"
-          exit 1
           python3 main.py
       
       - name: install ldid
