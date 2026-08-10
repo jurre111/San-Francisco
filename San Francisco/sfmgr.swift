@@ -23,6 +23,7 @@ final class sfmgr: ObservableObject {
         var name: String
         var categories: [String]
         var availability: Double
+        var layers: Int
     }
 
     struct Category: Codable, Hashable {

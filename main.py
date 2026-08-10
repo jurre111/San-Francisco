@@ -28,18 +28,19 @@ for year in year_to_release.keys():
 symbols = []
 
 for symbol, value in name_availability["symbols"].items():
-    result = subprocess.run(["./sfsym", "info", symbol, "--json"], capture_output=True, text=True)
-    if result.returncode == 0:
-        info = json.loads(result.stdout)
-        layers = info["hierarchyLayers"]
-    else:
-        layers = 1
     categories = ["all"]
     if symbol in symbol_categories:
         categories += symbol_categories[symbol]
-    dict = {"name": symbol, "categories": categories, "availability": year_to_release.get(value, 0.0), "layers": layers}
-    print(dict)
+    dict = {"name": symbol, "categories": categories, "availability": year_to_release.get(value, 0.0)}
     symbols.append(dict)
+
+cmdinput = ""
+for symbol in name_availability["symbols"].keys():
+    cmdinput += symbol + "\n"
+result = subprocess.run(["./sfsym", "batch", "--json"], input=cmdinput, capture_output=True, text=True)
+
+print(result.stderr)
+exit(1)
 
 symbols = sorted(symbols, key=itemgetter("name"))
 with open("symbols.plist", "wb") as f:
