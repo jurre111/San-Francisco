@@ -1,9 +1,15 @@
 import plistlib
 from operator import itemgetter
 import os
+from fontTools.ttLib import TTFont
 
 
-path = os.getenv("GLYPHS_PATH")
+path = "/System/Library/PrivateFrameworks/SFSymbols.framework/Resources/CoreGlyphs.bundle/Contents/Resources"
+
+font = TTFont(f"/System/Library/Fonts/Core/SFUI.ttf")
+glyphs = font.getGlyphSet()
+print(f"{len(glyphs)} glyps")
+exit(1)
 
 with open(f"{path}/symbol_categories.plist", "rb") as f:
     symbol_categories = plistlib.load(f)

@@ -20,22 +20,13 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: install acextract
+      - name: install fonttools
         run: |
-          brew tap canhth/homebrew-acextract
-          brew trust canhth/acextract
-          brew install acextract
+          pip install fonttools
 
       - name: get SF Symbols
         run: |
-          export GLYPHS_PATH="/System/Library/PrivateFrameworks/SFSymbols.framework/Resources/CoreGlyphs.bundle/Contents/Resources"
-          echo "Making plists..."
           python3 main.py
-          echo "parsing Assets.car..."
-          mkdir -p "symbols"
-          acextract -i "${GLYPHS_PATH}/Assets.car" -o "symbols"
-          ls "symbols"
-          exit 1
       
       - name: install ldid
         run: brew install ldid
