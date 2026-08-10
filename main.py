@@ -7,6 +7,7 @@ path = "/System/Library/PrivateFrameworks/SFSymbols.framework/Resources/CoreGlyp
 
 result = subprocess.run(["./sfsym", "list", "--json"], capture_output=True, text=True)
 symbolsInfo = json.loads(result.stdout)
+print(symbolsInfo[:5])
 for index, symbol in enumerate(symbolsInfo):
     print(symbol)
     result = subprocess.run(["./sfsym", "info", symbol], capture_output=True, text=True)
