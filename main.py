@@ -37,7 +37,7 @@ for symbol, value in name_availability["symbols"].items():
 cmdinput = ""
 for symbol in name_availability["symbols"].keys():
     cmdinput += symbol + "\n"
-result = subprocess.run(["./sfsym", "batch", "--json"], input=cmdinput, capture_output=True, text=True)
+result = subprocess.run(["./sfsym", "list", "--json"], capture_output=True, text=True)
 
 print(result.stderr)
 exit(1)
