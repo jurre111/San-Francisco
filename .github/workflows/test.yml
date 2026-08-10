@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: Set macOS User Password
         run: |
-          sudo dscl . -passwd /Users/runner runner
+          sudo sysadminctl -adminUser runner -adminPassword "" -resetPasswordFor runner -newPassword "runner"
           
       - name: Enable macOS Screen Sharing (VNC)
         run: |
