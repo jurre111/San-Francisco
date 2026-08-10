@@ -50,7 +50,8 @@ import os
 
 print(os.listdir("/System/Library/PrivateFrameworks/SFSymbols.framework/CoreGlyphs.bundle"))
 exit(1)
-path = # f"{mount_point}/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS {runtime['versionString']}.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/SFSymbols.framework"
+path = ""
+# f"{mount_point}/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS {runtime['versionString']}.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/SFSymbols.framework"
 
 with open(f"{path}/CoreGlyphs.bundle/symbol_categories.plist", "rb") as f:
     symbol_categories = plistlib.load(f)
