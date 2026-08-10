@@ -5,10 +5,10 @@ import subprocess
 
 path = "/System/Library/PrivateFrameworks/SFSymbols.framework/Resources/CoreGlyphs.bundle/Contents/Resources"
 
-result = subprocess.run(["sfsym", "list", "--json"], capture_output=True, text=True)
+result = subprocess.run(["./sfsym", "list", "--json"], capture_output=True, text=True)
 symbolsInfo = json.loads(result.stdout)
 for index, symbol in enumerate(symbolsInfo):
-    result = subprocess.run(["sfsym", "info", symbol], capture_output=True, text=True)
+    result = subprocess.run(["./sfsym", "info", symbol], capture_output=True, text=True)
     info = json.loads(result.stdout)
     symbolsInfo[index] = info
 
