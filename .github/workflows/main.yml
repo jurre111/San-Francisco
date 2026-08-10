@@ -27,7 +27,7 @@ jobs:
 
       - name: get SF Symbols
         run: |
-          sfsym list --json sfsym list --json 
+          sfsym list --json
           exit 1
           python3 main.py
       
