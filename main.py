@@ -48,7 +48,7 @@ import os
 # 
 
 
-print(os.listdir("/System/Library/PrivateFrameworks/SFSymbols.framework/Resources"))
+print(os.listdir("/System/Library/PrivateFrameworks/SFSymbols.framework/Resources/CoreGlyphs.bundle"))
 exit(1)
 path = ""
 # f"{mount_point}/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS {runtime['versionString']}.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/SFSymbols.framework"
