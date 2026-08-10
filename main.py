@@ -10,7 +10,7 @@ symbolsInfo = json.loads(result.stdout)
 print(symbolsInfo[:5])
 for index, symbol in enumerate(symbolsInfo):
     print(symbol)
-    result = subprocess.run(["./sfsym", "info", symbol], capture_output=True, text=True)
+    result = subprocess.run(["./sfsym", "info", symbol, "--json"], capture_output=True, text=True)
     info = json.loads(result.stdout)
     symbolsInfo[index] = info
 
