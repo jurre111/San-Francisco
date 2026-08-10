@@ -25,10 +25,7 @@ for year in year_to_release.keys():
 
 
 # get symbols
-result = subprocess.run(["./sfsym", "batch", "--json", "--fail-fast"], input=json.dumps(list(name_availability["symbols"].keys())), capture_output=True, text=True)
-if result.returncode != 0:
-    print(result.stderr)
-    exit(1)
+result = subprocess.run(["./sfsym", "batch", "--json"], input=json.dumps(list(name_availability["symbols"].keys())), capture_output=True, text=True)
 symbols = json.loads(result.stdout)
 
 for index, symbol in enumerate(symbols):
@@ -36,7 +33,7 @@ for index, symbol in enumerate(symbols):
     categories = ["all"]
     if name in symbol_categories:
         categories += symbol_categories[name]
-    dict = {"name": name, "categories": categories, "availability": year_to_release.get(name_availability[name], 0.0), "layers": symbol["hierarchyLayers"]}
+    dict = {"name": name, "categories": categories, "availability": year_to_release.get(name_availability["symbols"][name], 0.0), "layers": symbol.get("hierarchyLayers", 1)}
     symbols[index] = dict
 
 
