@@ -25,22 +25,22 @@ for year in year_to_release.keys():
 
 
 # get symbols
-symbols = []
+result = subprocess.run(["./sfsym", "batch", "--json", "--fail-fast"], input=json.dumps(list(name_availability["symbols"].keys())), capture_output=True, text=True)
+if result.returncode != 0:
+    print(result.stderr)
+    exit(1)
+symbols = json.loads(result.stdout)
 
-for symbol, value in name_availability["symbols"].items():
+for index, symbol in enumerate(symbols):
+    name = symbol["name"]
     categories = ["all"]
-    if symbol in symbol_categories:
-        categories += symbol_categories[symbol]
-    dict = {"name": symbol, "categories": categories, "availability": year_to_release.get(value, 0.0)}
-    symbols.append(dict)
+    if name in symbol_categories:
+        categories += symbol_categories[name]
+    dict = {"name": name, "categories": categories, "availability": year_to_release.get(name_availability[name], 0.0), "layers": symbol["hierarchyLayers"]}
+    symbols[index] = dict
 
-cmdinput = ""
-for symbol in name_availability["symbols"].keys():
-    cmdinput += symbol + "\n"
-result = subprocess.run(["./sfsym", "list", "--json"], capture_output=True, text=True)
 
-print(result.stderr)
-exit(1)
+print(symbols[:5])
 
 symbols = sorted(symbols, key=itemgetter("name"))
 with open("symbols.plist", "wb") as f:
