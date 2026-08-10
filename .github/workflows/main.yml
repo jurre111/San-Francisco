@@ -21,7 +21,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: install acextract
-        run: brew install acextract
+        run: brew tap canhth/homebrew-acextract && brew install acextract
       
       - name: get SF Symbols
         run: |
