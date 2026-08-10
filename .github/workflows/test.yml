@@ -18,14 +18,17 @@ jobs:
           
       - name: Download & Install SF Symbols App
         run: |
-          # Download SF Symbols DMG from Apple (or curl direct DMG link)
           echo "Downloading SF Symbols..."
           curl -Lo sfsymbols.dmg "https://devimages-cdn.apple.com/design/resources/download/SF-Symbols-7.dmg"
           
-          # Mount and install PKG
+          # Mount DMG
           hdiutil attach sfsymbols.dmg
-          sudo installer -pkg /Volumes/SF\ Symbols/SF\ Symbols.pkg -target /
-          hdiutil detach /Volumes/SF\ Symbols
+          
+          # Install using the actual mounted volume path (/Volumes/SFSymbols)
+          sudo installer -pkg /Volumes/SFSymbols/*.pkg -target /
+          
+          # Unmount
+          hdiutil detach /Volumes/SFSymbols
           
           # Open SF Symbols app
           open "/Applications/SF Symbols.app"
