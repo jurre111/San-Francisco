@@ -22,7 +22,7 @@ jobs:
           fetch-depth: 0
       - name: install fonttools
         run: |
-          python3 -m pip install fonttools
+          python3 -m pip install fonttools --break-system-packages
 
       - name: get SF Symbols
         run: |
