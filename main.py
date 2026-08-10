@@ -3,6 +3,7 @@ from operator import itemgetter
 import os
 from fontTools.ttLib import TTFont
 
+print(os.listdir("/System/Library/Fonts"))
 
 path = "/System/Library/PrivateFrameworks/SFSymbols.framework/Resources/CoreGlyphs.bundle/Contents/Resources"
 
