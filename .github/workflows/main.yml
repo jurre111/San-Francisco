@@ -23,6 +23,7 @@ jobs:
 
       - name: get SF Symbols
         run: |
+          ./sfsym list --json
           echo "working..."
           chmod +x sfsym
           python3 main.py
