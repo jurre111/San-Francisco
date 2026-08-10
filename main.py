@@ -3,7 +3,7 @@ from operator import itemgetter
 import os
 
 
-path = os.getenv("GLYPS_PATH")
+path = os.getenv("GLYPHS_PATH")
 
 with open(f"{path}/symbol_categories.plist", "rb") as f:
     symbol_categories = plistlib.load(f)

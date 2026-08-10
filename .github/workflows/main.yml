@@ -28,12 +28,12 @@ jobs:
 
       - name: get SF Symbols
         run: |
-          GLYPS_PATH="/System/Library/PrivateFrameworks/SFSymbols.framework/Resources/CoreGlyphs.bundle/Contents/Resources"
+          export GLYPHS_PATH="/System/Library/PrivateFrameworks/SFSymbols.framework/Resources/CoreGlyphs.bundle/Contents/Resources"
           echo "Making plists..."
           python3 main.py
           echo "parsing Assets.car..."
           mkdir -p "symbols"
-          acextract -i "${GLYPS_PATH}/Assets.car" -o "symbols"
+          acextract -i "${GLYPHS_PATH}/Assets.car" -o "symbols"
           ls "symbols"
           exit 1
       
