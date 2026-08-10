@@ -5,9 +5,9 @@ from fontTools.ttLib import TTFont
 
 path = "/System/Library/PrivateFrameworks/SFSymbols.framework/Resources/CoreGlyphs.bundle/Contents/Resources"
 
-font = TTFont(f"/System/Library/Fonts/SFNS.ttf")
+font = TTFont(f"/home/jurre/Downloads/SFSymbols/SF Symbols/SFSymbols.pkg/Payload (2)/Library/Fonts/SF-Pro.ttf")
 glyphs = font.getGlyphOrder()
-print(f"{len(glyphs)} glyps")
+print(f"{len(glyphs)} glyphs")
 exit(1)
 
 with open(f"{path}/symbol_categories.plist", "rb") as f:

@@ -20,6 +20,11 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      - name: test
+        run: |
+          ibtool GlyphCategoriesViewController.nib --upgrade --write /dev/stdout
+          exit 1
       - name: install fonttools
         run: |
           python3 -m pip install fonttools --break-system-packages
