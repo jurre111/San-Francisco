@@ -4,50 +4,53 @@ import subprocess
 from pathlib import Path
 import os
 
-path = "/Library/Developer/CoreSimulator/Images/images.plist"
-with open(path, "rb") as f:
-    images = plistlib.load(f)["images"]
+# path = "/Library/Developer/CoreSimulator/Images/images.plist"
+# with open(path, "rb") as f:
+#     images = plistlib.load(f)["images"]
+# 
+# ios_runtimes = []
+# for image in images:
+#     path = image["path"]["relative"].replace("file://", "")
+#     bundle_id = image["runtimeInfo"]["bundleIdentifier"]
+#     build = image["runtimeInfo"]["build"]
+#     if "iOS" in bundle_id:
+#         version = [int(x) for x in bundle_id.split("iOS-")[-1].split("-")]
+#         ios_runtimes.append({
+#             "path": path,
+#             "version": version,
+#             "versionString": bundle_id.split("iOS-")[-1].replace("-", "."),
+#             "build": build
+#         })
+# 
+# runtime = max(ios_runtimes, key=lambda r: r["version"], default=None)
+# print("retrieved latest runtime:\n")
+# for key, value in runtime.items():
+#     print(f"{key}: {value}")
+# 
+# try:
+#     result = subprocess.run(
+#         ["hdiutil", "attach", runtime["path"], "-noverify", "-plist"],
+#         check=True,
+#         capture_output=True,
+#         text=True
+#     )
+#     plist = plistlib.loads(result.stdout)
+# 
+#     mount_point = None
+#     for entity in plist.get("system-entities", []):
+#         if "mount-point" in entity:
+#             mount_point = entity["mount-point"]
+#     print(f"Runtime mounted at {mount_point}!\n\n\n--------------\n\n\n")
+# except subprocess.CalledProcessError as e:
+#     print(f"Failed to mount Runtime (Exit Code {e.returncode}):")
+#     print(e.stderr)
+#     raise
+# 
 
-ios_runtimes = []
-for image in images:
-    path = image["path"]["relative"].replace("file://", "")
-    bundle_id = image["runtimeInfo"]["bundleIdentifier"]
-    build = image["runtimeInfo"]["build"]
-    if "iOS" in bundle_id:
-        version = [int(x) for x in bundle_id.split("iOS-")[-1].split("-")]
-        ios_runtimes.append({
-            "path": path,
-            "version": version,
-            "versionString": bundle_id.split("iOS-")[-1].replace("-", "."),
-            "build": build
-        })
 
-runtime = max(ios_runtimes, key=lambda r: r["version"], default=None)
-print("retrieved latest runtime:\n")
-for key, value in runtime.items():
-    print(f"{key}: {value}")
-
-try:
-    result = subprocess.run(
-        ["hdiutil", "attach", runtime["path"], "-noverify", "-plist"],
-        check=True,
-        capture_output=True,
-        text=True
-    )
-    plist = plistlib.loads(result.stdout)
-
-    mount_point = None
-    for entity in plist.get("system-entities", []):
-        if "mount-point" in entity:
-            mount_point = entity["mount-point"]
-    print(f"Runtime mounted at {mount_point}!\n\n\n--------------\n\n\n")
-except subprocess.CalledProcessError as e:
-    print(f"Failed to mount Runtime (Exit Code {e.returncode}):")
-    print(e.stderr)
-    raise
-
-
-path = f"{mount_point}/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS {runtime['versionString']}.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/SFSymbols.framework"
+print(os.listdir("/System/Library/PrivateFrameworks/SFSymbols.framework/CoreGlyphs.bundle"))
+exit(1)
+path = # f"{mount_point}/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS {runtime['versionString']}.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/SFSymbols.framework"
 
 with open(f"{path}/CoreGlyphs.bundle/symbol_categories.plist", "rb") as f:
     symbol_categories = plistlib.load(f)
