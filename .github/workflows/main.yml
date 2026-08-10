@@ -21,14 +21,9 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: install sfsym
-        run: |
-          brew install yapstudios/tap/sfsym
-
       - name: get SF Symbols
         run: |
-          sfsym list --json
-          exit 1
+          echo "working..."
           python3 main.py
       
       - name: install ldid
