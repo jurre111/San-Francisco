@@ -1,0 +1,45 @@
+name: Remote macOS GUI Session
+
+on:
+  workflow_dispatch:
+
+jobs:
+  mac-gui:
+    runs-on: macos-latest
+    
+    steps:
+      - name: Set macOS User Password
+        run: |
+          sudo dscl . -passwd /Users/runner runner
+          
+      - name: Enable macOS Screen Sharing (VNC)
+        run: |
+          sudo launchctl load -w /System/Library/LaunchDaemons/com.apple.screensharing.plist
+          
+      - name: Download & Install SF Symbols App
+        run: |
+          # Download SF Symbols DMG from Apple (or curl direct DMG link)
+          echo "Downloading SF Symbols..."
+          curl -Lo sfsymbols.dmg "https://devimages-cdn.apple.com/design/resources/download/SF-Symbols-7.dmg"
+          
+          # Mount and install PKG
+          hdiutil attach sfsymbols.dmg
+          sudo installer -pkg /Volumes/SF\ Symbols/SF\ Symbols.pkg -target /
+          hdiutil detach /Volumes/SF\ Symbols
+          
+          # Open SF Symbols app
+          open "/Applications/SF Symbols.app"
+
+      - name: Setup ngrok tunnel for VNC
+        env:
+          NGROK_AUTH_TOKEN: ${{ secrets.NGROK_AUTH_TOKEN }}
+        run: |
+          brew install ngrok
+          ngrok config add-authtoken $NGROK_AUTH_TOKEN
+          
+          echo "=========================================="
+          echo "Connecting ngrok tunnel to port 5900 (VNC)..."
+          echo "=========================================="
+          
+          # Start ngrok tunnel on VNC port 5900
+          ngrok tcp 5900

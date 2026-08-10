@@ -25,7 +25,6 @@ jobs:
         run: |
           echo "working..."
           chmod +x sfsym
-          ./sfsym list | ./sfsym batch --json
           python3 main.py
       
       - name: install ldid
