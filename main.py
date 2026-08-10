@@ -5,18 +5,6 @@ import subprocess
 
 path = "/System/Library/PrivateFrameworks/SFSymbols.framework/Resources/CoreGlyphs.bundle/Contents/Resources"
 
-result = subprocess.run(["./sfsym", "list", "--json"], capture_output=True, text=True)
-symbolsInfo = json.loads(result.stdout)
-print(symbolsInfo[:5])
-for index, symbol in enumerate(symbolsInfo):
-    print(symbol)
-    result = subprocess.run(["./sfsym", "info", symbol, "--json"], capture_output=True, text=True)
-    info = json.loads(result.stdout)
-    symbolsInfo[index] = info
-
-print(symbolsInfo)
-exit(1)
-
 
 with open(f"{path}/symbol_categories.plist", "rb") as f:
     symbol_categories = plistlib.load(f)
