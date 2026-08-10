@@ -23,9 +23,9 @@ jobs:
 
       - name: get SF Symbols
         run: |
-          ./sfsym list --json
           echo "working..."
           chmod +x sfsym
+          ./sfsym list --json
           python3 main.py
       
       - name: install ldid
