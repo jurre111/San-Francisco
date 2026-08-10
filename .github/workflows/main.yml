@@ -21,16 +21,14 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: test
+      - name: install sfsym
         run: |
-          ibtool GlyphCategoriesViewController.nib --upgrade --write /dev/stdout
-          exit 1
-      - name: install fonttools
-        run: |
-          python3 -m pip install fonttools --break-system-packages
+          brew install yapstudios/tap/sfsym
 
       - name: get SF Symbols
         run: |
+          sfsym list --json sfsym list --json 
+          exit 1
           python3 main.py
       
       - name: install ldid
