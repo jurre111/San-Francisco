@@ -20,6 +20,7 @@ struct SymbolCustomizeView: View {
     }
 }
 
+@available(iOS 26.0, *)
 struct iOS26: View {
     @State private var infoSheet: sfmgr.Symbol? = nil
     @State private var renderingMode: String = "default"
@@ -173,6 +174,7 @@ struct iOS26: View {
     }
 }
 
+@available(iOS 18.0, *)
 struct iOS18: View {
     @State private var infoSheet: sfmgr.Symbol? = nil
     @State private var renderingMode: String = "default"
