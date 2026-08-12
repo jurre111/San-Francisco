@@ -23,7 +23,7 @@ struct SymbolCustomizeView: View {
 @available(iOS 26.0, *)
 struct iOS26: View {
     @State private var infoSheet: sfmgr.Symbol? = nil
-    @State private var renderingMode: String = "default"
+    @State private var renderingMode: String = "monochrome"
     @State private var color: Color = .blue
     @State private var BGcolor: Color = .white
     @State private var isFavorite: Bool = false
@@ -177,7 +177,7 @@ struct iOS26: View {
 @available(iOS 18.0, *)
 struct iOS18: View {
     @State private var infoSheet: sfmgr.Symbol? = nil
-    @State private var renderingMode: String = "default"
+    @State private var renderingMode: String = "monochrome"
     @State private var color: Color = .blue
     @State private var BGcolor: Color = .white
     @State private var isFavorite: Bool = false
@@ -195,17 +195,16 @@ struct iOS18: View {
                         .symbolRenderingMode(getRenderingMode(from: renderingMode))
                         .font(.system(size: 220))
                         .foregroundColor(color)
-                        .background(BGcolor)
                 }
                 .listRowBackground(
                     RoundedRectangle(cornerRadius: 28, style: .continuous)
-                        .fill(Color(UIColor.secondarySystemGroupedBackground))
+                        .fill(BGColor)
                 )
                 HStack(spacing: 12) {
                     VStack(alignment: .center, spacing: 12) {
                         Image(systemName: symbol.name)
                             .symbolRenderingMode(.monochrome)
-                            .font(.system(size: 75))
+                            .font(.system(size: 45))
                             .foregroundColor(color)
                         Image(systemName: "circle.fill")
                             .font(.system(size: 10))
@@ -216,7 +215,7 @@ struct iOS18: View {
                      VStack(alignment: .center, spacing: 12) {
                         Image(systemName: symbol.name)
                             .symbolRenderingMode(.hierarchical)
-                            .font(.system(size: 75))
+                            .font(.system(size: 45))
                             .foregroundColor(color)
                         Image(systemName: "circle.fill")
                             .font(.system(size: 10))
@@ -227,7 +226,7 @@ struct iOS18: View {
                      VStack(alignment: .center, spacing: 12) {
                         Image(systemName: symbol.name)
                             .symbolRenderingMode(.palette)
-                            .font(.system(size: 75))
+                            .font(.system(size: 45))
                             .foregroundColor(color)
                         Image(systemName: "circle.fill")
                             .font(.system(size: 10))
@@ -238,7 +237,7 @@ struct iOS18: View {
                      VStack(alignment: .center, spacing: 12) {
                         Image(systemName: symbol.name)
                             .symbolRenderingMode(.multicolor)
-                            .font(.system(size: 75))
+                            .font(.system(size: 45))
                             .foregroundColor(color)
                         Image(systemName: "circle.fill")
                             .font(.system(size: 10))
