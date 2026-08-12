@@ -81,7 +81,7 @@ struct iOS26: View {
                             .opacity(renderingMode == "palette" ? 1.0 : 0.0)
                     }
                     Spacer()
-                    VStack(spacing: 12, alignment: .center) {
+                    VStack(alignment: .center, spacing: 12) {
                         Image(systemName: symbol.name)
                             .symbolRenderingMode(.multicolor)
                             .font(.system(size: 75))
@@ -200,7 +200,7 @@ struct iOS18: View {
                         .fill(Color(UIColor.secondarySystemGroupedBackground))
                 )
                 HStack(spacing: 12) {
-                    VStack(spacing: 12, alignment: .center) {
+                    VStack(alignment: .center, spacing: 12) {
                         Image(systemName: symbol.name)
                             .symbolRenderingMode(.monochrome)
                             .font(.system(size: 75))
