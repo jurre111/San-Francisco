@@ -198,7 +198,7 @@ struct iOS18: View {
                 }
                 .listRowBackground(
                     RoundedRectangle(cornerRadius: 28, style: .continuous)
-                        .fill(BGColor)
+                        .fill(BGcolor)
                 )
                 HStack(spacing: 12) {
                     VStack(alignment: .center, spacing: 12) {
