@@ -13,6 +13,7 @@ final class sfmgr: ObservableObject {
     @Published var symbols: [Symbol] = []
     @Published var categories: [Category] = []
     @Published var favorites: [String] = []
+    @Published var systemVersion: Double = doubleSystemVersion()
 
     @AppStorage("favoritesString") var favoritesString: String = ";"
 
@@ -45,8 +46,6 @@ final class sfmgr: ObservableObject {
         }
         categories = categoriesResult.categories
 
-
-        let systemVersion = doubleSystemVersion()
         symbols = symbols.filter { symbol in
             return symbol.availability <= systemVersion && UIImage(systemName: symbol.name) != nil
         }

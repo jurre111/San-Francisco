@@ -40,7 +40,7 @@ struct SymbolsView: View {
         .sheet(item: $infoSheet) { symbol in
             SymbolInfoView(symbol: symbol)
         }
-        .onAppear {
+        .task {
             load()
         }
     }

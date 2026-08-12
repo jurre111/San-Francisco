@@ -13,6 +13,8 @@ struct SymbolCustomizeView: View {
     @State private var renderingMode: String = "default"
     @State private var color: Color = .blue
     @State private var isFavorite: Bool = false
+    @State private var gradientOn = false
+    @State private var variableColorOn = false
     let symbol: sfmgr.Symbol
 
     var body: some View {
@@ -32,7 +34,7 @@ struct SymbolCustomizeView: View {
                         .fill(Color(UIColor.secondarySystemGroupedBackground))
                 )
                 Section {
-                    Picker("Style", selection: $renderingMode) {
+                    Picker(selection: $renderingMode) {
                         Text("Default").tag("default")
                         if symbol.categories.contains("multicolor") {
                             Text("Multicolor").tag("multicolor")
@@ -40,7 +42,24 @@ struct SymbolCustomizeView: View {
                         Text("Hierarchical").tag("hierarchical")
                         Text("Palette").tag("palette")
                         Text("Monochrome").tag("monochrome")
+                    } label: {
+                        HStack(spacing: 12) {
+                            Image(systemName: "paintpalette")
+                            Text("Rendering Mode")
+                        }
                     }
+
+                    if sfmgr.shared.systemVersion >= 26.0 {
+                        Toggle(isOn: $gradientOn) {
+                            HStack(spacing: 12) {
+                                Image(systemName: "circle.fill")
+                                    .foregroundStyle(.blue)
+                                    .symbolColorRenderingMode(.gradient)
+                            }
+                        }
+                    }
+                }
+                Section {
                     HStack(spacing: 12) {
                         Text("Color")
                         Spacer()
@@ -88,6 +107,304 @@ struct SymbolCustomizeView: View {
                 return .monochrome
             default:
                 return nil
+        }
+    }
+}
+
+struct iOS26: View {
+    @ObservedObject var mgr: sfmgr = sfmgr.shared
+    @State private var infoSheet: sfmgr.Symbol? = nil
+    @State private var renderingMode: String = "default"
+    @State private var color: Color = .blue
+    @State private var BGcolor: Color = .white
+    @State private var isFavorite: Bool = false
+    @State private var gradientOn = false
+    @State private var variableColor: (enabled: Bool, value: Double) = (false, 1.0)
+    let symbol: sfmgr.Symbol
+
+    var body: some View {
+        NavigationStack {
+            List{
+                ZStack {
+                    Color.clear
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .aspectRatio(1.0, contentMode: .fit)
+                    Image(systemName: symbol.name, variableValue: variableColor.value)
+                        .symbolRenderingMode(getRenderingMode(from: renderingMode))
+                        .font(.system(size: 220))
+                        .foregroundColor(color)
+                        .background(BGcolor)
+                }
+                .listRowBackground(
+                    RoundedRectangle(cornerRadius: 28, style: .continuous)
+                        .fill(Color(UIColor.secondarySystemGroupedBackground))
+                )
+                HStack(spacing: 12) {
+                    VStack(spacing: 12, alignment: .center) {
+                        Image(systemName: symbol.name)
+                            .symbolRenderingMode(.monochrome)
+                            .font(.system(size: 75))
+                            .foregroundColor(color)
+                        Image(systemName: "circle.fill")
+                            .font(.system(size: 10))
+                            .foregroundColor(.blue)
+                            .opacity(renderingMode == "monochrome" ? 1.0 : 0.0)
+                    }
+                    Spacer()
+                    VStack(spacing: 12, alignment: .center) {
+                        Image(systemName: symbol.name)
+                            .symbolRenderingMode(.hierarchical)
+                            .font(.system(size: 75))
+                            .foregroundColor(color)
+                        Image(systemName: "circle.fill")
+                            .font(.system(size: 10))
+                            .foregroundColor(.blue)
+                            .opacity(renderingMode == "hierarchical" ? 1.0 : 0.0)
+                    }
+                    Spacer()
+                    VStack(spacing: 12, alignment: .center) {
+                        Image(systemName: symbol.name)
+                            .symbolRenderingMode(.palette)
+                            .font(.system(size: 75))
+                            .foregroundColor(color)
+                        Image(systemName: "circle.fill")
+                            .font(.system(size: 10))
+                            .foregroundColor(.blue)
+                            .opacity(renderingMode == "palette" ? 1.0 : 0.0)
+                    }
+                    Spacer()
+                    VStack(spacing: 12, alignment: .center) {
+                        Image(systemName: symbol.name)
+                            .symbolRenderingMode(.multicolor)
+                            .font(.system(size: 75))
+                            .foregroundColor(color)
+                        Image(systemName: "circle.fill")
+                            .font(.system(size: 10))
+                            .foregroundColor(.blue)
+                            .opacity(renderingMode == "multicolor" ? 1.0 : 0.0)
+                    }
+                }
+                Section {
+                    Picker(selection: $renderingMode) {
+                        Text("Monochrome").tag("monochrome")
+                        Text("Hierarchical").tag("hierarchical")
+                        Text("Palette").tag("palette")
+                        Text("Multicolor").tag("multicolor")              
+                    } label: {
+                        HStack(spacing: 12) {
+                            Image(systemName: "paintpalette")
+                            Text("Rendering Mode")
+                        }
+                    }
+                    Toggle(isOn: $gradientOn) {
+                        HStack(spacing: 12) {
+                            Image(systemName: "circle.fill")
+                                .frame(width: 20, alignment: .center)
+                                .foregroundStyle(.blue)
+                                .symbolColorRenderingMode(.gradient)
+                            Text("Gradients")
+                        }
+                    }
+                    Toggle(isOn: $variableColor.enabled) {
+                        HStack(spacing: 12) {
+                            Image(systemName: "slider.horizontal.below.square.and.square.filled")
+                                .frame(width: 20, alignment: .center)
+                            Text("Variable")
+                        }
+                    }
+                    if variableColor.enabled {
+                        HStack {
+                            Slider(value: $variableColor.value, in: 0.0...1.0, step: 0.01)
+                            Text("\(Int(variableColor.value * 100))%")
+                                .foregroundColor(.secondary)
+                        }
+                    }
+
+                }
+                Section {
+                    HStack(spacing: 12) {
+                        Text("Color")
+                        Spacer()
+                        ColorPicker("Color", selection: $color)
+                            .labelsHidden()
+                            .frame(width: 40)
+                    }
+                }
+                Section {
+                    HStack(spacing: 12) {
+                        Text("Background")
+                        Spacer()
+                        ColorPicker("Color", selection: $BGcolor)
+                            .labelsHidden()
+                            .frame(width: 40)
+                    }
+                }
+            }
+            .navigationTitle("Customize")
+            .navigationBarTitleDisplayMode(.inline)
+            .sheet(item: $infoSheet) { symbol in
+                SymbolInfoView(symbol: symbol)
+            }
+            .toolbar {
+                Button {
+                    sfmgr.shared.toggleFavorite(symbol: symbol.name)
+                    isFavorite.toggle()
+                } label: {
+                    Image(systemName: isFavorite ? "star.fill" : "star")
+                }
+                Button {
+                    infoSheet = symbol
+                } label: {
+                    Image(systemName: "info.circle")
+                }
+            }
+            .onAppear {
+                isFavorite = sfmgr.shared.favorites.contains(symbol.name)
+            }
+        }
+    }
+}
+
+struct iOS18: View {
+    @ObservedObject var mgr: sfmgr = sfmgr.shared
+    @State private var infoSheet: sfmgr.Symbol? = nil
+    @State private var renderingMode: String = "default"
+    @State private var color: Color = .blue
+    @State private var BGcolor: Color = .white
+    @State private var isFavorite: Bool = false
+    @State private var variableColor: (enabled: Bool, value: Double) = (false, 1.0)
+    let symbol: sfmgr.Symbol
+
+    var body: some View {
+        NavigationStack {
+            List{
+                ZStack {
+                    Color.clear
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .aspectRatio(1.0, contentMode: .fit)
+                    Image(systemName: symbol.name, variableValue: variableColor.value)
+                        .symbolRenderingMode(getRenderingMode(from: renderingMode))
+                        .font(.system(size: 220))
+                        .foregroundColor(color)
+                        .background(BGcolor)
+                }
+                .listRowBackground(
+                    RoundedRectangle(cornerRadius: 28, style: .continuous)
+                        .fill(Color(UIColor.secondarySystemGroupedBackground))
+                )
+                HStack(spacing: 12) {
+                    VStack(spacing: 12, alignment: .center) {
+                        Image(systemName: symbol.name)
+                            .symbolRenderingMode(.monochrome)
+                            .font(.system(size: 75))
+                            .foregroundColor(color)
+                        Image(systemName: "circle.fill")
+                            .font(.system(size: 10))
+                            .foregroundColor(.blue)
+                            .opacity(renderingMode == "monochrome" ? 1.0 : 0.0)
+                    }
+                    Spacer()
+                    VStack(spacing: 12, alignment: .center) {
+                        Image(systemName: symbol.name)
+                            .symbolRenderingMode(.hierarchical)
+                            .font(.system(size: 75))
+                            .foregroundColor(color)
+                        Image(systemName: "circle.fill")
+                            .font(.system(size: 10))
+                            .foregroundColor(.blue)
+                            .opacity(renderingMode == "hierarchical" ? 1.0 : 0.0)
+                    }
+                    Spacer()
+                    VStack(spacing: 12, alignment: .center) {
+                        Image(systemName: symbol.name)
+                            .symbolRenderingMode(.palette)
+                            .font(.system(size: 75))
+                            .foregroundColor(color)
+                        Image(systemName: "circle.fill")
+                            .font(.system(size: 10))
+                            .foregroundColor(.blue)
+                            .opacity(renderingMode == "palette" ? 1.0 : 0.0)
+                    }
+                    Spacer()
+                    VStack(spacing: 12, alignment: .center) {
+                        Image(systemName: symbol.name)
+                            .symbolRenderingMode(.multicolor)
+                            .font(.system(size: 75))
+                            .foregroundColor(color)
+                        Image(systemName: "circle.fill")
+                            .font(.system(size: 10))
+                            .foregroundColor(.blue)
+                            .opacity(renderingMode == "multicolor" ? 1.0 : 0.0)
+                    }
+                }
+                Section {
+                    Picker(selection: $renderingMode) {
+                        Text("Monochrome").tag("monochrome")
+                        Text("Hierarchical").tag("hierarchical")
+                        Text("Palette").tag("palette")
+                        Text("Multicolor").tag("multicolor")              
+                    } label: {
+                        HStack(spacing: 12) {
+                            Image(systemName: "paintpalette")
+                            Text("Rendering Mode")
+                        }
+                    }
+                    Toggle(isOn: $variableColor.enabled) {
+                        HStack(spacing: 12) {
+                            Image(systemName: "slider.horizontal.below.square.and.square.filled")
+                                .frame(width: 20, alignment: .center)
+                            Text("Variable")
+                        }
+                    }
+                    if variableColor.enabled {
+                        HStack {
+                            Slider(value: $variableColor.value, in: 0.0...1.0, step: 0.01)
+                            Text("\(Int(variableColor.value * 100))%")
+                                .foregroundColor(.secondary)
+                        }
+                    }
+
+                }
+                Section {
+                    HStack(spacing: 12) {
+                        Text("Color")
+                        Spacer()
+                        ColorPicker("Color", selection: $color)
+                            .labelsHidden()
+                            .frame(width: 40)
+                    }
+                }
+                Section {
+                    HStack(spacing: 12) {
+                        Text("Background")
+                        Spacer()
+                        ColorPicker("Color", selection: $BGcolor)
+                            .labelsHidden()
+                            .frame(width: 40)
+                    }
+                }
+            }
+            .navigationTitle("Customize")
+            .navigationBarTitleDisplayMode(.inline)
+            .sheet(item: $infoSheet) { symbol in
+                SymbolInfoView(symbol: symbol)
+            }
+            .toolbar {
+                Button {
+                    sfmgr.shared.toggleFavorite(symbol: symbol.name)
+                    isFavorite.toggle()
+                } label: {
+                    Image(systemName: isFavorite ? "star.fill" : "star")
+                }
+                Button {
+                    infoSheet = symbol
+                } label: {
+                    Image(systemName: "info.circle")
+                }
+            }
+            .onAppear {
+                isFavorite = sfmgr.shared.favorites.contains(symbol.name)
+            }
         }
     }
 }
