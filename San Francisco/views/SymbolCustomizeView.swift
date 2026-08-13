@@ -393,11 +393,10 @@ struct ColorView: View {
     let name: String
     var body: some View {
         HStack {
+            Circle()
+                .fill(color)
+                .frame(width: 10, height: 10)
             Text(name)
-            Image(systemName: "circle.fill")
-                .frame(width: 20, height: 7, alignment: .center)
-                .foregroundColor(color)
-                .symbolRenderingMode(.palette)
             
         }
     }

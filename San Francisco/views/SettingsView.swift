@@ -8,14 +8,14 @@
 import SwiftUI
 
 struct SettingsView: View {
-    @AppStorage("multicolorSymbols") var multicolorSymbols: Bool = true
+    @AppStorage("alwaysShowTabbar") var alwaysShowTabbar: Bool = false
     @State private var appVersion: String = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "Unknown"
     @State private var commitHash: String = Bundle.main.object(forInfoDictionaryKey: "CommitHash") as? String ?? "Unknown"
     var body: some View {
         NavigationStack {
             List {
                 Section("Appearance") {
-                    Toggle("Multicolor Symbols", isOn: $multicolorSymbols)
+                    Toggle("Always show Tabbar", isOn: $alwaysShowTabbar)
                 }
                 Section("App Info") {
                     HStack {
