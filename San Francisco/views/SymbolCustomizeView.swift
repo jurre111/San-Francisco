@@ -284,7 +284,7 @@ struct iOS18: View {
                         } else {
                             Image(systemName: "circle.fill")
                                 .foregroundColor(color)
-                                .font(system(size: 10))
+                                .font(.system(size: 10))
                             Picker("", selection: $color) {
                                 ColorView(color: Color.red, name: "Red").tag(Color.red)
                                 ColorView(color: Color.orange, name: "Orange").tag(Color.orange)
@@ -361,11 +361,13 @@ struct iOS18: View {
                         } else {
                             Image(systemName: "circle.fill")
                                 .foregroundColor(BGColor)
-                                .font(system(size: 10))
+                                .font(.system(size: 10))
                             Picker("", selection: $BGColor) {
                                 ColorView(color: Color(UIColor.secondarySystemGroupedBackground), name: "Default").tag(Color(UIColor.secondarySystemGroupedBackground))
                                 ColorView(color: Color(UIColor.secondarySystemGroupedBackground.resolvedColor(with: UITraitCollection(userInterfaceStyle: .light))), name: "Light").tag(Color(UIColor.secondarySystemGroupedBackground.resolvedColor(with: UITraitCollection(userInterfaceStyle: .light))))
                                 ColorView(color: Color(UIColor.secondarySystemGroupedBackground.resolvedColor(with: UITraitCollection(userInterfaceStyle: .dark))), name: "Dark").tag(Color(UIColor.secondarySystemGroupedBackground.resolvedColor(with: UITraitCollection(userInterfaceStyle: .dark))))
+                            } label: {
+                                Text("Background")
                             }
                         }
                     }
