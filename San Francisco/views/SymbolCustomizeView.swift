@@ -253,24 +253,24 @@ struct iOS18: View {
                                 .frame(width: 40)
                         } else {
                             Picker("", selection: $color) {
-                                ColorView(color: Color.red, name: "Red").tag(.red)
-                                ColorView(color: Color.orange, name: "Orange").tag(.orange)
-                                ColorView(color: Color.yellow, name: "Yellow").tag(.yellow)
-                                ColorView(color: Color.green, name: "Green").tag(.green)
-                                ColorView(color: Color.mint, name: "Mint").tag(.mint)
-                                ColorView(color: Color.teal, name: "Teal").tag(.teal)
-                                ColorView(color: Color.cyan, name: "Cyan").tag(.cyan)
-                                ColorView(color: Color.blue, name: "Blue").tag(.blue)
-                                ColorView(color: Color.indigo, name: "Indigo").tag(.indigo)
-                                ColorView(color: Color.purple, name: "Purple").tag(.purple)
-                                ColorView(color: Color.pink, name: "Pink").tag(.pink)
-                                ColorView(color: Color.brown, name: "Brown").tag(.brown)
-                                ColorView(color: Color.white, name: "White").tag(.white)
-                                ColorView(color: Color.gray, name: "Gray").tag(.gray)
-                                ColorView(color: Color.black, name: "Black").tag(.black)
-                                ColorView(color: Color.primary, name: "Primary").tag(.primary)
-                                ColorView(color: Color.secondary, name: "Secondary").tag(.secondary)
-                                ColorView(color: Color.tertiary, name: "tertiary").tag(.tertiary)
+                                ColorView(color: Color.red, name: "Red").tag(Color.red)
+                                ColorView(color: Color.orange, name: "Orange").tag(Color.orange)
+                                ColorView(color: Color.yellow, name: "Yellow").tag(Color.yellow)
+                                ColorView(color: Color.green, name: "Green").tag(Color.green)
+                                ColorView(color: Color.mint, name: "Mint").tag(Color.mint)
+                                ColorView(color: Color.teal, name: "Teal").tag(Color.teal)
+                                ColorView(color: Color.cyan, name: "Cyan").tag(Color.cyan)
+                                ColorView(color: Color.blue, name: "Blue").tag(Color.blue)
+                                ColorView(color: Color.indigo, name: "Indigo").tag(Color.indigo)
+                                ColorView(color: Color.purple, name: "Purple").tag(Color.purple)
+                                ColorView(color: Color.pink, name: "Pink").tag(Color.pink)
+                                ColorView(color: Color.brown, name: "Brown").tag(Color.brown)
+                                ColorView(color: Color.white, name: "White").tag(Color.white)
+                                ColorView(color: Color.gray, name: "Gray").tag(Color.gray)
+                                ColorView(color: Color.black, name: "Black").tag(Color.black)
+                                ColorView(color: Color.primary, name: "Primary").tag(Color.primary)
+                                ColorView(color: Color.secondary, name: "Secondary").tag(Color.secondary)
+                                ColorView(color: Color.tertiary, name: "tertiary").tag(Color.tertiary)
                             }
                         }
                     }
@@ -312,10 +312,10 @@ struct iOS18: View {
                                 .labelsHidden()
                                 .frame(width: 40)
                         } else {
-                            Picker("", selection: $BGcolor) {
-                                ColorView(color: Color(UIColor.secondarySystemGroupedBackground), name: "Default").tag("system")
-                                ColorView(color: Color.white, name: "Light").tag("white")
-                                ColorView(color: Color.black, name: "Dark").tag("black")
+                            Picker("", selection: $BGColor) {
+                                ColorView(color: Color(UIColor.secondarySystemGroupedBackground), name: "Default").tag(Color(UIColor.secondarySystemGroupedBackground))
+                                ColorView(color: Color(UIColor.secondarySystemGroupedBackground.resolvedColor(with: UITraitCollection(userInterfaceStyle: .light))), name: "Light").tag(Color(UIColor.secondarySystemGroupedBackground.resolvedColor(with: UITraitCollection(userInterfaceStyle: .light))))
+                                ColorView(color: Color(UIColor.secondarySystemGroupedBackground.resolvedColor(with: UITraitCollection(userInterfaceStyle: .dark))), name: "Dark").tag(Color(UIColor.secondarySystemGroupedBackground.resolvedColor(with: UITraitCollection(userInterfaceStyle: .dark))))
                             }
                         }
                     }
