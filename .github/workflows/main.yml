@@ -22,8 +22,7 @@ jobs:
           fetch-depth: 0
 
       - name: get SF Symbols
-        run: |
-          python3 main.py
+        run: python3 main.py
       
       - name: install ldid
         run: brew install ldid

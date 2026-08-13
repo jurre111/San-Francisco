@@ -17,7 +17,7 @@ struct SymbolCustomizeView: View {
             if #available(iOS 26.0, *) {
                 iOS26(symbol: symbol)
             } else if #available(iOS 18.0, *) {
-                iOS18(symbol: symbol)
+                iOS18(symbol: symbol, page: $page)
             }
         } else {
             NavigationStack {

@@ -6,13 +6,10 @@ APP_MARKETING_VERSION=$2
 APP_BUILD_VERSION=$3
 APP_COMMIT_HASH=$4
 
-echo $APP_COMMIT_HASH
-
 rm -rf build/
 mkdir -p build
 
 echo "Build Started!"
-echo
 
 xcodebuild \
   -project "$APP_NAME.xcodeproj" \
