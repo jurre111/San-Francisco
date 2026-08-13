@@ -9,13 +9,33 @@ import SwiftUI
 
 struct SymbolCustomizeView: View {
     @State private var isFavorite: Bool = false
+    @State private var page: Int = 0
     let symbol: sfmgr.Symbol
 
     var body: some View {
-        if #available(iOS 26.0, *) {
-            iOS26(symbol: symbol)
-        } else if #available(iOS 18.0, *) {
-            iOS18(symbol: symbol)
+        if page == 0 {
+            if #available(iOS 26.0, *) {
+                iOS26(symbol: symbol)
+            } else if #available(iOS 18.0, *) {
+                iOS18(symbol: symbol)
+            }
+        } else {
+            NavigationStack {
+                List {
+                    Section {
+                        Picker("", selection: $page) {
+                            Image(systemName: "paintbrush").tag(0)
+                            Image(systemName: "circle.dotted.and.circle").tag(1)
+                        }
+                        .pickerStyle(.segmented)
+                    }
+                    Section {
+                        Text("Animation")
+                    }
+                }
+                .navigationTitle("Animation")
+                .navigationBarTitleDisplayMode(.inline)
+            }
         }
     }
 }
@@ -178,6 +198,7 @@ struct iOS26: View {
 struct iOS18: View {
     let symbol: sfmgr.Symbol
     @State private var isFavorite: Bool = false
+    @Binding var page: Int
 
     @State private var infoSheet: sfmgr.Symbol? = nil
     
@@ -196,17 +217,24 @@ struct iOS18: View {
     var body: some View {
         NavigationStack {
             List{
+                Section {
+                    Picker("", selection: $page) {
+                        Image(systemName: "paintbrush").tag(0)
+                        Image(systemName: "circle.dotted.and.circle").tag(1)
+                    }
+                    .pickerStyle(.segmented)
+                }
                 ZStack {
                     Color.clear
                         .frame(maxWidth: .infinity, alignment: .center)
-                        .aspectRatio(1.0, contentMode: .fit)
+                        // .aspectRatio(1.0, contentMode: .fit)
                     Image(systemName: symbol.name, variableValue: variableColor.value)
                         .symbolRenderingMode(getRenderingMode(from: renderingMode))
                         .resizable()
                         .scaledToFit()
                         .foregroundColor(customColor.enabled ? customColor.value : color)
                         .opacity(opacity)
-                        .padding(40)
+                        .padding(25)
                 }
                 .listRowBackground(
                     RoundedRectangle(cornerRadius: 28, style: .continuous)
@@ -303,8 +331,11 @@ struct iOS18: View {
                         .scrollDismissesKeyboard(.interactively)
                         .multilineTextAlignment(.trailing)
                         .toolbar {
-                            Button("Done") {
-                                opacityFocused = false
+                            ToolbarItemGroup(placement: .keyboard) {
+                                Spacer()
+                                Button("Done") {
+                                    opacityFocused = false
+                                }
                             }
                         }
                     }
@@ -364,10 +395,9 @@ struct ColorView: View {
         HStack {
             Text(name)
             Image(systemName: "circle.fill")
-                .frame(width: 20, alignment: .center)
+                .frame(width: 20, height: 7, alignment: .center)
                 .foregroundColor(color)
-                .symbolRenderingMode(.monochrome)
-                .font(.system(size: 5))
+                .symbolRenderingMode(.palette)
             
         }
     }

@@ -47,7 +47,7 @@ final class sfmgr: ObservableObject {
         categories = categoriesResult.categories
 
         symbols = symbols.filter { symbol in
-            return symbol.availability <= systemVersion && UIImage(systemName: symbol.name) != nil
+            return symbol.availability <= systemVersion
         }
 
         let aliasesResult = loadAliases()

@@ -37,7 +37,6 @@ rm -rf "$PWD/Payload"
 mkdir -p "$PWD/Payload"
 cp -R "$APP_PATH" "$PWD/Payload/"
 
-plutil -insert NSLocationWhenInUseUsageDescription -string "This app needs your location to display your position on the map." "$PWD/Payload/$APP_NAME.app/Info.plist"
 plutil -insert CommitHash -string $APP_COMMIT_HASH "$PWD/Payload/$APP_NAME.app/Info.plist"
 cp symbols.plist "$PWD/Payload/$APP_NAME.app/symbols.plist"
 cp categories.plist "$PWD/Payload/$APP_NAME.app/categories.plist"

@@ -12,18 +12,14 @@ struct SymbolsView: View {
     @State private var infoSheet: sfmgr.Symbol? = nil
     @State private var allSymbols: [sfmgr.Symbol] = []
     @State private var shownSymbols: [sfmgr.Symbol] = []
-    @State private var loaded: Bool = true
+    @State private var loaded: Bool = false
 
     let category: sfmgr.Category
 
     var body: some View {
         List {
-            if loaded {
-                ForEach(shownSymbols, id: \.self) { symbol in
-                    SymbolListView(symbol: symbol, infoSheet: $infoSheet)
-                }
-            } else {
-                ProgressView()
+            ForEach(shownSymbols, id: \.self) { symbol in
+                SymbolListView(symbol: symbol, infoSheet: $infoSheet)
             }
         }
         .navigationTitle(category.displayName)
@@ -40,7 +36,7 @@ struct SymbolsView: View {
         .sheet(item: $infoSheet) { symbol in
             SymbolInfoView(symbol: symbol)
         }
-        .task {
+        .onAppear {
             load()
         }
     }
@@ -49,13 +45,12 @@ struct SymbolsView: View {
         let relevantSymbols = sfmgr.shared.symbols.filter { $0.categories.contains(category.name) }
         allSymbols = relevantSymbols
         shownSymbols = relevantSymbols
+        loaded = true
     }
 
     func search() async {
-        loaded = false
         let query = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
         let filtered = allSymbols.filter { $0.name.localizedCaseInsensitiveContains(query) }
         shownSymbols = filtered
-        loaded = true
     }
 }
