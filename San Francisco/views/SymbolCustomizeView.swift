@@ -304,6 +304,8 @@ struct iOS18: View {
                                 ColorView(color: Color.primary, name: "Primary").tag(Color.primary)
                                 ColorView(color: Color.secondary, name: "Secondary").tag(Color.secondary)
                                 ColorView(color: Color(UIColor.tertiaryLabel), name: "Tertiary").tag(Color(UIColor.tertiaryLabel))
+                            } label: {
+                                Text("Color")
                             }
                         }
                     }
@@ -397,14 +399,11 @@ struct iOS18: View {
 struct ColorView: View {
     let color: Color
     let name: String
-    @Environment(\.isPartOfMenu) private var isPartOfMenu
     var body: some View {
         HStack {
             Text(name)
-            if isPartOfMenu {
-                Image(systemName: "circle.fill")
-                    .foregroundColor(color)
-            }
+            Image(systemName: "circle.fill")
+                .foregroundColor(color)
         }
     }
 }
