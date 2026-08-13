@@ -7,6 +7,27 @@
 
 import SwiftUI
 
+let colors: [(name: String, color: Color)] = [
+    ("Red", .red),
+    ("Orange", .orange),
+    ("Yellow", .yellow),
+    ("Green", .green),
+    ("Mint", .mint),
+    ("Teal", .teal),
+    ("Cyan", .cyan),
+    ("Blue", .blue),
+    ("Indigo", .indigo),
+    ("Purple", .purple),
+    ("Pink", .pink),
+    ("Brown", .brown),
+    ("White", .white),
+    ("Gray", .gray),
+    ("Black", .black),
+    ("Primary", .primary),
+    ("Secondary", .secondary),
+    ("Tertiary", Color(UIColor.tertiaryLabel))
+]
+
 struct SymbolCustomizeView: View {
     @State private var isFavorite: Bool = false
     @State private var page: Int = 0
@@ -44,7 +65,7 @@ struct SymbolCustomizeView: View {
 struct iOS26: View {
     @State private var infoSheet: sfmgr.Symbol? = nil
     @State private var renderingMode: String = "monochrome"
-    @State private var color: Color = .blue
+    @State private var color: (name: String, color: Color) = (name: "Blue", color: .blue)
     @State private var BGcolor: Color = .white
     @State private var isFavorite: Bool = false
     @State private var gradientOn = false
@@ -282,30 +303,29 @@ struct iOS18: View {
                                 .labelsHidden()
                                 .frame(width: 40)
                         } else {
-                            Image(systemName: "circle.fill")
-                                .foregroundColor(color)
-                                .font(.system(size: 10))
-                            Picker(selection: $color) {
-                                ColorView(color: Color.red, name: "Red").tag(Color.red)
-                                ColorView(color: Color.orange, name: "Orange").tag(Color.orange)
-                                ColorView(color: Color.yellow, name: "Yellow").tag(Color.yellow)
-                                ColorView(color: Color.green, name: "Green").tag(Color.green)
-                                ColorView(color: Color.mint, name: "Mint").tag(Color.mint)
-                                ColorView(color: Color.teal, name: "Teal").tag(Color.teal)
-                                ColorView(color: Color.cyan, name: "Cyan").tag(Color.cyan)
-                                ColorView(color: Color.blue, name: "Blue").tag(Color.blue)
-                                ColorView(color: Color.indigo, name: "Indigo").tag(Color.indigo)
-                                ColorView(color: Color.purple, name: "Purple").tag(Color.purple)
-                                ColorView(color: Color.pink, name: "Pink").tag(Color.pink)
-                                ColorView(color: Color.brown, name: "Brown").tag(Color.brown)
-                                ColorView(color: Color.white, name: "White").tag(Color.white)
-                                ColorView(color: Color.gray, name: "Gray").tag(Color.gray)
-                                ColorView(color: Color.black, name: "Black").tag(Color.black)
-                                ColorView(color: Color.primary, name: "Primary").tag(Color.primary)
-                                ColorView(color: Color.secondary, name: "Secondary").tag(Color.secondary)
-                                ColorView(color: Color(UIColor.tertiaryLabel), name: "Tertiary").tag(Color(UIColor.tertiaryLabel))
+                            Menu {
+                                ForEach(colors, id: \.self) { color in
+                                    Button {
+                                        color = color.color
+                                    } label: {
+                                        HStack {
+                                            Image(systemName: "circle.fill")
+                                                .foregroundColor(color.color)
+                                                .font(.system(size: 10))
+                                            Text(color.name)
+                                        }
+                                    }
+                                }
                             } label: {
-                                Text("Color")
+                                HStack {
+                                    Image(systemName: "circle.fill")
+                                        .foregroundColor(color)
+                                        .font(.system(size: 10))
+                                    Text("Color")
+                                    Image(systemName: "chevron.up.chevron.down")
+                                        .foregroundColor(.secondary)
+                                        .font(.system(size: 10))
+                                }
                             }
                         }
                     }
@@ -359,16 +379,16 @@ struct iOS18: View {
                                 .labelsHidden()
                                 .frame(width: 40)
                         } else {
-                            Image(systemName: "circle.fill")
-                                .foregroundColor(BGColor)
-                                .font(.system(size: 10))
-                            Picker(selection: $BGColor) {
-                                ColorView(color: Color(UIColor.secondarySystemGroupedBackground), name: "Default").tag(Color(UIColor.secondarySystemGroupedBackground))
-                                ColorView(color: Color(UIColor.secondarySystemGroupedBackground.resolvedColor(with: UITraitCollection(userInterfaceStyle: .light))), name: "Light").tag(Color(UIColor.secondarySystemGroupedBackground.resolvedColor(with: UITraitCollection(userInterfaceStyle: .light))))
-                                ColorView(color: Color(UIColor.secondarySystemGroupedBackground.resolvedColor(with: UITraitCollection(userInterfaceStyle: .dark))), name: "Dark").tag(Color(UIColor.secondarySystemGroupedBackground.resolvedColor(with: UITraitCollection(userInterfaceStyle: .dark))))
-                            } label: {
-                                Text("Background")
-                            }
+                            // Image(systemName: "circle.fill")
+                            //     .foregroundColor(BGColor)
+                            //     .font(.system(size: 10))
+                            // Picker(selection: $BGColor) {
+                            //     ColorView(color: Color(UIColor.secondarySystemGroupedBackground), name: "Default").tag(Color(UIColor.secondarySystemGroupedBackground))
+                            //     ColorView(color: Color(UIColor.secondarySystemGroupedBackground.resolvedColor(with: UITraitCollection(userInterfaceStyle: .light))), name: "Light").tag(Color(UIColor.secondarySystemGroupedBackground.resolvedColor(with: UITraitCollection(userInterfaceStyle: .light))))
+                            //     ColorView(color: Color(UIColor.secondarySystemGroupedBackground.resolvedColor(with: UITraitCollection(userInterfaceStyle: .dark))), name: "Dark").tag(Color(UIColor.secondarySystemGroupedBackground.resolvedColor(with: UITraitCollection(userInterfaceStyle: .dark))))
+                            // } label: {
+                            //     Text("Background")
+                            // }
                         }
                     }
                 }
@@ -394,18 +414,6 @@ struct iOS18: View {
             .onAppear {
                 isFavorite = sfmgr.shared.favorites.contains(symbol.name)
             }
-        }
-    }
-}
-
-struct ColorView: View {
-    let color: Color
-    let name: String
-    var body: some View {
-        HStack {
-            Text(name)
-            Image(systemName: "circle.fill")
-                .foregroundColor(color)
         }
     }
 }
