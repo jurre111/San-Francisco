@@ -244,6 +244,7 @@ struct iOS18: View {
                         Text("System").tag(false)
                         Text("Custom").tag(true)
                     }
+                    .pickerStyle(.segmented)
                     HStack(spacing: 12) {
                         Text("Color")
                         Spacer()
@@ -296,7 +297,10 @@ struct iOS18: View {
                             }
                         ))
                         .foregroundColor(.secondary)
+                        .monospaced()
                         .keyboardType(.numberPad)
+                        .submitLabel(.done)
+                        .multilineTextAlignment(.trailing)
                     }
                 }
                 Section {
@@ -304,6 +308,7 @@ struct iOS18: View {
                         Text("System").tag(false)
                         Text("Custom").tag(true)
                     }
+                    .pickerStyle(.segmented)
                     HStack(spacing: 12) {
                         Text("Background")
                         Spacer()
@@ -354,8 +359,9 @@ struct ColorView: View {
             Text(name)
             Image(systemName: "circle.fill")
                 .frame(width: 20, alignment: .center)
-                .foregroundStyle(color)
+                .foregroundColor(color)
                 .symbolRenderingMode(.palette)
+                .font(.system(size: 11))
             
         }
     }
@@ -375,36 +381,5 @@ func getRenderingMode(from string: String) -> SymbolRenderingMode? {
             return .monochrome
         default:
             return nil
-    }
-}
-
-func getColor(from string: String) -> Color? {
-    switch string {
-        case "system":
-            return Color(UIColor.secondarySystemGroupedBackground)
-        case "white":
-            return .white
-        case "black":
-            return .black
-        case "blue":
-            return .blue
-        case "red":
-            return .red
-        case "green":
-            return .green
-        case "yellow":
-            return .yellow
-        case "orange":
-            return .orange
-        case "pink":
-            return .pink
-        case "purple":
-            return .purple
-        case "gray":
-            return .gray
-        case "custom":
-            return nil
-        default:
-            return .blue
     }
 }
