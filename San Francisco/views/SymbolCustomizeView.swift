@@ -161,6 +161,7 @@ struct iOS18: View {
                                             Image(systemName: "circle.fill")
                                                 .foregroundColor(entry.color)
                                                 .symbolRenderingMode(.palette)
+                                                .font(.system(size: 15))
                                         }
                                     }
                                 }
@@ -168,10 +169,10 @@ struct iOS18: View {
                                 HStack {
                                     Image(systemName: "circle.fill")
                                         .foregroundColor(color.color)
-                                        .font(.system(size: 10))
+                                        .font(.system(size: 15))
                                         .symbolRenderingMode(.palette)
                                     Text(color.name)
-                                        .foregroundColor(.primary)
+                                        .foregroundColor(.secondary)
                                     Image(systemName: "chevron.up.chevron.down")
                                         .foregroundColor(.secondary)
                                 }
@@ -201,17 +202,8 @@ struct iOS18: View {
                         ))
                         .foregroundColor(.secondary)
                         .monospaced()
-                        .keyboardType(.numberPad)
-                        .scrollDismissesKeyboard(.interactively)
+                        .scrollDismissesKeyboard(.immediately)
                         .multilineTextAlignment(.trailing)
-                        .toolbar {
-                            ToolbarItemGroup(placement: .keyboard) {
-                                Spacer()
-                                Button("Done") {
-                                    opacityFocused = false
-                                }
-                            }
-                        }
                     }
                 }
                 Section {
