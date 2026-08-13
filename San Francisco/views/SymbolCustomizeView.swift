@@ -253,7 +253,7 @@ struct iOS18: View {
                         .symbolRenderingMode(getRenderingMode(from: renderingMode))
                         .resizable()
                         .scaledToFit()
-                        .foregroundColor(customColor.enabled ? customColor.value : color)
+                        .foregroundColor(customColor.enabled ? customColor.value : color.color)
                         .opacity(opacity)
                         .padding(25)
                 }
@@ -304,24 +304,24 @@ struct iOS18: View {
                                 .frame(width: 40)
                         } else {
                             Menu {
-                                ForEach(colors, id: \.self) { color in
+                                ForEach(colors, id: \.self) { entry in
                                     Button {
-                                        color = color.color
+                                        color = entry
                                     } label: {
                                         HStack {
                                             Image(systemName: "circle.fill")
-                                                .foregroundColor(color.color)
+                                                .foregroundColor(entry.color)
                                                 .font(.system(size: 10))
-                                            Text(color.name)
+                                            Text(entry.name)
                                         }
                                     }
                                 }
                             } label: {
                                 HStack {
                                     Image(systemName: "circle.fill")
-                                        .foregroundColor(color)
+                                        .foregroundColor(color.color)
                                         .font(.system(size: 10))
-                                    Text("Color")
+                                    Text(color.name)
                                     Image(systemName: "chevron.up.chevron.down")
                                         .foregroundColor(.secondary)
                                         .font(.system(size: 10))
