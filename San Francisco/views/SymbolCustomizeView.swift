@@ -298,7 +298,6 @@ struct iOS18: View {
                         .foregroundColor(.secondary)
                         .keyboardType(.numberPad)
                     }
-                    }
                 }
                 Section {
                     Picker("", selection: $customBGColor.enabled) {
@@ -319,7 +318,6 @@ struct iOS18: View {
                                 ColorView(color: Color.black, name: "Dark").tag("black")
                             }
                         }
-                    }
                     }
                 }
             }
