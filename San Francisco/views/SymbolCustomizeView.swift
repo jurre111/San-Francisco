@@ -96,7 +96,7 @@ struct iOS18: View {
                 ZStack {
                     Color.clear
                         .frame(maxWidth: .infinity, alignment: .center)
-                        // .aspectRatio(1.0, contentMode: .fit)
+                        .aspectRatio(1.0, contentMode: .fit)
                     Image(systemName: symbol.name, variableValue: variableColor.value)
                         .symbolRenderingMode(getRenderingMode(from: renderingMode))
                         .resizable()
@@ -157,10 +157,10 @@ struct iOS18: View {
                                         color = entry
                                     } label: {
                                         HStack {
+                                            Text(entry.name)
                                             Image(systemName: "circle.fill")
                                                 .foregroundColor(entry.color)
-                                                .font(.system(size: 10))
-                                            Text(entry.name)
+                                                .symbolRenderingMode(.palette)
                                         }
                                     }
                                 }
@@ -169,10 +169,11 @@ struct iOS18: View {
                                     Image(systemName: "circle.fill")
                                         .foregroundColor(color.color)
                                         .font(.system(size: 10))
+                                        .symbolRenderingMode(.palette)
                                     Text(color.name)
+                                        .foregroundColor(.primary)
                                     Image(systemName: "chevron.up.chevron.down")
                                         .foregroundColor(.secondary)
-                                        .font(.system(size: 10))
                                 }
                             }
                         }
