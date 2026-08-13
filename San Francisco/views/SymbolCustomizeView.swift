@@ -187,6 +187,7 @@ struct iOS18: View {
     @State private var color: Color = .blue
     @State private var customColor: (enabled: Bool, value: Color) = (false, .blue)
     @State private var opacity: Double = 1.0
+    @State private var opacityFocused: Bool = false
 
     @State private var BGColor: Color = Color(UIColor.secondarySystemGroupedBackground)
     @State private var customBGColor: (enabled: Bool, value: Color) = (false, Color(UIColor.secondarySystemGroupedBackground))
@@ -299,8 +300,13 @@ struct iOS18: View {
                         .foregroundColor(.secondary)
                         .monospaced()
                         .keyboardType(.numberPad)
-                        .submitLabel(.done)
+                        .scrollDismissesKeyboard(.interactively)
                         .multilineTextAlignment(.trailing)
+                        .toolbar {
+                            Button("Done") {
+                                opacityFocused = false
+                            }
+                        }
                     }
                 }
                 Section {
