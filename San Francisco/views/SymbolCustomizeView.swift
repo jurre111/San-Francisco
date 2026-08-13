@@ -270,7 +270,7 @@ struct iOS18: View {
                                 ColorView(color: Color.black, name: "Black").tag(Color.black)
                                 ColorView(color: Color.primary, name: "Primary").tag(Color.primary)
                                 ColorView(color: Color.secondary, name: "Secondary").tag(Color.secondary)
-                                ColorView(color: Color.tertiary, name: "tertiary").tag(Color.tertiary)
+                                ColorView(color: Color(UIColor.tertiaryLabel), name: "Tertiary").tag(Color(UIColor.tertiaryLabel))
                             }
                         }
                     }
