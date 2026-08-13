@@ -179,7 +179,7 @@ struct iOS18: View {
     @State private var infoSheet: sfmgr.Symbol? = nil
     @State private var renderingMode: String = "monochrome"
     @State private var color: Color = .blue
-    @State private var BGcolor: Color = Color(UIColor.secondarySystemGroupedBackground)
+    @State private var BGcolor: String = "system"
     @State private var customBGColor: Color = Color(UIColor.secondarySystemGroupedBackground)
     @State private var isFavorite: Bool = false
     @State private var variableColor: (enabled: Bool, value: Double) = (false, 1.0)
@@ -249,7 +249,7 @@ struct iOS18: View {
                             ColorView(color: Color.gray, name: "Gray").tag("gray")
                             ColorView(color: customBGColor, name: "Custom").tag("custom")
                         }
-                        if BGColor == "custom" {
+                        if BGcolor == "custom" {
                             ColorPicker("", selection: $customBGColor)
                                 .labelsHidden()
                                 .frame(width: 40)
