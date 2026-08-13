@@ -161,7 +161,7 @@ struct iOS18: View {
                                             Image(systemName: "circle.fill")
                                                 .foregroundColor(entry.color)
                                                 .symbolRenderingMode(.palette)
-                                                .font(.system(size: 15))
+                                                .font(.system(size: 12))
                                         }
                                     }
                                 }
@@ -169,7 +169,7 @@ struct iOS18: View {
                                 HStack {
                                     Image(systemName: "circle.fill")
                                         .foregroundColor(color.color)
-                                        .font(.system(size: 15))
+                                        .font(.system(size: 12))
                                         .symbolRenderingMode(.palette)
                                     Text(color.name)
                                         .foregroundColor(.secondary)
