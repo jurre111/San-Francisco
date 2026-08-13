@@ -360,7 +360,7 @@ struct ColorView: View {
             Image(systemName: "circle.fill")
                 .frame(width: 20, alignment: .center)
                 .foregroundColor(color)
-                .symbolRenderingMode(.palette)
+                .symbolRenderingMode(.monochrome)
                 .font(.system(size: 5))
             
         }
