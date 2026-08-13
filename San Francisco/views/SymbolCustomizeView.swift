@@ -179,7 +179,8 @@ struct iOS18: View {
     @State private var infoSheet: sfmgr.Symbol? = nil
     @State private var renderingMode: String = "monochrome"
     @State private var color: Color = .blue
-    @State private var BGcolor: Color = .white
+    @State private var BGcolor: Color = Color(UIColor.secondarySystemGroupedBackground)
+    @State private var customBGColor: Color = Color(UIColor.secondarySystemGroupedBackground)
     @State private var isFavorite: Bool = false
     @State private var variableColor: (enabled: Bool, value: Double) = (false, 1.0)
     let symbol: sfmgr.Symbol
@@ -198,53 +199,8 @@ struct iOS18: View {
                 }
                 .listRowBackground(
                     RoundedRectangle(cornerRadius: 28, style: .continuous)
-                        .fill(BGcolor)
+                        .fill(getColor(from: BGcolor) ?? customBGColor)
                 )
-                HStack(spacing: 12) {
-                    VStack(alignment: .center, spacing: 12) {
-                        Image(systemName: symbol.name)
-                            .symbolRenderingMode(.monochrome)
-                            .font(.system(size: 45))
-                            .foregroundColor(color)
-                        Image(systemName: "circle.fill")
-                            .font(.system(size: 10))
-                            .foregroundColor(.blue)
-                            .opacity(renderingMode == "monochrome" ? 1.0 : 0.0)
-                    }
-                    Spacer()
-                     VStack(alignment: .center, spacing: 12) {
-                        Image(systemName: symbol.name)
-                            .symbolRenderingMode(.hierarchical)
-                            .font(.system(size: 45))
-                            .foregroundColor(color)
-                        Image(systemName: "circle.fill")
-                            .font(.system(size: 10))
-                            .foregroundColor(.blue)
-                            .opacity(renderingMode == "hierarchical" ? 1.0 : 0.0)
-                    }
-                    Spacer()
-                     VStack(alignment: .center, spacing: 12) {
-                        Image(systemName: symbol.name)
-                            .symbolRenderingMode(.palette)
-                            .font(.system(size: 45))
-                            .foregroundColor(color)
-                        Image(systemName: "circle.fill")
-                            .font(.system(size: 10))
-                            .foregroundColor(.blue)
-                            .opacity(renderingMode == "palette" ? 1.0 : 0.0)
-                    }
-                    Spacer()
-                     VStack(alignment: .center, spacing: 12) {
-                        Image(systemName: symbol.name)
-                            .symbolRenderingMode(.multicolor)
-                            .font(.system(size: 45))
-                            .foregroundColor(color)
-                        Image(systemName: "circle.fill")
-                            .font(.system(size: 10))
-                            .foregroundColor(.blue)
-                            .opacity(renderingMode == "multicolor" ? 1.0 : 0.0)
-                    }
-                }
                 Section {
                     Picker(selection: $renderingMode) {
                         Text("Monochrome").tag("monochrome")
@@ -286,9 +242,18 @@ struct iOS18: View {
                     HStack(spacing: 12) {
                         Text("Background")
                         Spacer()
-                        ColorPicker("Color", selection: $BGcolor)
-                            .labelsHidden()
-                            .frame(width: 40)
+                        Picker("", selection: $BGcolor) {
+                            ColorView(color: Color(UIColor.secondarySystemGroupedBackground), name: "System").tag("system")
+                            ColorView(color: Color.white, name: "White").tag("white")
+                            ColorView(color: Color.black, name: "Black").tag("black")
+                            ColorView(color: Color.gray, name: "Gray").tag("gray")
+                            ColorView(color: customBGColor, name: "Custom").tag("custom")
+                        }
+                        if BGColor == "custom" {
+                            ColorPicker("", selection: $customBGColor)
+                                .labelsHidden()
+                                .frame(width: 40)
+                        }
                     }
                 }
             }
@@ -317,19 +282,64 @@ struct iOS18: View {
     }
 }
 
-func getRenderingMode(from string: String) -> SymbolRenderingMode? {
-        switch string {
-            case "default":
-                return nil
-            case "multicolor":
-                return .multicolor
-            case "hierarchical":
-                return .hierarchical
-            case "palette":
-                return .palette
-            case "monochrome":
-                return .monochrome
-            default:
-                return nil
+struct ColorView: View {
+    let color: Color
+    let name: String
+    var body: some View {
+        HStack {
+            Image(systemName: "circle.fill")
+                .frame(width: 20, alignment: .center)
+                .foregroundStyle(color)
+            Text(name)
+            
         }
     }
+}
+
+func getRenderingMode(from string: String) -> SymbolRenderingMode? {
+    switch string {
+        case "default":
+            return nil
+        case "multicolor":
+            return .multicolor
+        case "hierarchical":
+            return .hierarchical
+        case "palette":
+            return .palette
+        case "monochrome":
+            return .monochrome
+        default:
+            return nil
+    }
+}
+
+func getColor(from string: String) -> Color? {
+    switch string {
+        case "system":
+            return Color(UIColor.secondarySystemGroupedBackground)
+        case "white":
+            return .white
+        case "black":
+            return .black
+        case "blue":
+            return .blue
+        case "red":
+            return .red
+        case "green":
+            return .green
+        case "yellow":
+            return .yellow
+        case "orange":
+            return .orange
+        case "pink":
+            return .pink
+        case "purple":
+            return .purple
+        case "gray":
+            return .gray
+        case "custom":
+            return nil
+        default:
+            return .blue
+    }
+}
