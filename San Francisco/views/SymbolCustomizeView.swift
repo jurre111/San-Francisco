@@ -176,14 +176,21 @@ struct iOS26: View {
 
 @available(iOS 18.0, *)
 struct iOS18: View {
-    @State private var infoSheet: sfmgr.Symbol? = nil
-    @State private var renderingMode: String = "monochrome"
-    @State private var color: Color = .blue
-    @State private var BGcolor: String = "system"
-    @State private var customBGColor: Color = Color(UIColor.secondarySystemGroupedBackground)
-    @State private var isFavorite: Bool = false
-    @State private var variableColor: (enabled: Bool, value: Double) = (false, 1.0)
     let symbol: sfmgr.Symbol
+    @State private var isFavorite: Bool = false
+
+    @State private var infoSheet: sfmgr.Symbol? = nil
+    
+    @State private var renderingMode: String = "monochrome"
+    @State private var variableColor: (enabled: Bool, value: Double) = (false, 1.0)
+    
+    @State private var color: Color = .blue
+    @State private var customColor: (enabled: Bool, value: Color) = (false, .blue)
+    @State private var opacity: Double = 1.0
+
+    @State private var BGColor: Color = Color(UIColor.secondarySystemGroupedBackground)
+    @State private var customBGColor: (enabled: Bool, value: Color) = (false, Color(UIColor.secondarySystemGroupedBackground))
+    
 
     var body: some View {
         NavigationStack {
@@ -194,12 +201,15 @@ struct iOS18: View {
                         .aspectRatio(1.0, contentMode: .fit)
                     Image(systemName: symbol.name, variableValue: variableColor.value)
                         .symbolRenderingMode(getRenderingMode(from: renderingMode))
-                        .font(.system(size: 220))
-                        .foregroundColor(color)
+                        .resizable()
+                        .scaledToFit()
+                        .foregroundColor(customColor.enabled ? customColor.value : color)
+                        .opacity(opacity)
+                        .padding(40)
                 }
                 .listRowBackground(
                     RoundedRectangle(cornerRadius: 28, style: .continuous)
-                        .fill(getColor(from: BGcolor) ?? customBGColor)
+                        .fill(customBGColor.enabled ? customBGColor.value : BGColor)
                 )
                 Section {
                     Picker(selection: $renderingMode) {
@@ -230,30 +240,86 @@ struct iOS18: View {
 
                 }
                 Section {
+                    Picker("", selection: $customBGColor.enabled) {
+                        Text("System").tag(false)
+                        Text("Custom").tag(true)
+                    }
                     HStack(spacing: 12) {
                         Text("Color")
                         Spacer()
-                        ColorPicker("Color", selection: $color)
-                            .labelsHidden()
-                            .frame(width: 40)
+                        if customColor.enabled {
+                            ColorPicker("", selection: $customColor.value)
+                                .labelsHidden()
+                                .frame(width: 40)
+                        } else {
+                            Picker("", selection: $color) {
+                                ColorView(color: Color.red, name: "Red").tag(.red)
+                                ColorView(color: Color.orange, name: "Orange").tag(.orange)
+                                ColorView(color: Color.yellow, name: "Yellow").tag(.yellow)
+                                ColorView(color: Color.green, name: "Green").tag(.green)
+                                ColorView(color: Color.mint, name: "Mint").tag(.mint)
+                                ColorView(color: Color.teal, name: "Teal").tag(.teal)
+                                ColorView(color: Color.cyan, name: "Cyan").tag(.cyan)
+                                ColorView(color: Color.blue, name: "Blue").tag(.blue)
+                                ColorView(color: Color.indigo, name: "Indigo").tag(.indigo)
+                                ColorView(color: Color.purple, name: "Purple").tag(.purple)
+                                ColorView(color: Color.pink, name: "Pink").tag(.pink)
+                                ColorView(color: Color.brown, name: "Brown").tag(.brown)
+                                ColorView(color: Color.white, name: "White").tag(.white)
+                                ColorView(color: Color.gray, name: "Gray").tag(.gray)
+                                ColorView(color: Color.black, name: "Black").tag(.black)
+                                ColorView(color: Color.primary, name: "Primary").tag(.primary)
+                                ColorView(color: Color.secondary, name: "Secondary").tag(.secondary)
+                                ColorView(color: Color.tertiary, name: "tertiary").tag(.tertiary)
+                            }
+                        }
+                    }
+                    HStack {
+                        Text("Opacity")
+                        Spacer()
+                        TextField("100", text: Binding(
+                            get: { "\(Int(opacity*100))" },
+                            set: { newValue in
+                                if let newValue = Double(newValue) {
+                                    if newValue > 100 {
+                                        opacity = 1.0
+                                    } else if newValue < 0 {
+                                        opacity = 0
+                                    } else {
+                                        opacity = newValue / 100
+                                    }
+                                } else {
+                                    if newValue.isEmpty {
+                                        opacity = 1.0
+                                    }
+                                }
+                            }
+                        ))
+                        .foregroundColor(.secondary)
+                        .keyboardType(.numberPad)
+                    }
                     }
                 }
                 Section {
+                    Picker("", selection: $customBGColor.enabled) {
+                        Text("System").tag(false)
+                        Text("Custom").tag(true)
+                    }
                     HStack(spacing: 12) {
                         Text("Background")
                         Spacer()
-                        Picker("", selection: $BGcolor) {
-                            ColorView(color: Color(UIColor.secondarySystemGroupedBackground), name: "System").tag("system")
-                            ColorView(color: Color.white, name: "White").tag("white")
-                            ColorView(color: Color.black, name: "Black").tag("black")
-                            ColorView(color: Color.gray, name: "Gray").tag("gray")
-                            ColorView(color: customBGColor, name: "Custom").tag("custom")
-                        }
-                        if BGcolor == "custom" {
-                            ColorPicker("", selection: $customBGColor)
+                        if customBGColor.enabled {
+                            ColorPicker("", selection: $customBGColor.value)
                                 .labelsHidden()
                                 .frame(width: 40)
+                        } else {
+                            Picker("", selection: $BGcolor) {
+                                ColorView(color: Color(UIColor.secondarySystemGroupedBackground), name: "Default").tag("system")
+                                ColorView(color: Color.white, name: "Light").tag("white")
+                                ColorView(color: Color.black, name: "Dark").tag("black")
+                            }
                         }
+                    }
                     }
                 }
             }
@@ -287,10 +353,11 @@ struct ColorView: View {
     let name: String
     var body: some View {
         HStack {
+            Text(name)
             Image(systemName: "circle.fill")
                 .frame(width: 20, alignment: .center)
                 .foregroundStyle(color)
-            Text(name)
+                .symbolRenderingMode(.palette)
             
         }
     }
