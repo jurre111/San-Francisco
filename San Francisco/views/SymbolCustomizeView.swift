@@ -240,7 +240,7 @@ struct iOS18: View {
 
                 }
                 Section {
-                    Picker("", selection: $customBGColor.enabled) {
+                    Picker("", selection: $customColor.enabled) {
                         Text("System").tag(false)
                         Text("Custom").tag(true)
                     }
@@ -361,7 +361,7 @@ struct ColorView: View {
                 .frame(width: 20, alignment: .center)
                 .foregroundColor(color)
                 .symbolRenderingMode(.palette)
-                .font(.system(size: 11))
+                .font(.system(size: 5))
             
         }
     }
