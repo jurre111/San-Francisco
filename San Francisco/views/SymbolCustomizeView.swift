@@ -282,6 +282,9 @@ struct iOS18: View {
                                 .labelsHidden()
                                 .frame(width: 40)
                         } else {
+                            Image(systemName: "circle.fill")
+                                .foregroundColor(color)
+                                .font(system(size: 10))
                             Picker("", selection: $color) {
                                 ColorView(color: Color.red, name: "Red").tag(Color.red)
                                 ColorView(color: Color.orange, name: "Orange").tag(Color.orange)
@@ -354,6 +357,9 @@ struct iOS18: View {
                                 .labelsHidden()
                                 .frame(width: 40)
                         } else {
+                            Image(systemName: "circle.fill")
+                                .foregroundColor(BGColor)
+                                .font(system(size: 10))
                             Picker("", selection: $BGColor) {
                                 ColorView(color: Color(UIColor.secondarySystemGroupedBackground), name: "Default").tag(Color(UIColor.secondarySystemGroupedBackground))
                                 ColorView(color: Color(UIColor.secondarySystemGroupedBackground.resolvedColor(with: UITraitCollection(userInterfaceStyle: .light))), name: "Light").tag(Color(UIColor.secondarySystemGroupedBackground.resolvedColor(with: UITraitCollection(userInterfaceStyle: .light))))
@@ -391,13 +397,14 @@ struct iOS18: View {
 struct ColorView: View {
     let color: Color
     let name: String
+    @Environment(\.isPartOfMenu) private var isPartOfMenu
     var body: some View {
         HStack {
-            Circle()
-                .fill(color)
-                .frame(width: 10, height: 10)
             Text(name)
-            
+            if isPartOfMenu {
+                Image(systemName: "circle.fill")
+                    .foregroundColor(color)
+            }
         }
     }
 }
