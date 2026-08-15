@@ -152,16 +152,14 @@ struct iOS18: View {
                                 .frame(width: 40)
                         } else {
                             Menu {
-                                ForEach(colors, id: \.self) { entry in
-                                    Button {
-                                        color = entry
-                                    } label: {
-                                        HStack {
+                                Picker("", selection: $color) {
+                                    ForEach(colors, id: \.self) { entry in
+                                        Label {
                                             Text(entry.name)
+                                        } icon: {
                                             Image(systemName: "circle.fill")
                                                 .foregroundColor(entry.color)
                                                 .symbolRenderingMode(.palette)
-                                                .font(.system(size: 12))
                                         }
                                     }
                                 }
@@ -205,6 +203,7 @@ struct iOS18: View {
                         .scrollDismissesKeyboard(.immediately)
                         .multilineTextAlignment(.trailing)
                     }
+                    Slider(value: $opacity, in: 0.0...1.0, step: 0.01)
                 }
                 Section {
                     Picker("", selection: $customBGColor.enabled) {
